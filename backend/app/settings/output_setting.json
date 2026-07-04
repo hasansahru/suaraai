@@ -1,0 +1,72 @@
+{
+  "sections": [
+    {
+      "key": "ringkasan",
+      "label": "Ringkasan",
+      "emoji": "📊",
+      "group": "Analisis"
+    },
+    {
+      "key": "strategi",
+      "label": "Strategi",
+      "emoji": "🎯",
+      "group": "Analisis"
+    },
+    {
+      "key": "segmen",
+      "label": "Segmen",
+      "emoji": "🎬",
+      "group": "Produksi"
+    },
+    {
+      "key": "judul",
+      "label": "Judul",
+      "emoji": "🏆",
+      "group": "Produksi"
+    },
+    {
+      "key": "thumbnail",
+      "label": "Thumbnail",
+      "emoji": "🖼",
+      "group": "Produksi"
+    },
+    {
+      "key": "deskripsi",
+      "label": "Deskripsi",
+      "emoji": "📝",
+      "group": "Produksi"
+    },
+    {
+      "key": "seo",
+      "label": "SEO",
+      "emoji": "🔍",
+      "group": "Optimasi"
+    },
+    {
+      "key": "editing",
+      "label": "Editing",
+      "emoji": "🎞",
+      "group": "Optimasi"
+    },
+    {
+      "key": "prediksi",
+      "label": "Prediksi Performa",
+      "emoji": "📈",
+      "group": "Optimasi"
+    },
+    {
+      "key": "checklist",
+      "label": "Checklist",
+      "emoji": "✅",
+      "group": "Optimasi"
+    }
+  ],
+  "components": {
+    "use_tabs": true,
+    "use_accordion": true,
+    "use_progress_bar": true,
+    "use_badge": true,
+    "use_copy_button": true,
+    "use_loading_animation": true
+  }
+}

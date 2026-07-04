@@ -1,0 +1,117 @@
+{
+  "channel_id": "nalar_senyap",
+  "source_files": [
+    "Nalar Senyap - Data tabel.csv"
+  ],
+  "total_videos_analyzed": 196,
+  "avg_ctr_pct": 3.833948717948718,
+  "avg_retention_pct": null,
+  "avg_view_duration_seconds": null,
+  "avg_views_per_video": 41.317460317460316,
+  "avg_impressions_per_video": 370.5459183673469,
+  "notes": [
+    "Video terbaik (\"Musuh Terberat Itu Bukan Orang Lain, Tapi Dirimu S\") punya views 27.6x di atas rata-rata — analisis pola hook, topik, dan thumbnail video ini untuk direplikasi.",
+    "CTR tertinggi dicapai oleh \"Srory Gus Kautsar - Generasi Ampas #santrikyai #gu\" (100.0%) — jauh di atas rata-rata; replikasi pola judul/thumbnail video ini."
+  ],
+  "top_videos_by_views": [
+    {
+      "title": "Musuh Terberat Itu Bukan Orang Lain, Tapi Dirimu Sendiri",
+      "views": 1139.0,
+      "watch_time_hours": 276.926,
+      "impressions": 28719.0,
+      "ctr_pct": 2.99,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 5.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Salah Pilih vs Terlambat Menikah",
+      "views": 1013.0,
+      "watch_time_hours": 3.6676,
+      "impressions": 35.0,
+      "ctr_pct": 2.86,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": null,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Berhenti Merusak Dirimu",
+      "views": 706.0,
+      "watch_time_hours": 2.3205,
+      "impressions": 43.0,
+      "ctr_pct": 6.98,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Dengarkan Hatimu: Suara Paling Jujur dalam Hidup – Dr. Fahruddin Faiz",
+      "views": 662.0,
+      "watch_time_hours": 2.8721,
+      "impressions": 96.0,
+      "ctr_pct": 2.08,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Hidupmu Bukan Lagi Milikmu Jika Pikiranmu Mudah Diseret ke Mana-Mana",
+      "views": 466.0,
+      "watch_time_hours": 67.3196,
+      "impressions": 15052.0,
+      "ctr_pct": 2.4,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 5.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_ctr": [
+    {
+      "title": "Srory Gus Kautsar - Generasi Ampas #santrikyai #guskautsar",
+      "views": 3.0,
+      "watch_time_hours": 0.0203,
+      "impressions": 1.0,
+      "ctr_pct": 100.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Yang Sabar, Yang Tenang | Gus Kautsar #guskautsar  #motivasi #storywaguskautsar",
+      "views": 6.0,
+      "watch_time_hours": 0.024,
+      "impressions": 2.0,
+      "ctr_pct": 50.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Ndak Penting Nasabmu Turunan Siapa, Kalau Kamu Sendiri Gak Bisa Apa-apa - Gus Kautsar #santrikyai",
+      "views": 2.0,
+      "watch_time_hours": 0.0034,
+      "impressions": 2.0,
+      "ctr_pct": 50.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_retention": []
+}
