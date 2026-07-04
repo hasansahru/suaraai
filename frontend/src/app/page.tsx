@@ -1881,7 +1881,7 @@ export default function Dashboard() {
                                   <div key={idx} className="bg-background/30 p-3 rounded-lg border border-border/20">
                                     <div className="flex items-center justify-between font-bold mb-1">
                                       <span>Babak {idx+1}: {chapter.babak}</span>
-                                      <span className="text-indigo-400 text-[10px]">⏱️ {chapter.start_estimate} - {chapter.end_estimate}</span>
+                                      <span className="text-indigo-400 text-[10px]">{chapter.start_estimate} - {chapter.end_estimate}</span>
                                     </div>
                                     <p className="text-muted-foreground text-[11px] font-sans leading-relaxed">{chapter.isi}</p>
                                     {chapter.sumber_segmen && chapter.sumber_segmen.map((src: any, srcIdx: number) => (
