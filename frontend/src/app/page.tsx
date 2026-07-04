@@ -2080,7 +2080,45 @@ export default function Dashboard() {
                               ))}
                             </div>
                           </div>
+                          {/* Rekomendasi Upload — hanya Suara Filsuf */}
+                          {channelDna === "suara_filsuf" && result.result?.video_panjang?.rekomendasi_upload?.tersedia && (
+                            <>
+                              <Separator className="bg-card" />
+                              <div className="space-y-3 bg-gradient-to-br from-violet-500/10 to-indigo-500/5 p-4 border border-violet-500/30 rounded-xl">
+                                <h4 className="text-xs font-bold text-violet-300 flex items-center gap-1.5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                  📅 Rekomendasi Waktu Upload <span className="text-[9px] text-violet-400/70 font-normal ml-1">(Data Suara Filsuf — 357 video)</span>
+                                </h4>
+                                <div className="grid grid-cols-2 gap-3 text-xs">
+                                  <div className="bg-background/40 rounded-lg p-3 border border-violet-500/20">
+                                    <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider font-bold block mb-1.5">✅ Hari Terbaik</span>
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {(result.result?.video_panjang?.rekomendasi_upload?.hari_terbaik || []).map((hari: string, i: number) => (
+                                        <span key={i} className="bg-violet-500/20 border border-violet-500/40 text-violet-300 px-2.5 py-1 rounded-lg font-bold text-[11px]">{hari}</span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div className="bg-background/40 rounded-lg p-3 border border-violet-500/20">
+                                    <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider font-bold block mb-1.5">🕐 Jam Upload</span>
+                                    <span className="text-violet-300 font-bold text-xl">{result.result?.video_panjang?.rekomendasi_upload?.jam_upload}</span>
+                                  </div>
+                                </div>
+                                {result.result?.video_panjang?.rekomendasi_upload?.alasan && (
+                                  <p className="text-[11px] text-muted-foreground/80 font-sans leading-relaxed">
+                                    💡 {result.result?.video_panjang?.rekomendasi_upload?.alasan}
+                                  </p>
+                                )}
+                                {result.result?.video_panjang?.rekomendasi_upload?.hindari && (
+                                  <div className="bg-red-500/5 border border-red-500/20 rounded-lg px-3 py-2">
+                                    <span className="text-[10px] text-red-400 font-bold">❌ Hindari: </span>
+                                    <span className="text-[10px] text-muted-foreground/80 font-sans">{result.result?.video_panjang?.rekomendasi_upload?.hindari}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </Card>
+
                       )}
                     </div>
                   )}

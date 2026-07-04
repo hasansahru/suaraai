@@ -82,7 +82,13 @@ Prioritaskan **Kamis** (avg 994 views) dan **Minggu** (avg 938 views). Hindari S
 
 **Logika:** hari dengan performa views terbaik (Kamis, Minggu) dialokasikan untuk video panjang — format dengan nilai tertinggi (avg 770 views, CTR 6,66%, revenue Rp21.930/video) — bukan untuk Shorts yang nilainya jauh lebih kecil per video. Jam 18:00–19:00 sudah sesuai window puncak audiens online sehingga tidak perlu diubah.
 
----
+**⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true, khusus channel ini karena sudah ada data analytics):
+- `hari_terbaik`: ["Kamis", "Jumat", "Minggu"]
+- `jam_upload`: "19:00 WIB"
+- `alasan`: "Berdasarkan data 357 video (31 Mar–29 Jun 2026): Kamis avg 994 views dan Minggu avg 938 views adalah hari performa terbaik. Jam puncak penonton membuka YouTube adalah 18:00–21:00 WIB (data heatmap penonton Suara Filsuf, GMT+7). Upload jam 19:00 memberi waktu bagi YouTube untuk mengindeks video sebelum traffic malam puncak."
+- `hindari`: "Senin (avg 290 views, performa terburuk). Hindari upload sebelum jam 10:00 WIB karena traffic penonton masih rendah."
+
+
 
 ## OPENING 60 DETIK PERTAMA (video panjang) — ATURAN PALING KETAT
 

@@ -128,7 +128,14 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
     },
     "checklist": [
       {"item": "string", "wajib": true}
-    ]
+    ],
+    "rekomendasi_upload": {
+      "tersedia": false,
+      "hari_terbaik": ["string"],
+      "jam_upload": "string",
+      "alasan": "string",
+      "hindari": "string"
+    }
   },
 
   "shots": [
