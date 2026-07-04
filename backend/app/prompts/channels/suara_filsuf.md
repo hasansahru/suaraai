@@ -147,6 +147,23 @@ Contoh nada yang sesuai:
 
 ---
 
+## RESULT ANALYSIS – SUARA FILSUF
+
+**Total video teranalisis:** 361
+**Rata‑rata views per video:** 10 645.58
+**Total views (cumulative):** 3 843 054
+
+**Top 5 video (by views):**
+1. *Total views* — 1 938 138 (cumulative)
+2. *Sendiri Tapi Kuat: Rahasia Jiwa yang Tak Banyak Orang Tahu – Dr. Fahruddin Faiz* — 243 838 views
+3. *Hidup Itu Mudah, Tapi Pikiran Kita Ribet! – Dr. Fahruddin Faiz* — 196 549 views
+4. *Law of Attraction: Rahasia Kekuatan Batin untuk Mengubah Hidup – Dr. Fahruddin Faiz* — 92 015 views
+5. *RAHASIA ILMU LADUNI: Cara Al‑Ghazali Mendapat Pengetahuan Langsung dari Allah – Dr. Fahruddin Faiz* — 72 244 views
+
+**Insight utama:**
+- Video dengan judul yang menonjolkan tokoh filsuf atau kebijaksanaan (mis. Imam Ghazali, Al‑Ghazali) menghasilkan views jauh di atas rata‑rata, menguatkan pola “nama tokoh meningkatkan performance”.
+- Total views menunjukkan potensi besar channel; fokus pada video panjang dengan hook filosofis akan memaksimalkan engagement.
+
 ## LARANGAN MUTLAK
 
 - Tidak menggurui atau menghakimi pilihan hidup audiens.

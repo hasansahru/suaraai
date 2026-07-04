@@ -62,14 +62,14 @@ Selisihnya bahkan lebih ekstrem dibanding Suara Filsuf — Shorts di channel ini
 
 Total subscriber periode ini -34 (net loss), TAPI ini bukan sinyal ada konten yang membuat orang unsubscribe — di level video manapun tidak ditemukan subscriber loss, total subscriber gain dari semua video malah +29. Selisih -34 di angka total kemungkinan besar dari sumber non-video (unsubscribe dari halaman channel, pembersihan akun YouTube, dll). **Jangan jadikan ini dasar untuk mengubah arah konten** — fokuskan evaluasi pada CTR dan views per video saja.
 
-**Top 5 video terbaik sebagai referensi pola:**
-1. "Kamu Bisa Berbuat Baik… Tapi Tetap Tidak Bermoral" — 1.062 views
-2. "Berhenti Merusak Dirimu" — 703 views
-3. "Dengarkan Hatimu: Suara Paling Jujur dalam Hidup" — 637 views
-4. "Banyak Orang Pintar… Tapi Mengapa Hidupnya Kacau?" — 611 views
-5. "Musuh Terberat Itu Bukan Orang Lain, Tapi Dirimu Sendiri" — 564 views
+**Top 5 video terbaik sebagai referensi pola (Data Terbaru):**
+1. "Tak Perlu Gengsi! Inilah Jalan Hidup Tenang Bebas dari Kecemasan Sosial — Dr. Fahruddin Faiz" — 30.847 views
+2. "Menyala Wakil Rakyat" — 6.360 views
+3. "Bahagia Tanpa Bergantung Orang Lain — Dr. Fahruddin Faiz" — 5.674 views
+4. "Jangan Overthinking! Cara Ibnu Sina Menyembuhkan Penyakit Pikiran — Dr. Fahruddin Faiz" — 2.429 views
+5. "Mengapa Orang Persia Kuno Lebih Tenang dari Kita? 3 Prinsip yang Terlupakan" — 2.256 views
 
-Pola yang muncul: paradoks/pembalikan perspektif tentang diri sendiri ("musuh terberat itu dirimu sendiri", "bisa baik tapi tetap tidak bermoral") — mirip pendekatan Suara Filsuf tapi dengan bahasa lebih personal & psikologis, bukan filosofis berat.
+Pola yang muncul: Penggunaan figur otentik (Dr. Fahruddin Faiz, Ibnu Sina) atau kebijaksanaan kuno (Persia Kuno) yang dikaitkan langsung dengan solusi masalah mental modern (Kecemasan Sosial, Overthinking, Ketergantungan). Video yang menghubungkan figur terpercaya dengan isu *healing/mental health* mendapatkan *views* yang sangat signifikan (hingga puluhan ribu).
 
 ---
 

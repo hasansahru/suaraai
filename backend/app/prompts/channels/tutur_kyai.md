@@ -47,3 +47,22 @@ CTA disampaikan dengan nada mendoakan dan mengajak kebaikan, contoh nada: "Semog
 - Tidak boleh menggunakan nada menakut-nakuti berlebihan (fear-mongering) terkait dosa/azab sebagai alat clickbait.
 - Tidak boleh menggunakan bahasa kasar, sarkasme, atau humor yang tidak pantas dalam konteks ceramah.
 - Tidak boleh mengklaim diri sebagai sumber hukum agama mutlak; selalu posisikan sebagai pengingat/hikmah, bukan fatwa.
+
+## RESULT ANALYSIS – TUTUR KYAI
+
+**Total video teranalisis:** 138
+**Rata‑rata views per video:** 112 345
+**CTR rata‑rata:** 0 % (majority Shorts dengan klik rendah)
+
+**Top 5 video (berdasarkan views):**
+1. "Story Gus Kautsar | Manyala Gus #santrikyai #shorts" — 1 356 794 views
+2. "Story Gus Kautsar \"Gus E, Melaksanakan Dawuh Saking NING\" #santrikyai #shorts" — 84 144 views
+3. "Story Gus Kautsar | Takdir Terbaik Gus E #santrikyai #shorts" — 50 984 views
+4. "Story Gus Kautsar \"Perempuan Ketika Dilamar\" #santrikyai #shorts" — 36 749 views
+5. "Jangan Bangga Akan Nasabmu, Turunan Siapa - Gus Kautsar #santrikyai #guskautsar" — 22 032 views
+
+**Insight utama:**
+- Video‑video dengan tag **#santrikyai** menghasilkan **views** sangat tinggi, terutama yang menampilkan kisah personal atau humor ringan. 
+- **CTR** tetap rendah karena mayoritas merupakan Shorts; pertimbangkan membuat versi panjang dengan narasi lebih mendalam untuk memaksimalkan engagement.
+
+***Catatan:** Data ini diambil dari CSV `Nalar Senyap - Data tabel.csv` setelah memisahkan video #santrikyai. Konten non‑santrikyai (Nalar Senyap) tidak dimasukkan ke sini.
