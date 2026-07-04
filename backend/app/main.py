@@ -46,8 +46,8 @@ async def get_current_user(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://suaraai.vercel.app", "http://localhost:3000"],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
