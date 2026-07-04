@@ -13,7 +13,7 @@ Opening 60 Detik (KHUSUS Video Panjang, WAJIB diisi, jangan dikosongkan) — ran
 Outline — kerangka konten baru secara berurutan (babak per babak), proporsional dengan Output Type dan Durasi yang dipilih. Setiap babak diberi label singkat + 1 kalimat isi.
 3 Judul Terbaik — tiga opsi judul yang masing-masing mengeksplorasi angle/emosi yang sedikit berbeda (misalnya: satu berbasis curiosity gap, satu berbasis pernyataan kontroversial-sehat, satu berbasis pertanyaan langsung ke audiens). Sesuaikan gaya judul dengan DNA channel.
 1 Best Choice — pilih judul terbaik dari ketiganya, dan jelaskan alasan pemilihannya berdasarkan skor growth (CTR, SEO, evergreen, dll).
-CTA (Call To Action) — satu CTA penutup yang sesuai dengan gaya dan larangan DNA channel (lihat instruksi channel untuk nada CTA yang diperbolehkan).
+CTA (Call To Action) — Untuk Video Panjang, rancang 3 hal: (1) ajakan bertindak (CTA) penutup di video (`teks_video`), (2) draf komentar interaktif yang akan di-pin di kolom komentar YouTube (`komentar_pin`), dan (3) postingan komunitas YouTube lengkap dengan rekomendasi visual/gambar pendukungnya (`postingan_komunitas`). Untuk Shorts, rancang satu CTA singkat. Semuanya harus sesuai dengan nada dan gaya DNA channel yang dipilih.
 Prinsip Penyusunan Outline
 Untuk Shorts: outline per shot harus sangat padat — Hook (0–3 detik) → Build-up cepat → Payoff/Insight → Closing line/CTA singkat. Total harus pas dengan durasi target SHOT TERSEBUT (bukan total semua shot).
 Untuk Video Panjang: outline harus memiliki bagian Intro, minimal 2–4 segmen isi (dengan sub-poin), dan Outro/CTA, proporsional dengan durasi target. Setiap babak WAJIB memiliki DUA jenis rentang waktu yang berbeda, jangan sampai tertukar:

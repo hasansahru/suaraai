@@ -1921,14 +1921,78 @@ export default function Dashboard() {
                             </div>
 
                             {/* CTA */}
-                            {result.result?.video_panjang?.strategi_konten?.cta && (
-                              <div className="pt-3 border-t border-border/40 text-xs">
-                                <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1.5 text-rose-400">📣 Call To Action (CTA)</span>
-                                <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
-                                  {result.result?.video_panjang?.strategi_konten?.cta}
-                                </p>
-                              </div>
-                            )}
+                            {result.result?.video_panjang?.strategi_konten?.cta && (() => {
+                              const ctaObj = result.result.video_panjang.strategi_konten.cta;
+                              if (typeof ctaObj === "string") {
+                                return (
+                                  <div className="pt-3 border-t border-border/40 text-xs">
+                                    <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1.5 text-rose-400">📣 Call To Action (CTA)</span>
+                                    <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
+                                      {ctaObj}
+                                    </p>
+                                  </div>
+                                );
+                              }
+                              return (
+                                <div className="pt-3 border-t border-border/40 text-xs space-y-3">
+                                  {ctaObj.teks_video && (
+                                    <div>
+                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1 text-rose-400">📣 Call To Action (CTA) Video</span>
+                                      <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
+                                        {ctaObj.teks_video}
+                                      </p>
+                                    </div>
+                                  )}
+                                  {ctaObj.komentar_pin && (
+                                    <div>
+                                      <div className="flex justify-between items-center mb-1">
+                                        <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block text-rose-400">📌 Draf Komentar Pin</span>
+                                        <Button 
+                                          onClick={() => copyToClipboard(ctaObj.komentar_pin)} 
+                                          variant="ghost" 
+                                          size="xs" 
+                                          className="h-5 text-[9px] text-rose-400 hover:text-rose-300"
+                                        >
+                                          <Copy className="size-3 mr-1" /> Salin Komentar
+                                        </Button>
+                                      </div>
+                                      <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2 italic">
+                                        "{ctaObj.komentar_pin}"
+                                      </p>
+                                    </div>
+                                  )}
+                                  {ctaObj.postingan_komunitas && (ctaObj.postingan_komunitas.teks || ctaObj.postingan_komunitas.rekomendasi_gambar) && (
+                                    <div className="bg-rose-500/5 border border-rose-500/10 rounded-lg p-3 space-y-2">
+                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block text-rose-400">💬 Rekomendasi Postingan Komunitas</span>
+                                      {ctaObj.postingan_komunitas.teks && (
+                                        <div className="space-y-1">
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-[10px] text-muted-foreground/60 font-medium">Teks Postingan:</span>
+                                            <Button 
+                                              onClick={() => copyToClipboard(ctaObj.postingan_komunitas.teks)} 
+                                              variant="ghost" 
+                                              size="xs" 
+                                              className="h-5 text-[9px] text-rose-400 hover:text-rose-300"
+                                            >
+                                              <Copy className="size-3 mr-1" /> Salin Postingan
+                                            </Button>
+                                          </div>
+                                          <div className="bg-background/40 p-2.5 rounded text-foreground/90 font-sans whitespace-pre-wrap leading-relaxed text-[11px]">
+                                            {ctaObj.postingan_komunitas.teks}
+                                          </div>
+                                        </div>
+                                      )}
+                                      {ctaObj.postingan_komunitas.rekomendasi_gambar && (
+                                        <div className="pt-1.5 border-t border-rose-500/10">
+                                          <span className="text-[10px] text-muted-foreground/60 font-medium block mb-1">🖼️ Rekomendasi Gambar/Visual:</span>
+                                          <p className="text-muted-foreground text-[11px] leading-relaxed italic">{ctaObj.postingan_komunitas.rekomendasi_gambar}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })()}
 
                           </div>
 

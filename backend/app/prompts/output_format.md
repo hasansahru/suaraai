@@ -87,7 +87,14 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
           ]
         }
       ],
-      "cta": "string"
+      "cta": {
+        "teks_video": "string — ajakan bertindak (CTA) penutup di dalam video",
+        "komentar_pin": "string — draf komentar interaktif untuk di-pin di kolom komentar YouTube untuk memicu diskusi",
+        "postingan_komunitas": {
+          "teks": "string — draf postingan teks untuk Tab Komunitas YouTube guna mempromosikan video ini",
+          "rekomendasi_gambar": "string — konsep/rekomendasi visual/gambar untuk disertakan dalam postingan komunitas"
+        }
+      }
     },
     "momen_highlight_sumber": [
       {
