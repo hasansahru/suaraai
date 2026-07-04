@@ -19,18 +19,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Jika sudah login, redirect ke dashboard
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      // Verifikasi token masih valid
-      fetch(`${API_BASE}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((r) => {
-          if (r.ok) router.replace("/");
-        })
-        .catch(() => {});
-    }
+    router.replace("/");
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {

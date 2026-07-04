@@ -139,7 +139,7 @@ export default function Dashboard() {
   // Auth States
   const router = useRouter();
   const [authUser, setAuthUser] = useState<any>(null);
-  const [authChecked, setAuthChecked] = useState(false);
+  const [authChecked, setAuthChecked] = useState(true);
 
   // YouTube Keyword Suggestions States
   const [keywordQuery, setKeywordQuery] = useState("");
@@ -170,32 +170,7 @@ export default function Dashboard() {
     }
   };
 
-  // Auth check on mount
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    const userStr = localStorage.getItem("auth_user");
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-    // Verify token
-    fetch("https://suarafilsuf-suaraai-backend.hf.space/api/auth/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => {
-        if (!r.ok) throw new Error("invalid");
-        return r.json();
-      })
-      .then((data) => {
-        setAuthUser(data);
-        setAuthChecked(true);
-      })
-      .catch(() => {
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("auth_user");
-        router.replace("/login");
-      });
-  }, [router]);
+  // Auth check removed
 
   // YouTube Keyword Suggestions — debounced fetch
   useEffect(() => {
@@ -452,10 +427,8 @@ export default function Dashboard() {
         setSelectedShotIndex(0);
         toast.success("Analisis Video Berhasil diselesaikan!");
       } else if (res.status === 401) {
-        toast.error("Sesi login expired. Silakan login ulang.");
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("auth_user");
-        router.replace("/login");
+        setError(data.detail || "Unauthorized (401).");
+        toast.error("Unauthorized (401).");
       } else {
         setError(data.detail || "Terjadi kesalahan pada backend server.");
         toast.error("Gagal melakukan analisis.");

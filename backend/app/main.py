@@ -46,7 +46,7 @@ async def get_current_user(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict this to the frontend URL
+    allow_origins=["https://suaraai.vercel.app", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -208,7 +208,7 @@ class AnalyzeRequest(BaseModel):
     proxy_webshare_password: Optional[str] = None
 
 @app.post("/api/analyze")
-async def api_analyze(req: AnalyzeRequest, current_user: auth_utils.UserInfo = Depends(get_current_user)):
+async def api_analyze(req: AnalyzeRequest):
     try:
         ai_provider_setting = load_json_setting("ai_provider_setting.json")
         provider_options = ai_provider_setting.get("providers", [])
