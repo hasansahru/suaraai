@@ -1893,6 +1893,17 @@ export default function Dashboard() {
                                 ))}
                               </div>
                             </div>
+
+                            {/* CTA */}
+                            {result.result?.video_panjang?.strategi_konten?.cta && (
+                              <div className="pt-3 border-t border-border/40 text-xs">
+                                <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1.5 text-rose-400">📣 Call To Action (CTA)</span>
+                                <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
+                                  {result.result?.video_panjang?.strategi_konten?.cta}
+                                </p>
+                              </div>
+                            )}
+
                           </div>
 
                           <Separator className="bg-card" />
