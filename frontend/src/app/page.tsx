@@ -1629,16 +1629,29 @@ export default function Dashboard() {
                                         </div>
                                         {keywords.length > 0 && (
                                           <div className="space-y-1">
-                                            <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Utama</span>
+                                            <div className="flex items-center justify-between">
+                                              <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Utama</span>
+                                              <button
+                                                onClick={() => {
+                                                  navigator.clipboard.writeText(keywords.join(', '));
+                                                }}
+                                                className="text-[10px] text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-400/50 px-2 py-0.5 rounded transition-colors flex items-center gap-1"
+                                                title="Salin semua kata kunci"
+                                              >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                                Salin
+                                              </button>
+                                            </div>
                                             <div className="flex flex-wrap gap-1.5">
                                               {keywords.map((kw: string, i: number) => (
                                                 <span key={i} className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-semibold">
-                                                  {kw}
+                                                  {kw}{i < keywords.length - 1 ? ',' : ''}
                                                 </span>
                                               ))}
                                             </div>
                                           </div>
                                         )}
+
                                         {tags.length > 0 && (
                                           <div className="space-y-2">
                                             <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Tag Kata Kunci SEO</span>
