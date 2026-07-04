@@ -1,0 +1,118 @@
+{
+  "channel_id": "suara_filsuf",
+  "source_files": [
+    "Suara Filsuf - Data tabel.csv"
+  ],
+  "total_videos_analyzed": 358,
+  "avg_ctr_pct": 5.023116147308782,
+  "avg_retention_pct": null,
+  "avg_view_duration_seconds": null,
+  "avg_views_per_video": 5374.573446327684,
+  "avg_impressions_per_video": 56082.84636871509,
+  "notes": [
+    "CTR channel di atas rata-rata industri (5.0%) — ada ruang untuk eksperimen judul/thumbnail yang lebih berani tanpa risiko besar.",
+    "Video terbaik (\"Sendiri Tapi Kuat: Rahasia Jiwa yang Tak Banyak Or\") punya views 45.4x di atas rata-rata — analisis pola hook, topik, dan thumbnail video ini untuk direplikasi.",
+    "CTR tertinggi dicapai oleh \"Jangan Sampai Kebencian Orang Lain Tinggal di Dala\" (10.3%) — jauh di atas rata-rata; replikasi pola judul/thumbnail video ini."
+  ],
+  "top_videos_by_views": [
+    {
+      "title": "Sendiri Tapi Kuat: Rahasia Jiwa yang Tak Banyak Orang Tahu – Dr. Fahruddin Faiz",
+      "views": 243838.0,
+      "watch_time_hours": 67255.6466,
+      "impressions": 3368034.0,
+      "ctr_pct": 5.44,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 2874.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Hidup Itu Mudah, Tapi Pikiran Kita Ribet! – Dr. Fahruddin Faiz",
+      "views": 196549.0,
+      "watch_time_hours": 31651.3128,
+      "impressions": 3041609.0,
+      "ctr_pct": 4.8,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 3119.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Law of Attraction: Rahasia Kekuatan Batin untuk Mengubah Hidup – Dr. Fahruddin Faiz",
+      "views": 92015.0,
+      "watch_time_hours": 49520.9854,
+      "impressions": 1180544.0,
+      "ctr_pct": 6.16,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 855.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "RAHASIA ILMU LADUNI: Cara Al-Ghazali Mendapat Pengetahuan Langsung dari Allah – Dr. Fahruddin Faiz",
+      "views": 72244.0,
+      "watch_time_hours": 36514.4917,
+      "impressions": 1313172.0,
+      "ctr_pct": 4.11,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 689.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Zarathustra: Nabi yang Dihapus Sejarah atau Mitos yang Disalahpahami?  – Dr. Fahruddin Faiz",
+      "views": 61638.0,
+      "watch_time_hours": 26863.0818,
+      "impressions": 813610.0,
+      "ctr_pct": 5.88,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 488.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_ctr": [
+    {
+      "title": "Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu",
+      "views": 476.0,
+      "watch_time_hours": 383.2619,
+      "impressions": 3746.0,
+      "ctr_pct": 10.28,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 1.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Yang Bikin Kamu Sakit Bukan Masalahnya, Tapi Pikiranmu",
+      "views": 3272.0,
+      "watch_time_hours": 38.6912,
+      "impressions": 3509.0,
+      "ctr_pct": 9.23,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 13.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Lelah dengan Kebisingan Dunia? Sedikit yang Cukup Ternyata Menyelamatkanmu",
+      "views": 488.0,
+      "watch_time_hours": 353.1206,
+      "impressions": 4253.0,
+      "ctr_pct": 9.08,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_retention": []
+}
