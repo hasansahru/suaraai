@@ -64,8 +64,8 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
           {
             "video_baru_start": "00:00",
             "video_baru_end": "00:08",
-            "sumber_start": "mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
-            "sumber_end": "mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
+            "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
+            "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
             "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini, BUKAN kalimat baru buatan AI",
             "catatan_editing": "string — instruksi editing untuk segmen ini (B-roll, musik, jeda, dll)"
           }
@@ -76,12 +76,12 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         {
           "babak": "string",
           "isi": "string",
-          "start_estimate": "mm:ss — estimasi waktu MULAI babak ini di VIDEO BARU (bukan video sumber), dihitung kumulatif dari 00:00",
-          "end_estimate": "mm:ss — estimasi waktu SELESAI babak ini di VIDEO BARU; total seluruh babak harus pas dengan Durasi Target yang dipilih pengguna",
+          "start_estimate": "hh:mm:ss — estimasi waktu MULAI babak ini di VIDEO BARU (bukan video sumber), dihitung kumulatif dari 00:00",
+          "end_estimate": "hh:mm:ss — estimasi waktu SELESAI babak ini di VIDEO BARU; total seluruh babak harus pas dengan Durasi Target yang dipilih pengguna",
           "sumber_segmen": [
             {
-              "start": "mm:ss — timestamp MULAI di VIDEO SUMBER tempat materi babak ini diambil (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
-              "end": "mm:ss — timestamp SELESAI di VIDEO SUMBER",
+              "start": "hh:mm:ss — timestamp MULAI di VIDEO SUMBER tempat materi babak ini diambil (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
+              "end": "hh:mm:ss — timestamp SELESAI di VIDEO SUMBER",
               "catatan": "string — apa yang diambil dari rentang ini (topik/kutipan/insight spesifik), bukan deskripsi ulang isi babak"
             }
           ]
@@ -91,8 +91,8 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
     },
     "momen_highlight_sumber": [
       {
-        "start_time": "mm:ss — timestamp di VIDEO SUMBER (referensi saja, bukan klip terpisah)",
-        "end_time": "mm:ss",
+        "start_time": "hh:mm:ss — timestamp di VIDEO SUMBER (referensi saja, bukan klip terpisah)",
+        "end_time": "hh:mm:ss",
         "durasi": "string",
         "alasan": "string"
       }
@@ -135,8 +135,8 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
     {
       "shot_number": 1,
       "segmen": {
-        "start_time": "mm:ss — di VIDEO SUMBER, batas klip shot ini",
-        "end_time": "mm:ss",
+        "start_time": "hh:mm:ss — di VIDEO SUMBER, batas klip shot ini",
+        "end_time": "hh:mm:ss",
         "durasi": "string",
         "alasan": "string — mengapa rentang INI dipilih untuk shot ini secara spesifik"
       },

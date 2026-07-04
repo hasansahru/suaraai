@@ -105,7 +105,7 @@ Jika transkrip video sumber belum tersedia, kamu WAJIB meminta transkrip dulu �
 | 00:28–00:48 | Kalimat paling "menohok" | Jeda hening 2–3 detik setelah — JANGAN dipotong |
 | 00:48–01:00 | Pertanyaan penutup menggantung | Fade ke title card, musik ambient masuk pelan |
 
-Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER mm:ss–mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
+Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
 
 ---
 
