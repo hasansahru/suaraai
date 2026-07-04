@@ -60,7 +60,13 @@ def load_json_setting(filename: str) -> dict:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+@app.get("/health")
+async def health_check():
+    """Endpoint untuk monitoring — dipakai oleh UptimeRobot agar Space tidak sleep."""
+    return {"status": "ok", "message": "Backend aktif"}
+
 @app.get("/api/settings")
+
 async def get_settings():
     try:
         return {
