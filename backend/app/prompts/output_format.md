@@ -63,8 +63,8 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         "end_time": "01:00",
         "klip": [
           {
-            "video_baru_start": "00:00",
-            "video_baru_end": "00:08",
+            "video_baru_start": "mm:ss — estimasi waktu mulai di video baru, harus berurutan kumulatif mulai dari 00:00",
+            "video_baru_end": "mm:ss — estimasi waktu selesai di video baru, akumulasi klip terakhir HARUS tepat berakhir di 01:00 (tidak boleh lebih dari 60 detik)",
             "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
             "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
             "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini, BUKAN kalimat baru buatan AI",

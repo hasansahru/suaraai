@@ -678,10 +678,10 @@ def build_user_content(
         out.append(
             f"- Output Type = Video Panjang: isi HANYA object `video_panjang` (satu paket utuh). "
             f"Durasi Target Video Baru adalah {duration_desc} ({target_min_seconds or 0}-{target_max_seconds or 0} detik). "
-            f"WAJIB: Rancang babak/chapter pada outline agar total durasinya dari 00:00 hingga babak akhir "
-            f"PAS dengan target durasi tersebut. Tulis estimasi waktu `start_estimate` dan `end_estimate` "
-            f"pada setiap babak di `video_panjang.strategi_konten.outline` dalam format `mm:ss` (atau `hh:mm:ss` jika di atas 60 menit), kumulatif dari 00:00. "
-            f"Sertakan juga `video_panjang.strategi_konten.opening_60_detik` (rancangan menit pertama). "
+            f"WAJIB HUKUMNYA: Total akumulasi durasi dari awal (00:00) hingga babak/chapter terakhir di `video_panjang.strategi_konten.outline` harus berakhir PAS di dalam rentang Durasi Target tersebut ({duration_desc}). "
+            f"PENTING: Jangan mendasarkan total durasi outline video baru pada durasi video sumber! Jika video sumber pendek (misal 10 menit) tetapi target durasi baru adalah {duration_desc}, Anda wajib mengembangkan dan memperluas outline (tambah sub-topik, visualisasi, studi kasus, atau analisis) sehingga total estimasi akhir babak mencapai rentang tersebut. Sebaliknya, ringkas jika target durasi baru lebih pendek dari video sumber. "
+            f"Tulis estimasi waktu `start_estimate` dan `end_estimate` pada setiap babak dalam format `mm:ss` (atau `hh:mm:ss` jika di atas 60 menit), kumulatif dari 00:00. "
+            f"Sertakan juga `video_panjang.strategi_konten.opening_60_detik` (rancangan menit pertama) di mana akumulasi seluruh klip-klip di dalamnya harus tepat berjalan dari 00:00 dan berakhir tepat di 01:00 (tidak boleh melompati batas 60 detik!). "
             f"Biarkan array `shots` kosong (`[]`)."
         )
 
