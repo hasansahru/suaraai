@@ -263,21 +263,12 @@ async def api_analyze(req: AnalyzeRequest):
             try:
                 proxy_config = youtube_utils.build_proxy_config(proxy_setting)
                 
-                if not youtube_utils._YTT_AVAILABLE:
-                    raise HTTPException(status_code=500, detail="youtube-transcript-api belum terinstal.")
-                
-                transcript_list = youtube_utils.YouTubeTranscriptApi.list_transcripts(video_id, proxies=proxy_config)
-                try:
-                    transcript_obj = transcript_list.find_transcript(['id', 'en'])
-                except Exception:
-                    transcript_obj = next(iter(transcript_list))
-                
-                fetched_data = transcript_obj.fetch()
-                segments = [
-                    youtube_utils.TranscriptSegment(start=s["start"], duration=s["duration"], text=s["text"])
-                    for s in fetched_data
-                ]
-                video_transcript = youtube_utils.VideoTranscript(video_id=video_id, language=transcript_obj.language, segments=segments)
+                # Gunakan helper get_video_transcript yang menangani inisialisasi versi lama/baru, proxy, retry, dll.
+                video_transcript = youtube_utils.get_video_transcript(
+                    video_id=video_id,
+                    preferred_languages=["id", "en"],
+                    proxy_config=proxy_config
+                )
                 transcript_text = video_transcript.full_text
             except Exception as exc:
                 raise HTTPException(
