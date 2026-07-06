@@ -59,9 +59,9 @@ const DEFAULT_PROVIDERS = [
 ];
 
 const DEFAULT_CHANNELS = [
-  { id: "suara_filsuf", name: "Suara Filsuf", emoji: "🧠 ", description: "Filosofi populer, reflektif, tenang, dan dalam." },
-  { id: "nalar_senyap", name: "Nalar Senyap", emoji: "Œ¿", description: "Psikologi, healing, dan kontemplasi diri yang hangat." },
-  { id: "tutur_kyai", name: "Tutur Kyai", emoji: "•Šï¸", description: "Hikmah Islami, akhlak, dan nilai spiritual yang santun." }
+  { id: "suara_filsuf", name: "Suara Filsuf", emoji: "🧠", description: "Filosofi populer, reflektif, tenang, dan dalam." },
+  { id: "nalar_senyap", name: "Nalar Senyap", emoji: "🌿", description: "Psikologi, healing, dan kontemplasi diri yang hangat." },
+  { id: "tutur_kyai", name: "Tutur Kyai", emoji: "🕊️", description: "Hikmah Islami, akhlak, dan nilai spiritual yang santun." }
 ];
 
 // ID harus sama persis dengan duration_setting.json di backend
@@ -313,12 +313,12 @@ export default function Dashboard() {
       if (res.ok) {
         setAnalyticsExists(true);
         setAnalyticsSummary(data.summary);
-        toast.success("âœ… Analytics berhasil disimpan!", { id: uploadToastId });
+        toast.success("✅ Analytics berhasil disimpan!", { id: uploadToastId });
       } else {
-        toast.error(`âŒ Gagal: ${data.detail || "Format tidak didukung"}`, { id: uploadToastId });
+        toast.error(`❌ Gagal: ${data.detail || "Format tidak didukung"}`, { id: uploadToastId });
       }
     } catch (err) {
-      toast.error("âŒ Gagal menghubungi backend API.", { id: uploadToastId });
+      toast.error("❌ Gagal menghubungi backend API.", { id: uploadToastId });
     }
   };
 
@@ -331,7 +331,7 @@ export default function Dashboard() {
         setAnalyticsExists(false);
         setAnalyticsSummary(null);
         setAnalyticsFile(null);
-        toast.success("—‘ï¸ Data analytics channel berhasil dihapus!");
+        toast.success("🗑️ Data analytics channel berhasil dihapus!");
       } else {
         toast.error("Gagal menghapus data analytics.");
       }
@@ -969,7 +969,7 @@ export default function Dashboard() {
               <CardHeader className="pb-4">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
                   <Brain className="size-4 text-pink-400" />
-                  <span>🧠  Skill Claude Tambahan</span>
+                  <span>🧠 Skill Claude Tambahan</span>
                 </CardTitle>
                 <CardDescription className="text-xs text-muted-foreground">
                   Aktifkan kemampuan asinkron ekstra.
@@ -1079,7 +1079,7 @@ export default function Dashboard() {
             <CardHeader className="pb-4">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
                 <Compass className="size-4 text-emerald-400" />
-                <span>Œ Proxy Clapperboard (Anti-Blocking)</span>
+                <span>🌐 Proxy Clapperboard (Anti-Blocking)</span>
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
                 Mengurangi resiko rate-limit IP saat scraping transkrip.
