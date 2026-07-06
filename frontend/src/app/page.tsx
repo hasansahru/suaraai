@@ -33,7 +33,9 @@ import {
   Sun,
   Moon,
   LogOut,
-  Search as SearchIcon
+  Search as SearchIcon,
+  History,
+  Trash2
 } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -133,6 +135,77 @@ export default function Dashboard() {
   const [testLoading, setTestLoading] = useState(false);
   const [testResult, setTestResult] = useState<any>(null);
   const [result, setResult] = useState<any>(null);
+  
+  // History State
+  const [historyList, setHistoryList] = useState<any[]>([]);
+
+  // Load history on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("suara_ai_history");
+      if (stored) {
+        setHistoryList(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error("Gagal memuat riwayat:", e);
+    }
+  }, []);
+
+  // Save to history helper
+  const addToHistory = useCallback((title: string, dna: string, output: string, resData: any) => {
+    setHistoryList((prev) => {
+      const newItem = {
+        id: Date.now().toString(),
+        title: title || "Video Tanpa Judul",
+        channel_dna: dna,
+        output_type_id: output,
+        timestamp: new Date().toLocaleString("id-ID"),
+        result: resData
+      };
+      const updated = [newItem, ...prev].slice(0, 15);
+      try {
+        localStorage.setItem("suara_ai_history", JSON.stringify(updated));
+      } catch (e) {
+        console.error("Gagal menyimpan riwayat:", e);
+      }
+      return updated;
+    });
+  }, []);
+
+  // Clear all history
+  const clearHistory = useCallback(() => {
+    setHistoryList([]);
+    try {
+      localStorage.removeItem("suara_ai_history");
+      toast.success("Riwayat analisis berhasil dihapus!");
+    } catch (e) {
+      console.error("Gagal menghapus riwayat:", e);
+    }
+  }, []);
+
+  // Delete single history item
+  const deleteHistoryItem = useCallback((id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setHistoryList((prev) => {
+      const updated = prev.filter(item => item.id !== id);
+      try {
+        localStorage.setItem("suara_ai_history", JSON.stringify(updated));
+        toast.success("Item riwayat berhasil dihapus!");
+      } catch (e) {
+        console.error("Gagal menghapus item riwayat:", e);
+      }
+      return updated;
+    });
+  }, []);
+
+  // Load history item
+  const loadHistoryItem = useCallback((item: any) => {
+    setResult(item.result);
+    setChannelDna(item.channel_dna);
+    setOutputType(item.output_type_id);
+    setSelectedShotIndex(0);
+    toast.success(`Berhasil memuat analisis: "${item.title}"`);
+  }, []);
   const [error, setError] = useState<string | null>(null);
   
   // Selected Results States
@@ -428,6 +501,7 @@ export default function Dashboard() {
       if (res.ok) {
         setResult(data);
         setSelectedShotIndex(0);
+        addToHistory(data.video_title, channelDna, outputType, data);
         toast.success("Analisis Video Berhasil diselesaikan!");
       } else if (res.status === 401) {
         setError(data.detail || "Unauthorized (401).");
@@ -1072,6 +1146,70 @@ export default function Dashboard() {
                       className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-violet-500/60 transition-colors"
                     />
                   </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Riwayat Analisis Card */}
+          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl border-t border-t-zinc-700/50">
+            <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+              <div className="space-y-1">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
+                  <History className="size-4 text-violet-400" />
+                  <span>Riwayat Analisis</span>
+                </CardTitle>
+                <CardDescription className="text-[11px] text-muted-foreground">
+                  Akses cepat ke analisis sebelumnya.
+                </CardDescription>
+              </div>
+              {historyList.length > 0 && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={clearHistory}
+                  title="Hapus Semua Riwayat"
+                  className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="size-3.5" />
+                </Button>
+              )}
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              {historyList.length === 0 ? (
+                <div className="text-center py-6 text-xs text-muted-foreground border border-dashed border-border/60 rounded-lg">
+                  Belum ada riwayat analisis.
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                  {historyList.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => loadHistoryItem(item)}
+                      className="group flex items-center justify-between p-2.5 rounded-lg border border-border/40 hover:border-violet-500/50 bg-background/50 hover:bg-zinc-800/40 cursor-pointer transition-all duration-200"
+                    >
+                      <div className="space-y-1 pr-2 min-w-0 flex-1">
+                        <div className="text-xs font-semibold text-foreground/90 truncate group-hover:text-violet-400 transition-colors">
+                          {item.title}
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                          <span className="bg-muted px-1.5 py-0.5 rounded text-zinc-400 font-medium">
+                            {item.channel_dna === "suara_filsuf" ? "Suara Filsuf" : item.channel_dna === "nalar_senyap" ? "Nalar Senyap" : "Tutur Kyai"}
+                          </span>
+                          <span>•</span>
+                          <span>{item.timestamp}</span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => deleteHistoryItem(item.id, e)}
+                        className="h-6 w-6 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all rounded"
+                      >
+                        <Trash2 className="size-3" />
+                      </Button>
+                    </div>
+                  ))}
                 </div>
               )}
             </CardContent>
