@@ -23,7 +23,19 @@ Yang Harus Dihasilkan (per shot, ATAU satu kali untuk video panjang — lihat at
 Prinsip Penyusunan Outline
 * **Untuk Shorts**: outline per shot harus sangat padat — Hook (0–3 detik) → Build-up cepat → Payoff/Insight → Closing line/CTA singkat. Total harus pas dengan durasi target SHOT TERSEBUT (bukan total semua shot).
 * **Untuk Video Panjang**: outline harus memiliki bagian Intro, minimal 2–4 segmen isi (dengan sub-poin), dan Outro/CTA, proporsional dengan durasi target. Setiap babak WAJIB memiliki DUA jenis rentang waktu yang berbeda, jangan sampai tertukar:
-  - `start_estimate`/`end_estimate` (format mm:ss atau hh:mm:ss, dihitung KUMULATIF mulai dari 00:00 di VIDEO BARU) — **ATURAN MUTLAK SINKRONISASI DURASI**: Total akumulasi durasi dari awal hingga babak terakhir **WAJIB PAS** dengan rentang "Durasi Target" yang dipilih pengguna (misalnya: jika memilih target 5-15 menit, maka babak akhir harus berakhir di rentang 5-15 menit, misalnya di 10:00. JANGAN menyalin durasi video sumber secara malas!). Jika video sumber pendek (misal 10 menit) tetapi target durasi baru panjang (misal 30-60 menit), kembangkan outline video baru agar meluas mencapai 30-60 menit dengan menyisipkan detail analisis baru, studi kasus, analogi, atau penjabaran teoritis. Sebaliknya, ringkas isi jika video baru berdurasi target lebih pendek dari video sumber. Distribusikan durasi setiap babak secara logis (misal: Intro 1-2 menit, Isi 6-10 menit, Outro 1 menit).
+  - `start_estimate`/`end_estimate` (format mm:ss atau hh:mm:ss, dihitung KUMULATIF berurutan tanpa reset mulai dari 00:00 pada babak pertama hingga babak terakhir di VIDEO BARU) — **ATURAN MUTLAK SINKRONISASI & URUTAN DURASI**: 
+    1. Nilai `start_estimate` babak berikutnya **HARUS SAMA** dengan `end_estimate` babak sebelumnya.
+    2. Nilai `end_estimate` babak terakhir **WAJIB BERAKHIR PAS** di dalam rentang Durasi Target video baru yang dipilih pengguna.
+    3. **CONTOH STRUKTUR DURASI YANG BENAR (Target Durasi: 5-15 Menit)**:
+       * Babak 1 (Intro): `start_estimate = "00:00"`, `end_estimate = "01:30"` (Durasi: 1m 30s)
+       * Babak 2 (Isi A): `start_estimate = "01:30"`, `end_estimate = "05:00"` (Durasi: 3m 30s)
+       * Babak 3 (Isi B): `start_estimate = "05:00"`, `end_estimate = "09:15"` (Durasi: 4m 15s)
+       * Babak 4 (Outro/CTA): `start_estimate = "09:15"`, `end_estimate = "10:00"` (Durasi: 45s) -> *Akhir babak terakhir pas di 10:00 (masuk dalam rentang 5-15 menit)*.
+    4. **CONTOH YANG SALAH (DILARANG KERAS!)**:
+       * Reset ke awal: Babak 2 dimulai dari `00:00` lagi.
+       * Melompat mundur: Babak 2 berakhir di `05:00`, tapi Babak 3 dimulai di `04:00`.
+       * Terlahu pendek/panjang: Babak terakhir berakhir di `03:00` (di luar target 5-15 menit) atau berakhir di `20:00`.
+    5. Jika target durasi baru panjang (misal 30-60 menit) sementara video sumber pendek, kembangkan sub-topik baru, studi kasus, atau analogi di outline agar durasi kumulatifnya pas mencapai rentang target tersebut. Sebaliknya, ringkas jika durasi target baru lebih pendek dari video sumber.
   - `sumber_segmen` (satu atau lebih rentang hh:mm:ss di VIDEO SUMBER) — menunjukkan dengan jelas materi/insight babak ini diambil dari menit berapa sampai berapa di video sumber. WAJIB diisi untuk SETIAP babak, dihitung dari posisi teks terkait di transkrip (posisi_relatif × durasi_video), bukan ditinggalkan kosong atau ditebak kasar. Kalau satu babak menggabungkan materi dari beberapa bagian sumber yang tidak berurutan (mis. gabungan 2 paradoks berbeda), isi beberapa entri `sumber_segmen`, masing-masing dengan catatan singkat apa yang diambil dari rentang itu.
 
 **ATURAN MUTLAK OPENING**: Pada `video_panjang.strategi_konten.opening_60_detik.klip`, akumulasi segmen klip **HARUS tepat 60 detik**. Klip pertama dimulai dari `00:00` dan klip terakhir harus diakhiri tepat pada `01:00` (atau 60 detik). Dilarang keras membuat klip baru yang melebihi batas waktu 1 menit tersebut!

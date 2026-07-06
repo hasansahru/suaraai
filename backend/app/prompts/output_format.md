@@ -77,8 +77,8 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         {
           "babak": "string",
           "isi": "string",
-          "start_estimate": "hh:mm:ss — estimasi waktu MULAI babak ini di VIDEO BARU (bukan video sumber), dihitung kumulatif dari 00:00",
-          "end_estimate": "hh:mm:ss — estimasi waktu SELESAI babak ini di VIDEO BARU; total seluruh babak harus pas dengan Durasi Target yang dipilih pengguna",
+          "start_estimate": "hh:mm:ss — estimasi waktu MULAI babak ini di VIDEO BARU (bukan video sumber), dihitung kumulatif dari 00:00; start_estimate babak ini harus sama dengan end_estimate babak sebelumnya",
+          "end_estimate": "hh:mm:ss — estimasi waktu SELESAI babak ini di VIDEO BARU; dihitung kumulatif berurutan, di mana end_estimate babak terakhir wajib berakhir pas di rentang Durasi Target video baru yang dipilih pengguna",
           "sumber_segmen": [
             {
               "start": "hh:mm:ss — timestamp MULAI di VIDEO SUMBER tempat materi babak ini diambil (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",

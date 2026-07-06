@@ -653,11 +653,14 @@ def build_user_content(
     if target_min_seconds or target_max_seconds:
         lo = target_min_seconds or target_max_seconds
         hi = target_max_seconds or target_min_seconds
+        
+        # Batasan keras agar tidak melebihi platform limit Shorts
+        upper_limit = hi
         out.append(
             f"- Durasi Target dalam DETIK (untuk perhitungan presisi): {lo}-{hi} detik. "
             f"WAJIB: untuk SETIAP shot di `shots[].segmen` (Output Type = Shorts), "
-            f"(end_time - start_time) harus berada dalam rentang {max(lo - 10, 1)}-{hi + 10} detik "
-            f"(toleransi \u00b110 detik). Jika satu topik di transkrip lebih panjang dari itu, potong ke "
+            f"(end_time - start_time) harus berada dalam rentang {max(lo - 10, 1)}-{upper_limit} detik "
+            f"(DILARANG KERAS melebihi {upper_limit} detik!). Jika satu topik di transkrip lebih panjang dari itu, potong ke "
             f"sub-bagian tersempit yang paling kuat \u2014 JANGAN ambil seluruh blok topik."
         )
 
