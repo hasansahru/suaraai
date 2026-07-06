@@ -118,7 +118,7 @@ export default function Dashboard() {
   const [proxyHttpUrl, setProxyHttpUrl] = useState("");
   const [proxyHttpsUrl, setProxyHttpsUrl] = useState("");
   const [proxyWebshareUser, setProxyWebshareUser] = useState("");
-  const [proxyWebsharePass] = useState("");
+  const [proxyWebsharePass, setProxyWebsharePass] = useState("");
   
   // Skills States
   const [enableWebSearch, setEnableWebSearch] = useState(false);
@@ -1059,7 +1059,17 @@ export default function Dashboard() {
                       placeholder="Webshare username" 
                       value={proxyWebshareUser} 
                       onChange={e => setProxyWebshareUser(e.target.value)} 
-                      className="bg-background border-border text-foreground text-foreground font-semibold text-xs h-9.5 focus:border-violet-500/60 transition-colors"
+                      className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-violet-500/60 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-semibold text-muted-foreground">Password Webshare</label>
+                    <Input 
+                      type="password"
+                      placeholder="Webshare password" 
+                      value={proxyWebsharePass} 
+                      onChange={e => setProxyWebsharePass(e.target.value)} 
+                      className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-violet-500/60 transition-colors"
                     />
                   </div>
                 </div>
