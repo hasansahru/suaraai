@@ -60,7 +60,13 @@ def load_json_setting(filename: str) -> dict:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+@app.get("/")
+@app.head("/")
+async def root_path():
+    return {"status": "ok", "message": "Suara AI Backend is running"}
+
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     """Endpoint untuk monitoring — dipakai oleh UptimeRobot agar Space tidak sleep."""
     return {"status": "ok", "message": "Backend aktif"}
@@ -190,6 +196,7 @@ async def api_test_connection(req: TestConnectionRequest):
 
 class AnalyzeRequest(BaseModel):
     youtube_url: Optional[str] = None
+    Clapperboard_url: Optional[str] = None
     manual_transcript: Optional[str] = None
     channel_dna: str
     output_type_id: str
@@ -229,10 +236,11 @@ async def api_analyze(req: AnalyzeRequest):
         transcript_text = ""
         metadata = {}
 
+        url = req.youtube_url or req.Clapperboard_url
         if req.manual_transcript and req.manual_transcript.strip():
             transcript_text = req.manual_transcript.strip()
-        elif req.youtube_url and req.youtube_url.strip():
-            video_id = youtube_utils.extract_video_id(req.youtube_url)
+        elif url and url.strip():
+            video_id = youtube_utils.extract_video_id(url)
             if not video_id:
                 raise HTTPException(status_code=400, detail="URL YouTube tidak valid.")
             

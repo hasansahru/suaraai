@@ -86,6 +86,8 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   custom: []
 };
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://suarafilsuf-suaraai-backend.hf.space";
+
 export default function Dashboard() {
   const [apiSettings, setApiSettings] = useState<any>(null);
   
@@ -182,7 +184,7 @@ export default function Dashboard() {
       setKeywordLoading(true);
       try {
         const res = await fetch(
-          `https://suarafilsuf-suaraai-backend.hf.space/api/youtube-suggestions?q=${encodeURIComponent(keywordQuery.trim())}`
+          `${API_BASE}/api/youtube-suggestions?q=${encodeURIComponent(keywordQuery.trim())}`
         );
         if (res.ok) {
           const data = await res.json();
@@ -210,7 +212,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function checkAnalytics() {
       try {
-        const res = await fetch(`https://suarafilsuf-suaraai-backend.hf.space/api/channels/${channelDna}/analytics`);
+        const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`);
         if (res.ok) {
           const data = await res.json();
           setAnalyticsExists(data.exists);
@@ -230,7 +232,7 @@ export default function Dashboard() {
     
     const uploadToastId = toast.loading("Memproses data analytics...");
     try {
-      const res = await fetch(`https://suarafilsuf-suaraai-backend.hf.space/api/channels/${channelDna}/analytics`, {
+      const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`, {
         method: "POST",
         body: formData,
       });
@@ -249,7 +251,7 @@ export default function Dashboard() {
 
   const handleDeleteAnalytics = async () => {
     try {
-      const res = await fetch(`https://suarafilsuf-suaraai-backend.hf.space/api/channels/${channelDna}/analytics`, {
+      const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -269,7 +271,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function loadSettings() {
       try {
-        const res = await fetch("https://suarafilsuf-suaraai-backend.hf.space/api/settings");
+        const res = await fetch(`${API_BASE}/api/settings`);
         if (res.ok) {
           const data = await res.json();
           setApiSettings(data);
@@ -315,7 +317,7 @@ export default function Dashboard() {
     setTestLoading(true);
     setTestResult(null);
     try {
-      const res = await fetch("https://suarafilsuf-suaraai-backend.hf.space/api/test-connection", {
+      const res = await fetch(`${API_BASE}/api/test-connection`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -380,13 +382,14 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem("auth_token");
-      const res = await fetch("https://suarafilsuf-suaraai-backend.hf.space/api/analyze", {
+      const res = await fetch(`${API_BASE}/api/analyze`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
+          youtube_url: useManual ? null : ClapperboardUrl,
           Clapperboard_url: useManual ? null : ClapperboardUrl,
           manual_transcript: useManual ? manualTranscript : null,
           channel_dna: channelDna,
