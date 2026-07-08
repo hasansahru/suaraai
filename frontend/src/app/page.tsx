@@ -552,7 +552,7 @@ export default function Dashboard() {
             <div>
               <div className="text-[9px] uppercase tracking-[0.22em] text-violet-400 font-mono font-bold leading-none mb-1">AI Content Engine</div>
               <h1 className="text-lg font-bold tracking-tight flex items-center gap-2 leading-none">
-                <span className="text-foreground">Clapperboard</span> 
+                <span className="text-foreground">YouTube</span> 
                 <span className="text-violet-400 font-medium">Content Intelligence</span> 
                 <span className="text-[9px] bg-muted border border-border/80 text-muted-foreground/80 px-2 py-0.5 rounded-full font-mono font-medium tracking-wide">PRO</span>
               </h1>
@@ -2391,7 +2391,7 @@ export default function Dashboard() {
       {/* Footer copyright */}
       <footer className="border-t border-border bg-[#111318]/40 py-6 mt-12 text-center text-xs text-muted-foreground/80 font-medium">
         <div className="max-w-7xl mx-auto px-6">
-          <p>Â© 2026 AI-Clapperboard-Content-Intelligence Pro. Dikembangkan untuk Kreator Original Clapperboard Indonesia.</p>
+          <p>© 2026 AI-YouTube-Content-Intelligence Pro. Dikembangkan untuk Kreator Original YouTube Indonesia.</p>
         </div>
       </footer>
     </div>
