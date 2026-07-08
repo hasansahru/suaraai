@@ -81,17 +81,10 @@ const DEFAULT_DURATIONS = [
 ];
 
 const DEFAULT_MODELS: Record<string, string[]> = {
-  anthropic: [
-    "claude-sonnet-4-5",
-    "claude-sonnet-4-6",
-    "claude-opus-4-5",
-    "claude-3-5-sonnet-latest",
-    "claude-3-5-haiku-latest",
-    "claude-3-opus-latest",
-  ],
-  openai: ["gpt-4o", "gpt-4o-mini", "o3-mini", "o1-mini"],
-  gemini: ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"],
-  "9router": ["cc/claude-sonnet-4-6", "cc/claude-sonnet-4-5", "cc/claude-opus-4-5", "openai/gpt-4o", "openai/o3-mini"],
+  anthropic: ["claude-3-5-sonnet-latest", "claude-3-5-sonnet-20241022", "claude-3-opus-latest"],
+  openai: ["gpt-4o", "gpt-4o-mini", "o1-mini"],
+  gemini: ["gemini-2.5-flash", "gemini-2.5-pro"],
+  "9router": ["cc/claude-sonnet-4-6", "openai/gpt-4o"],
   custom: []
 };
 
@@ -623,7 +616,7 @@ export default function Dashboard() {
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">AI Provider</label>
                 <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs font-semibold hover:bg-accent transition-colors">
+                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
                     <SelectValue placeholder="Pilih Provider">
                       {(() => {
                         const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
@@ -664,7 +657,7 @@ export default function Dashboard() {
                   />
                 ) : (
                   <Select value={model} onValueChange={(v) => v && setModel(v)}>
-                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs font-semibold hover:bg-accent transition-colors">
+                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
                       <SelectValue placeholder="Pilih Model">
                         {(() => {
                           const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
@@ -742,7 +735,7 @@ export default function Dashboard() {
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between">
                   <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Timeout API</label>
-                  <span className="text-xs text-violet-600 dark:text-violet-400 font-semibold tabular-nums">{timeout} detik</span>
+                  <span className="text-xs text-violet-400 font-semibold">{timeout} detik</span>
                 </div>
                 <Slider 
                   min={30} 
@@ -777,8 +770,8 @@ export default function Dashboard() {
                 {testResult && (
                   <div className={`text-[11px] p-2.5 rounded-lg border flex items-start gap-2 ${
                     testResult.ok 
-                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400" 
-                      : "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                      : "bg-rose-950/20 border-rose-900/40 text-rose-400"
                   }`}>
                     {testResult.ok ? (
                       <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
@@ -860,7 +853,7 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="border border-dashed border-border rounded-xl p-4 bg-muted/20 hover:border-muted-foreground/40 transition-all">
+                  <div className="border border-dashed border-border rounded-xl p-4 bg-background/20 hover:border-border/60 transition-all">
                     <label htmlFor="analytics-upload" className="cursor-pointer flex flex-col items-center gap-2">
                       <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                         <FileText className="size-5 text-emerald-400" />
@@ -1124,12 +1117,12 @@ export default function Dashboard() {
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-muted-foreground">Proxy Mode</label>
                 <Select value={proxyMode} onValueChange={(v) => v && setProxyMode(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
+                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
                     <SelectValue placeholder="Pilih Proxy">
                       {proxyMode === "none" ? "Tidak pakai proxy" : proxyMode === "webshare" ? "Webshare Proxy" : "HTTP/HTTPS Proxy"}
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-xl min-w-[200px]">
+                  <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[200px]">
                     <SelectItem value="none">Tidak pakai proxy</SelectItem>
                     <SelectItem value="webshare">Webshare (rotating residential)</SelectItem>
                     <SelectItem value="generic">Proxy HTTP/HTTPS biasa</SelectItem>
@@ -1408,23 +1401,33 @@ export default function Dashboard() {
               </div>
 
               {/* Submit Button */}
-              <Button 
-                onClick={handleRunAnalysis} 
+              <button
+                onClick={handleRunAnalysis}
                 disabled={loading}
-                className="w-full bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition-all text-zinc-50 dark:text-zinc-950 font-bold h-12 shadow-md text-sm rounded-xl tracking-tight"
+                className="relative w-full h-12 rounded-xl font-bold text-sm tracking-widest uppercase overflow-hidden group disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ isolation: 'isolate' }}
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 size-5 animate-spin text-zinc-50 dark:text-zinc-950" />
-                    <span className="text-zinc-50 dark:text-zinc-950">{loadingStep || "Menganalisis..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="size-4 mr-2 fill-current text-zinc-50 dark:text-zinc-950" />
-                    JALANKAN ANALISIS ENGINE
-                  </>
-                )}
-              </Button>
+                {/* Gradient background */}
+                <span className="absolute inset-0 bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 bg-[length:200%_100%] transition-all duration-500 group-hover:bg-[position:right_center] group-hover:from-violet-500 group-hover:via-indigo-500 group-hover:to-violet-500" />
+                {/* Shimmer sweep */}
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg]" />
+                {/* Glow */}
+                <span className="absolute inset-0 rounded-xl shadow-[0_0_24px_4px_rgba(124,58,237,0.35)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* Content */}
+                <span className="relative z-10 flex items-center justify-center gap-2 text-white">
+                  {loading ? (
+                    <>
+                      <Loader2 className="size-5 animate-spin" />
+                      <span>{loadingStep || "Menganalisis..."}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="size-4 fill-current" />
+                      JALANKAN ANALISIS ENGINE
+                    </>
+                  )}
+                </span>
+              </button>
             </div>
           </div>
 
@@ -1525,7 +1528,7 @@ export default function Dashboard() {
 
                 {/* Tab: Summary */}
                 <TabsContent value="ringkasan">
-                  <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-2xl p-6 hover:border-zinc-800/90 transition-all duration-200 shadow-md">
+                  <div className="bg-card border border-border rounded-2xl p-6 hover:border-border/80 transition-all duration-200 shadow-sm">
                     <div className="flex items-center gap-2 mb-1 border-b border-border/40 pb-3">
                       <div>
                         <h3 className="text-sm font-semibold text-foreground">Struktur Video & Target Audiens</h3>
