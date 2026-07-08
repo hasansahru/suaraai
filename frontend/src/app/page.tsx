@@ -603,17 +603,15 @@ export default function Dashboard() {
         
         {/* Left Control Panel (Sidebar Settings) */}
         <section className="lg:col-span-4 flex flex-col gap-6">
-          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
-                <Settings className="size-4 text-violet-400" />
-                <span>Konfigurasi AI & Model</span>
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                Pilih provider dan sesuaikan credentials Anda.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Settings className="size-4 text-violet-500" />
+              <h2 className="text-sm font-semibold text-foreground">Konfigurasi AI & Model</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Pilih provider dan sesuaikan credentials Anda.
+            </p>
+            <div className="space-y-4">
               {/* Provider Selection */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">AI Provider</label>
@@ -786,58 +784,47 @@ export default function Dashboard() {
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* 🎭­ Target Channel & Analytics */}
-          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-                <User className="size-4 text-amber-400" />
-                <span>🎭 Target Channel &amp; Analytics</span>
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                Pilih DNA channel dan unggah data analytics untuk konteks AI.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          {/* 🎭 Target Channel & Analytics */}
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <User className="size-4 text-amber-500" />
+              <h2 className="text-sm font-semibold text-foreground">Target Channel &amp; Analytics</h2>
+            </div>
+            
+            <div className="space-y-4">
               {/* Channel Selector */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Target Channel</label>
-                <Select value={channelDna} onValueChange={(v) => v && setChannelDna(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
-                    <SelectValue placeholder="Pilih Channel">
-                      {(() => {
-                        const ch = DEFAULT_CHANNELS.find(c => c.id === channelDna);
-                        return ch ? `${ch.emoji} ${ch.name}` : channelDna;
-                      })()}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-2xl min-w-[240px]">
-                    {DEFAULT_CHANNELS.map(ch => (
-                      <SelectItem key={ch.id} value={ch.id} className="py-2">
-                        <span className="flex items-center gap-2">
-                          <span>{ch.emoji}</span>
-                          <span>{ch.name}</span>
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {/* Channel Description */}
-                {(() => {
-                  const ch = DEFAULT_CHANNELS.find(c => c.id === channelDna);
-                  return ch ? (
-                    <p className="text-[11px] text-muted-foreground leading-relaxed bg-muted/60 border border-border/40 rounded-lg px-3 py-2 mt-1">
-                      {ch.emoji} <span className="font-semibold text-foreground/90">{ch.name}</span> — {ch.description}
-                    </p>
-                  ) : null;
-                })()}
+              <div className="space-y-2.5">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] font-mono block">DNA Channel</label>
+                <div className="grid grid-cols-1 gap-2.5">
+                  {DEFAULT_CHANNELS.map((ch) => {
+                    const isSelected = channelDna === ch.id;
+                    return (
+                      <button
+                        key={ch.id}
+                        onClick={() => setChannelDna(ch.id)}
+                        className={`text-left p-3.5 rounded-xl border transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                          isSelected
+                            ? "bg-violet-600/10 border-violet-500/50 text-violet-600 dark:text-violet-400 ring-1 ring-violet-500/20"
+                            : "bg-muted/30 border-border text-muted-foreground hover:border-zinc-500/40 hover:text-foreground"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-base">{ch.emoji}</span>
+                          <span className="text-xs font-bold font-sans tracking-tight">{ch.name}</span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground/80 leading-normal font-medium">{ch.description}</p>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Analytics CSV Upload */}
-              <div className="space-y-2 pt-1 border-t border-border/30">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider flex items-center gap-1.5">
+              <div className="space-y-2.5 pt-2.5 border-t border-border/30">
+                <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-[0.2em] font-mono block flex items-center gap-1.5">
                   <Activity className="size-3 text-emerald-400" />
                   Analytics Channel
                 </label>
@@ -846,10 +833,10 @@ export default function Dashboard() {
                     <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-lg text-xs leading-relaxed flex items-start gap-2.5">
                       <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
                       <div>
-                        <strong className="font-semibold block mb-0.5 text-foreground">Analytics Aktif</strong>
-                        Data performa real untuk channel ini sudah tersimpan dan otomatis digunakan.
+                        <strong className="font-semibold block mb-0.5 text-foreground text-[11px]">Analytics Aktif</strong>
+                        <p className="text-[10px] text-emerald-400/90">Data performa real untuk channel ini sudah tersimpan dan otomatis digunakan.</p>
                         {analyticsSummary && (
-                          <div className="mt-2 pt-2 border-t border-emerald-500/30 text-[10px] space-y-1 text-muted-foreground">
+                          <div className="mt-2 pt-2 border-t border-emerald-500/25 text-[10px] space-y-1 text-muted-foreground font-mono">
                             <div>• Total video: {analyticsSummary.total_videos_analyzed}</div>
                             {analyticsSummary.avg_ctr_pct && <div>• Rata-rata CTR: {analyticsSummary.avg_ctr_pct.toFixed(2)}%</div>}
                             {analyticsSummary.avg_retention_pct && <div>• Rata-rata Retensi: {analyticsSummary.avg_retention_pct.toFixed(2)}%</div>}
@@ -860,13 +847,13 @@ export default function Dashboard() {
                     <Button
                       onClick={handleDeleteAnalytics}
                       variant="outline"
-                      className="border-rose-950 text-rose-400 hover:bg-rose-950/20 w-full h-8 text-[11px] font-medium transition-colors"
+                      className="border-rose-950/40 text-rose-400 hover:bg-rose-950/20 w-full h-8 text-[10px] font-medium transition-all rounded-xl"
                     >
-                      🗑️ Hapus data analytics channel ini
+                      🗑️ Hapus data analytics channel
                     </Button>
                   </div>
                 ) : (
-                  <div className="border border-dashed border-zinc-600/60 rounded-xl p-4 bg-muted/40 hover:border-zinc-500/60 transition-colors">
+                  <div className="border border-dashed border-zinc-800/80 rounded-xl p-4 bg-background/20 hover:border-zinc-700/60 transition-all">
                     <label htmlFor="analytics-upload" className="cursor-pointer flex flex-col items-center gap-2">
                       <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                         <FileText className="size-5 text-emerald-400" />
@@ -896,91 +883,108 @@ export default function Dashboard() {
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Format Output & Durasi */}
-          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
-                <Sliders className="size-4 text-indigo-400" />
-                <span>Format Output</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Sliders className="size-4 text-indigo-550" />
+              <h2 className="text-sm font-semibold text-foreground">Format Output &amp; Durasi</h2>
+            </div>
+            
+            <div className="space-y-4">
               {/* Output Type */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Format Output</label>
-                <Select value={outputType} onValueChange={(v) => v && setOutputType(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
-                    <SelectValue placeholder="Format Output">
-                      {outputType === "shorts" ? "🎬 Shorts / Reels / TikTok" : "🎥 Video Panjang Clapperboard"}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-2xl min-w-[240px]">
-                    <SelectItem value="shorts" className="py-2">🎬 Shorts / Reels / TikTok</SelectItem>
-                    <SelectItem value="video_panjang" className="py-2">🎥 Video Panjang Clapperboard</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] font-mono block">Format Output</label>
+                <div className="grid grid-cols-2 gap-1 p-1 bg-muted border border-border rounded-xl">
+                  <button
+                    onClick={() => setOutputType("shorts")}
+                    className={`py-2 px-3 text-[11px] font-semibold rounded-lg transition-all cursor-pointer active:scale-[0.98] ${
+                      outputType === "shorts"
+                        ? "bg-violet-600 text-white shadow-sm"
+                        : "text-muted-foreground hover:text-foreground bg-transparent"
+                    }`}
+                  >
+                    🎬 Shorts / TikTok
+                  </button>
+                  <button
+                    onClick={() => setOutputType("video_panjang")}
+                    className={`py-2 px-3 text-[11px] font-semibold rounded-lg transition-all cursor-pointer active:scale-[0.98] ${
+                      outputType === "video_panjang"
+                        ? "bg-violet-600 text-white shadow-sm"
+                        : "text-muted-foreground hover:text-foreground bg-transparent"
+                    }`}
+                  >
+                    🎥 Video Panjang
+                  </button>
+                </div>
               </div>
 
               {/* Duration Target */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Durasi Target</label>
-                <Select value={duration} onValueChange={(v) => v && setDuration(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
-                    <SelectValue placeholder="Durasi Target">
-                      {(() => {
-                        const d = DEFAULT_DURATIONS.find(x => x.id === duration);
-                        return d ? d.label : duration;
-                      })()}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-2xl min-w-[200px]">
-                    {DEFAULT_DURATIONS.filter(d => d.type === (outputType === "shorts" ? "shorts" : "long")).map(d => (
-                      <SelectItem key={d.id} value={d.id} className="py-2">{d.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="space-y-2.5">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] font-mono block">Durasi Target</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {DEFAULT_DURATIONS.filter(d => d.type === (outputType === "shorts" ? "shorts" : "long")).map(d => {
+                    const isSelected = duration === d.id;
+                    return (
+                      <button
+                        key={d.id}
+                        onClick={() => setDuration(d.id)}
+                        className={`px-3 py-1.5 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer active:scale-[0.96] ${
+                          isSelected
+                            ? "bg-violet-600/10 border-violet-500/50 text-violet-600 dark:text-violet-400 ring-1 ring-violet-500/10"
+                            : "bg-muted/30 border-border text-muted-foreground hover:border-zinc-500/40 hover:text-foreground"
+                        }`}
+                      >
+                        {d.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Shot Count (Shorts Only) */}
               {outputType === "shorts" && (
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider flex items-center justify-between">
+                <div className="space-y-2.5 pt-1.5 border-t border-border/30">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] font-mono block flex items-center justify-between">
                     <span>Jumlah Segmen / Shots</span>
-                    <span className="text-xs text-indigo-300 font-bold bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">{shotCount} Shot</span>
+                    <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-mono font-bold bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">{shotCount} Shot</span>
                   </label>
-                  <Select value={String(shotCount)} onValueChange={(v) => v && setShotCount(Number(v))}>
-                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
-                      <SelectValue>
-                        {shotCount} Shot
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-2xl min-w-[200px]">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-                        <SelectItem key={n} value={String(n)} className="py-2">{n} Shot{n > 1 ? " Rekomendasi" : " Rekomendasi"}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[3, 4, 5, 6, 7, 8].map(n => {
+                      const isSelected = shotCount === n;
+                      return (
+                        <button
+                          key={n}
+                          onClick={() => setShotCount(n)}
+                          className={`px-3 py-1 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer active:scale-[0.96] ${
+                            isSelected
+                              ? "bg-indigo-600/10 border-indigo-500/50 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/10"
+                              : "bg-muted/30 border-border text-muted-foreground hover:border-zinc-500/40 hover:text-foreground"
+                          }`}
+                        >
+                          {n} Shot
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Claude Beta / Reasoning Skills Expander */}
           {showSkillsCard && (
-            <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
-                  <Brain className="size-4 text-pink-400" />
-                  <span>{provider === "anthropic" ? "🧠 Skill Claude Tambahan" : "🧠 Fitur Agentic / Reasoning"}</span>
-                </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground">
-                  {provider === "anthropic" ? "Aktifkan kemampuan asinkron ekstra." : "Konfigurasi kemampuan penalaran (reasoning) model."}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Brain className="size-4 text-pink-400" />
+                <h2 className="text-sm font-semibold text-foreground">{provider === "anthropic" ? "Skill Claude Tambahan" : "Fitur Agentic / Reasoning"}</h2>
+              </div>
+              <p className="text-xs text-muted-foreground mb-4">
+                {provider === "anthropic" ? "Aktifkan kemampuan asinkron ekstra." : "Konfigurasi kemampuan penalaran (reasoning) model."}
+              </p>
+              <div className="space-y-4">
                 {/* Web Search - Only for Anthropic */}
                 {provider === "anthropic" && (
                   <>
@@ -1096,22 +1100,20 @@ export default function Dashboard() {
                     </div>
                   </>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* YouTube Proxy Configuration */}
-          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
-                <Compass className="size-4 text-emerald-400" />
-                <span>🌐 Proxy YouTube (Anti-Blocking)</span>
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                Mengurangi resiko rate-limit IP saat scraping transkrip.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Compass className="size-4 text-emerald-400" />
+              <h2 className="text-sm font-semibold text-foreground">Proxy YouTube (Anti-Blocking)</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Mengurangi resiko rate-limit IP saat scraping transkrip.
+            </p>
+            <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-muted-foreground">Proxy Mode</label>
                 <Select value={proxyMode} onValueChange={(v) => v && setProxyMode(v)}>
@@ -1174,20 +1176,20 @@ export default function Dashboard() {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Riwayat Analisis Card */}
-          <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl border-t border-t-zinc-700/50">
-            <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
               <div className="space-y-1">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
+                <div className="flex items-center gap-2 text-foreground">
                   <History className="size-4 text-violet-400" />
-                  <span>Riwayat Analisis</span>
-                </CardTitle>
-                <CardDescription className="text-[11px] text-muted-foreground">
+                  <h2 className="text-sm font-semibold font-sans tracking-tight">Riwayat Analisis</h2>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
                   Akses cepat ke analisis sebelumnya.
-                </CardDescription>
+                </p>
               </div>
               {historyList.length > 0 && (
                 <Button 
@@ -1200,8 +1202,8 @@ export default function Dashboard() {
                   <Trash2 className="size-3.5" />
                 </Button>
               )}
-            </CardHeader>
-            <CardContent className="px-4 pb-4">
+            </div>
+            <div className="space-y-2">
               {historyList.length === 0 ? (
                 <div className="text-center py-6 text-xs text-muted-foreground border border-dashed border-border/60 rounded-lg">
                   Belum ada riwayat analisis.
@@ -1238,25 +1240,23 @@ export default function Dashboard() {
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </section>
 
         {/* Right Section (Main App Area) */}
         <section className="lg:col-span-8 flex flex-col gap-6">
           
           {/* Main Input Form */}
-          <Card className="bg-card text-card-foreground border-border shadow-xl overflow-hidden relative border-t-2 border-t-violet-500/80">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-bold flex items-center gap-2 text-foreground font-bold">
-                <Sparkles className="size-5 text-violet-400" />
-                <span>Analisis Strategi Konten Video Baru</span>
-              </CardTitle>
-              <CardDescription className="text-xs text-muted-foreground">
-                Masukkan URL video kompetitor/referensi untuk diekstraksi menjadi paket produksi orisinal.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="bg-card border border-border rounded-2xl p-6 transition-all duration-200 shadow-sm relative">
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="size-5 text-violet-400" />
+              <h2 className="text-base font-bold text-foreground">Analisis Strategi Konten Video Baru</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-5">
+              Masukkan URL video kompetitor/referensi untuk diekstraksi menjadi paket produksi orisinal.
+            </p>
+            <div className="space-y-4">
               {/* Mode Selector Tab */}
               <div className="flex gap-2 p-1 bg-muted border border-border/40 rounded-lg w-fit">
                 <Button 
@@ -1404,22 +1404,22 @@ export default function Dashboard() {
               <Button 
                 onClick={handleRunAnalysis} 
                 disabled={loading}
-                className="w-full bg-violet-600 hover:bg-violet-550 active:scale-[0.98] transition-all text-white font-bold h-12 shadow-md hover:shadow-violet-600/20 text-sm rounded-xl"
+                className="w-full bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition-all text-zinc-50 dark:text-zinc-950 font-bold h-12 shadow-md text-sm rounded-xl tracking-tight"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="mr-2 size-5 animate-spin" />
-                    <span>{loadingStep || "Menganalisis..."}</span>
+                    <Loader2 className="mr-2 size-5 animate-spin text-zinc-50 dark:text-zinc-950" />
+                    <span className="text-zinc-50 dark:text-zinc-950">{loadingStep || "Menganalisis..."}</span>
                   </>
                 ) : (
                   <>
-                    <Play className="size-4 mr-2 fill-white" />
+                    <Play className="size-4 mr-2 fill-current text-zinc-50 dark:text-zinc-950" />
                     JALANKAN ANALISIS ENGINE
                   </>
                 )}
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Loading Skeleton */}
           {loading && (
@@ -1479,28 +1479,28 @@ export default function Dashboard() {
             <div className="space-y-6">
               
               {/* Video Title Header card */}
-              <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl p-5 border-l-4 border-l-emerald-500">
+              <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-2xl p-5 border-l-4 border-l-emerald-500 shadow-md">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1.5">
-                    <span className="text-[10px] uppercase tracking-wider text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
                       Hasil Analisis
                     </span>
-                    <h2 className="text-lg font-bold text-foreground font-semibold flex items-center gap-2">
-                      <Clapperboard className="size-5 text-rose-500 shrink-0" />
+                    <h2 className="text-base font-bold text-foreground flex items-center gap-2 tracking-tight">
+                      <Play className="size-4 text-emerald-400 shrink-0 fill-current" />
                       <span>{result.video_title}</span>
                     </h2>
                   </div>
                   {result.duration_warnings && result.duration_warnings.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {result.duration_warnings.map((w: string, i: number) => (
-                        <span key={i} className="text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1 font-medium">
+                        <span key={i} className="text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1 font-medium font-mono">
                           <AlertTriangle className="size-3 shrink-0" /> {w}
                         </span>
                       ))}
                     </div>
                   )}
                 </div>
-              </Card>
+              </div>
 
               {/* Main Tabs result container */}
               <Tabs defaultValue="ringkasan" className="space-y-6">
@@ -1518,14 +1518,14 @@ export default function Dashboard() {
 
                 {/* Tab: Summary */}
                 <TabsContent value="ringkasan">
-                  <Card className="bg-card text-card-foreground border-border">
-                    <CardHeader className="pb-4 border-b border-border/60">
-                      <CardTitle className="text-sm font-semibold text-foreground">Struktur Video & Target Audiens</CardTitle>
-                      <CardDescription className="text-xs text-muted-foreground">
-                        Hasil reverse engineering modul awal AI.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-6">
+                  <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-2xl p-6 hover:border-zinc-800/90 transition-all duration-200 shadow-md">
+                    <div className="flex items-center gap-2 mb-1 border-b border-border/40 pb-3">
+                      <div>
+                        <h3 className="text-sm font-semibold text-foreground">Struktur Video & Target Audiens</h3>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">Hasil reverse engineering modul awal AI.</p>
+                      </div>
+                    </div>
+                    <div className="pt-4 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2.5">
                           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
@@ -1583,8 +1583,8 @@ export default function Dashboard() {
                           </div>
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 {/* Tab: Shots/Segments details */}
