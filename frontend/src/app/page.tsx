@@ -81,10 +81,17 @@ const DEFAULT_DURATIONS = [
 ];
 
 const DEFAULT_MODELS: Record<string, string[]> = {
-  anthropic: ["claude-3-5-sonnet-latest", "claude-3-5-sonnet-20241022", "claude-3-opus-latest"],
-  openai: ["gpt-4o", "gpt-4o-mini", "o1-mini"],
-  gemini: ["gemini-2.5-flash", "gemini-2.5-pro"],
-  "9router": ["cc/claude-sonnet-4-6", "openai/gpt-4o"],
+  anthropic: [
+    "claude-sonnet-4-5",
+    "claude-sonnet-4-6",
+    "claude-opus-4-5",
+    "claude-3-5-sonnet-latest",
+    "claude-3-5-haiku-latest",
+    "claude-3-opus-latest",
+  ],
+  openai: ["gpt-4o", "gpt-4o-mini", "o3-mini", "o1-mini"],
+  gemini: ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"],
+  "9router": ["cc/claude-sonnet-4-6", "cc/claude-sonnet-4-5", "cc/claude-opus-4-5", "openai/gpt-4o", "openai/o3-mini"],
   custom: []
 };
 
@@ -616,7 +623,7 @@ export default function Dashboard() {
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">AI Provider</label>
                 <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
+                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs font-semibold hover:bg-accent transition-colors">
                     <SelectValue placeholder="Pilih Provider">
                       {(() => {
                         const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
@@ -625,7 +632,7 @@ export default function Dashboard() {
                       })()}
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-xl min-w-[260px]">
+                  <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[260px]">
                     {((apiSettings?.ai_provider?.providers) || DEFAULT_PROVIDERS).map((p: any) => (
                       <SelectItem key={p.id} value={p.id} className="py-2">
                         {p.label}
@@ -657,7 +664,7 @@ export default function Dashboard() {
                   />
                 ) : (
                   <Select value={model} onValueChange={(v) => v && setModel(v)}>
-                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-zinc-700/80 transition-colors">
+                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs font-semibold hover:bg-accent transition-colors">
                       <SelectValue placeholder="Pilih Model">
                         {(() => {
                           const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
@@ -668,7 +675,7 @@ export default function Dashboard() {
                         })()}
                       </SelectValue>
                     </SelectTrigger>
-                    <SelectContent className="bg-card border-zinc-600/70 text-foreground font-semibold text-xs shadow-xl min-w-[240px]">
+                    <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[240px]">
                       {(() => {
                         const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
                         const pInfo = providers.find((p: any) => p.id === provider);
@@ -735,7 +742,7 @@ export default function Dashboard() {
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between">
                   <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Timeout API</label>
-                  <span className="text-xs text-violet-400 font-semibold">{timeout} detik</span>
+                  <span className="text-xs text-violet-600 dark:text-violet-400 font-semibold tabular-nums">{timeout} detik</span>
                 </div>
                 <Slider 
                   min={30} 
@@ -770,8 +777,8 @@ export default function Dashboard() {
                 {testResult && (
                   <div className={`text-[11px] p-2.5 rounded-lg border flex items-start gap-2 ${
                     testResult.ok 
-                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
-                      : "bg-rose-950/20 border-rose-900/40 text-rose-400"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400" 
+                      : "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400"
                   }`}>
                     {testResult.ok ? (
                       <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
@@ -853,7 +860,7 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="border border-dashed border-zinc-800/80 rounded-xl p-4 bg-background/20 hover:border-zinc-700/60 transition-all">
+                  <div className="border border-dashed border-border rounded-xl p-4 bg-muted/20 hover:border-muted-foreground/40 transition-all">
                     <label htmlFor="analytics-upload" className="cursor-pointer flex flex-col items-center gap-2">
                       <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                         <FileText className="size-5 text-emerald-400" />
@@ -1479,14 +1486,14 @@ export default function Dashboard() {
             <div className="space-y-6">
               
               {/* Video Title Header card */}
-              <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-2xl p-5 border-l-4 border-l-emerald-500 shadow-md">
+              <div className="bg-card border border-border rounded-2xl p-5 border-l-4 border-l-emerald-500 shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1.5">
-                    <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 dark:border-emerald-500/25 px-2.5 py-0.5 rounded-full">
                       Hasil Analisis
                     </span>
                     <h2 className="text-base font-bold text-foreground flex items-center gap-2 tracking-tight">
-                      <Play className="size-4 text-emerald-400 shrink-0 fill-current" />
+                      <Play className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0 fill-current" />
                       <span>{result.video_title}</span>
                     </h2>
                   </div>
