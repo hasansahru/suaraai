@@ -110,7 +110,7 @@ export default function Dashboard() {
   const [analyticsExists, setAnalyticsExists] = useState(false);
   const [analyticsSummary, setAnalyticsSummary] = useState<any>(null);
 
-  const [ClapperboardUrl, setClapperboardUrl] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
   const [manualTranscript, setManualTranscript] = useState("");
   const [useManual, setUseManual] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
@@ -425,8 +425,8 @@ export default function Dashboard() {
   };
 
   const handleRunAnalysis = async () => {
-    if (!useManual && !ClapperboardUrl) {
-      toast.warning("Silakan masukkan URL Clapperboard terlebih dahulu.");
+    if (!useManual && !youtubeUrl) {
+      toast.warning("Silakan masukkan URL YouTube terlebih dahulu.");
       return;
     }
     if (useManual && !manualTranscript) {
@@ -465,8 +465,8 @@ export default function Dashboard() {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
-          youtube_url: useManual ? null : ClapperboardUrl,
-          Clapperboard_url: useManual ? null : ClapperboardUrl,
+          youtube_url: useManual ? null : youtubeUrl,
+          Clapperboard_url: useManual ? null : youtubeUrl,
           manual_transcript: useManual ? manualTranscript : null,
           channel_dna: channelDna,
           output_type_id: outputType,
@@ -543,16 +543,18 @@ export default function Dashboard() {
       <Toaster position="top-center" theme={theme} richColors />
       
       {/* Header Banner */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
+      <header className="border-b border-border/85 bg-background/80 backdrop-blur-md sticky top-0 z-50 px-6 py-3.5">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-violet-600/10 border border-violet-500/20 rounded-xl text-violet-400">
-              <Clapperboard className="size-6 animate-pulse" />
+              <Clapperboard className="size-5.5 transition-transform hover:scale-110 duration-200" />
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-violet-400 font-bold">AI Content Engine</div>
-              <h1 className="text-xl font-bold flex items-center gap-2">
-                <span>Clapperboard</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400">Content Intelligence</span> Pro
+              <div className="text-[9px] uppercase tracking-[0.22em] text-violet-400 font-mono font-bold leading-none mb-1">AI Content Engine</div>
+              <h1 className="text-lg font-bold tracking-tight flex items-center gap-2 leading-none">
+                <span className="text-foreground">Clapperboard</span> 
+                <span className="text-violet-400 font-medium">Content Intelligence</span> 
+                <span className="text-[9px] bg-muted border border-border/80 text-muted-foreground/80 px-2 py-0.5 rounded-full font-mono font-medium tracking-wide">PRO</span>
               </h1>
             </div>
           </div>
@@ -1098,12 +1100,12 @@ export default function Dashboard() {
             </Card>
           )}
 
-          {/* Clapperboard Proxy Configuration */}
+          {/* YouTube Proxy Configuration */}
           <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
             <CardHeader className="pb-4">
               <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
                 <Compass className="size-4 text-emerald-400" />
-                <span>🌐 Proxy Clapperboard (Anti-Blocking)</span>
+                <span>🌐 Proxy YouTube (Anti-Blocking)</span>
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
                 Mengurangi resiko rate-limit IP saat scraping transkrip.
@@ -1256,25 +1258,25 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Mode Selector Tab */}
-              <div className="flex gap-2 p-1 bg-muted border-border rounded-lg w-fit">
+              <div className="flex gap-2 p-1 bg-muted border border-border/40 rounded-lg w-fit">
                 <Button 
                   onClick={() => setUseManual(false)} 
                   variant={!useManual ? "default" : "ghost"}
-                  className={`text-xs h-8 px-4 rounded-md transition-all ${
+                  className={`text-xs h-8 px-4 rounded-md transition-all active:scale-[0.97] ${
                     !useManual 
-                      ? "bg-violet-600 hover:bg-violet-700 text-white font-bold" 
+                      ? "bg-violet-600 hover:bg-violet-550 text-white font-semibold" 
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <Clapperboard className="size-3.5 mr-1.5" />
-                  Clapperboard URL
+                  <Play className="size-3 mr-1.5 fill-current" />
+                  YouTube URL
                 </Button>
                 <Button 
                   onClick={() => setUseManual(true)} 
                   variant={useManual ? "default" : "ghost"}
-                  className={`text-xs h-8 px-4 rounded-md transition-all ${
+                  className={`text-xs h-8 px-4 rounded-md transition-all active:scale-[0.97] ${
                     useManual 
-                      ? "bg-violet-600 hover:bg-violet-700 text-white font-bold" 
+                      ? "bg-violet-600 hover:bg-violet-550 text-white font-semibold" 
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -1283,18 +1285,18 @@ export default function Dashboard() {
                 </Button>
               </div>
 
-              {/* Clapperboard URL input */}
+              {/* YouTube URL input */}
               {!useManual ? (
                 <div className="space-y-2">
-                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">URL Video Clapperboard</label>
+                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">URL Video YouTube</label>
                   <div className="relative">
                     <Input 
-                      placeholder="Tempel tautan video Clapperboard... (e.g. https://www.Clapperboard.com/watch?v=...)" 
-                      value={ClapperboardUrl} 
-                      onChange={e => setClapperboardUrl(e.target.value)} 
-                      className="bg-muted border-border text-sm h-11 pl-10 text-foreground"
+                      placeholder="Tempel tautan video YouTube... (e.g. https://www.youtube.com/watch?v=...)" 
+                      value={youtubeUrl} 
+                      onChange={e => setYoutubeUrl(e.target.value)} 
+                      className="bg-muted border border-border/80 focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/20 text-sm h-11 pl-10 text-foreground transition-all rounded-xl"
                     />
-                    <Clapperboard className="absolute left-3.5 top-3.5 size-4.5 text-muted-foreground/80" />
+                    <Play className="absolute left-3.5 top-3.5 size-4 text-muted-foreground/80 fill-current" />
                   </div>
                 </div>
               ) : (
@@ -1402,7 +1404,7 @@ export default function Dashboard() {
               <Button 
                 onClick={handleRunAnalysis} 
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold h-12 shadow-lg hover:shadow-violet-600/10 transition-all text-sm rounded-xl"
+                className="w-full bg-violet-600 hover:bg-violet-550 active:scale-[0.98] transition-all text-white font-bold h-12 shadow-md hover:shadow-violet-600/20 text-sm rounded-xl"
               >
                 {loading ? (
                   <>
@@ -1428,7 +1430,7 @@ export default function Dashboard() {
               </div>
               <h3 className="text-base font-bold mb-2 animate-pulse text-foreground">AI Sedang Bekerja Keras</h3>
               <p className="text-xs text-muted-foreground text-center max-w-sm mb-6 leading-relaxed">
-                Proses pipeline 5-modul membutuhkan waktu sekitar 30 - 90 detik karena model AI sedang menyusun paket konten Clapperboard yang komprehensif.
+                Proses pipeline 5-modul membutuhkan waktu sekitar 30 - 90 detik karena model AI sedang menyusun paket konten video baru yang komprehensif.
               </p>
               
               {/* Simulated visual feedback step */}
