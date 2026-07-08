@@ -35,8 +35,9 @@ DEFAULT_MAX_TOKENS = 16000
 # (batas aktual API adalah 64k, tapi 32k cukup untuk output JSON video panjang terpanjang)
 _ANTHROPIC_MAX_OUTPUT = 32000
 
-# Saat extended thinking aktif, API mewajibkan max_tokens ≤ 16000 dan temperature = 1.0
-_ANTHROPIC_THINKING_MAX = 16000
+# Saat extended thinking aktif, API mewajibkan max_tokens ≤ 64000 (batas aman model Claude 3.7 Sonnet) dan temperature = 1.0
+_ANTHROPIC_THINKING_MAX = 64000
+
 
 # Token yang cukup untuk respons test connection singkat ("OK" / satu kalimat).
 _TEST_MAX_TOKENS = 64
@@ -312,6 +313,9 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
         timeout=timeout_obj,
     )
 
+    model_lower = request.model.lower()
+    is_openai_reasoning = model_lower.startswith("o1") or model_lower.startswith("o3")
+
     # Retry otomatis untuk error sementara: 503 Service Unavailable, 529 Overloaded,
     # dan timeout. Maksimal 3 percobaan dengan jeda eksponensial (2s → 4s).
     _RETRY_STATUS = {503, 529}
@@ -320,16 +324,31 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
     last_exc: Exception | None = None
     for attempt in range(1, _MAX_RETRIES + 1):
         try:
-            response = client.chat.completions.create(
-                model=request.model,
-                max_tokens=request.max_tokens,
-                temperature=request.temperature,
-                stream=False,   # eksplisit non-streaming agar respons dikembalikan sekaligus
-                messages=[
+            create_kwargs = {
+                "model": request.model,
+                "stream": False,   # eksplisit non-streaming agar respons dikembalikan sekaligus
+                "messages": [
                     {"role": "system", "content": request.system_prompt},
                     {"role": "user", "content": request.user_content},
                 ],
-            )
+            }
+            if is_openai_reasoning:
+                # Model reasoning OpenAI menggunakan max_completion_tokens dan tidak menerima custom temperature
+                create_kwargs["max_completion_tokens"] = request.max_tokens
+                if getattr(request, "enable_thinking", False):
+                    budget = getattr(request, "thinking_budget_tokens", 4000) or 4000
+                    if budget <= 2000:
+                        create_kwargs["reasoning_effort"] = "low"
+                    elif budget <= 8000:
+                        create_kwargs["reasoning_effort"] = "medium"
+                    else:
+                        create_kwargs["reasoning_effort"] = "high"
+            else:
+                # Batasi max_tokens untuk model standar agar tidak melebihi limit internal provider (misal Gemini/GPT max output 8192)
+                create_kwargs["max_tokens"] = min(request.max_tokens, 8192)
+                create_kwargs["temperature"] = request.temperature
+
+            response = client.chat.completions.create(**create_kwargs)
             break  # sukses — keluar dari loop retry
         except openai.APIStatusError as exc:
             status = getattr(exc, "status_code", None)

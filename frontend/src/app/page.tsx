@@ -128,6 +128,9 @@ export default function Dashboard() {
   const [enableThinking, setEnableThinking] = useState(false);
   const [thinkingBudget, setThinkingBudget] = useState(4000);
   const [enableCodeExecution, setEnableCodeExecution] = useState(false);
+
+  const isReasoningModel = model.toLowerCase().startsWith("o1") || model.toLowerCase().startsWith("o3") || model.toLowerCase().includes("thinking");
+  const showSkillsCard = provider === "anthropic" || isReasoningModel;
   
   // App Logic States
   const [loading, setLoading] = useState(false);
@@ -963,113 +966,134 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Claude Beta Skills Expander */}
-          {provider === "anthropic" && (
+          {/* Claude Beta / Reasoning Skills Expander */}
+          {showSkillsCard && (
             <Card className="bg-card text-card-foreground border-border backdrop-blur-sm shadow-xl">
               <CardHeader className="pb-4">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-semibold">
                   <Brain className="size-4 text-pink-400" />
-                  <span>🧠 Skill Claude Tambahan</span>
+                  <span>{provider === "anthropic" ? "🧠 Skill Claude Tambahan" : "🧠 Fitur Agentic / Reasoning"}</span>
                 </CardTitle>
                 <CardDescription className="text-xs text-muted-foreground">
-                  Aktifkan kemampuan asinkron ekstra.
+                  {provider === "anthropic" ? "Aktifkan kemampuan asinkron ekstra." : "Konfigurasi kemampuan penalaran (reasoning) model."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Web Search */}
-                <div className="flex items-start gap-2.5">
-                  <Checkbox 
-                    id="webSearch" 
-                    checked={enableWebSearch} 
-                    onCheckedChange={(val: boolean) => setEnableWebSearch(val)}
-                    className="mt-0.5 border-border" 
-                  />
-                  <div className="space-y-1">
-                    <label htmlFor="webSearch" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                      <Search className="size-3 text-muted-foreground" /> 
-                      <span>Web Search (Riset Online)</span>
-                    </label>
-                    <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                      Mencari tren judul terbaru, riset kata kunci kompetitor, dan data terkini.
-                    </p>
-                  </div>
-                </div>
-
-                {enableWebSearch && (
-                  <div className="space-y-2 pl-6 pb-2">
-                    <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                      <span>Maks. Jumlah Pencarian</span>
-                      <span className="text-pink-400">{webSearchMaxUses} Kali</span>
+                {/* Web Search - Only for Anthropic */}
+                {provider === "anthropic" && (
+                  <>
+                    <div className="flex items-start gap-2.5">
+                      <Checkbox 
+                        id="webSearch" 
+                        checked={enableWebSearch} 
+                        onCheckedChange={(val: boolean) => setEnableWebSearch(val)}
+                        className="mt-0.5 border-border" 
+                      />
+                      <div className="space-y-1">
+                        <label htmlFor="webSearch" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                          <Search className="size-3 text-muted-foreground" /> 
+                          <span>Web Search (Riset Online)</span>
+                        </label>
+                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                          Mencari tren judul terbaru, riset kata kunci kompetitor, dan data terkini.
+                        </p>
+                      </div>
                     </div>
-                    <Slider 
-                      min={1} 
-                      max={10} 
-                      step={1} 
-                      value={[webSearchMaxUses]} 
-                      onValueChange={(v) => setWebSearchMaxUses(typeof v === "number" ? v : (v as readonly number[])[0])}
-                      className="[&_[role=slider]]:bg-pink-500 [&_[role=slider]]:border-pink-400"
-                    />
-                  </div>
+
+                    {enableWebSearch && (
+                      <div className="space-y-2 pl-6 pb-2">
+                        <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
+                          <span>Maks. Jumlah Pencarian</span>
+                          <span className="text-pink-400">{webSearchMaxUses} Kali</span>
+                        </div>
+                        <Slider 
+                          min={1} 
+                          max={10} 
+                          step={1} 
+                          value={[webSearchMaxUses]} 
+                          onValueChange={(v) => setWebSearchMaxUses(typeof v === "number" ? v : (v as readonly number[])[0])}
+                          className="[&_[role=slider]]:bg-pink-500 [&_[role=slider]]:border-pink-400"
+                        />
+                      </div>
+                    )}
+
+                    <Separator className="bg-card" />
+                  </>
                 )}
 
-                <Separator className="bg-card" />
-
-                {/* Extended Thinking */}
-                <div className="flex items-start gap-2.5">
-                  <Checkbox 
-                    id="thinking" 
-                    checked={enableThinking} 
-                    onCheckedChange={(val: boolean) => setEnableThinking(val)}
-                    className="mt-0.5 border-border" 
-                  />
-                  <div className="space-y-1">
-                    <label htmlFor="thinking" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                      <Brain className="size-3 text-muted-foreground" /> 
-                      <span>Extended Thinking</span>
-                    </label>
-                    <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                      Claude bernalar lebih lambat, mendalam, dan eksplisit (reasoning).
-                    </p>
-                  </div>
-                </div>
-
-                {enableThinking && (
-                  <div className="space-y-2 pl-6 pb-2">
-                    <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                      <span>Budget Token Berpikir</span>
-                      <span className="text-pink-400">{thinkingBudget} Token</span>
+                {/* Extended Thinking - For Anthropic or OpenAI Reasoning models */}
+                {(provider === "anthropic" || isReasoningModel) && (
+                  <>
+                    <div className="flex items-start gap-2.5">
+                      <Checkbox 
+                        id="thinking" 
+                        checked={enableThinking} 
+                        onCheckedChange={(val: boolean) => setEnableThinking(val)}
+                        className="mt-0.5 border-border" 
+                      />
+                      <div className="space-y-1">
+                        <label htmlFor="thinking" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                          <Brain className="size-3 text-muted-foreground" /> 
+                          <span>{provider === "anthropic" ? "Extended Thinking" : "Reasoning Effort (Penalaran)"}</span>
+                        </label>
+                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                          {provider === "anthropic" 
+                            ? "Claude bernalar lebih lambat, mendalam, dan eksplisit (reasoning)." 
+                            : "Model menggunakan waktu tambahan untuk menganalisis dan bernalar mendalam."}
+                        </p>
+                      </div>
                     </div>
-                    <Slider 
-                      min={1024} 
-                      max={16000} 
-                      step={1024} 
-                      value={[thinkingBudget]} 
-                      onValueChange={(v) => setThinkingBudget(typeof v === "number" ? v : (v as readonly number[])[0])}
-                      className="[&_[role=slider]]:bg-pink-500 [&_[role=slider]]:border-pink-400"
-                    />
-                  </div>
+
+                    {enableThinking && (
+                      <div className="space-y-2 pl-6 pb-2">
+                        <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
+                          <span>{provider === "anthropic" ? "Budget Token Berpikir" : "Reasoning Effort"}</span>
+                          <span className="text-pink-400 font-medium">
+                            {provider === "anthropic" 
+                              ? `${thinkingBudget} Token` 
+                              : thinkingBudget <= 2000 
+                                ? "Low (Rendah)" 
+                                : thinkingBudget <= 8000 
+                                  ? "Medium (Sedang)" 
+                                  : "High (Tinggi)"}
+                          </span>
+                        </div>
+                        <Slider 
+                          min={provider === "anthropic" ? 1024 : 1000} 
+                          max={provider === "anthropic" ? 16000 : 9000} 
+                          step={provider === "anthropic" ? 1024 : 4000} 
+                          value={[thinkingBudget]} 
+                          onValueChange={(v) => setThinkingBudget(typeof v === "number" ? v : (v as readonly number[])[0])}
+                          className="[&_[role=slider]]:bg-pink-500 [&_[role=slider]]:border-pink-400"
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
 
-                <Separator className="bg-card" />
-
-                {/* Code Execution */}
-                <div className="flex items-start gap-2.5">
-                  <Checkbox 
-                    id="codeExec" 
-                    checked={enableCodeExecution} 
-                    onCheckedChange={(val: boolean) => setEnableCodeExecution(val)}
-                    className="mt-0.5 border-border" 
-                  />
-                  <div className="space-y-1">
-                    <label htmlFor="codeExec" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                      <FileCode2 className="size-3 text-muted-foreground" /> 
-                      <span>Code Execution (Python Sandbox)</span>
-                    </label>
-                    <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                      Verifikasi hitungan durasi shot secara akurat lewat runtime Python sandbox.
-                    </p>
-                  </div>
-                </div>
+                {/* Code Execution - Only for Anthropic */}
+                {provider === "anthropic" && (
+                  <>
+                    <Separator className="bg-card" />
+                    <div className="flex items-start gap-2.5">
+                      <Checkbox 
+                        id="codeExec" 
+                        checked={enableCodeExecution} 
+                        onCheckedChange={(val: boolean) => setEnableCodeExecution(val)}
+                        className="mt-0.5 border-border" 
+                      />
+                      <div className="space-y-1">
+                        <label htmlFor="codeExec" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                          <FileCode2 className="size-3 text-muted-foreground" /> 
+                          <span>Code Execution (Python Sandbox)</span>
+                        </label>
+                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                          Verifikasi hitungan durasi shot secara akurat lewat runtime Python sandbox.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           )}

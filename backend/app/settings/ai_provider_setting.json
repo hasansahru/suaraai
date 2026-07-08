@@ -1,5 +1,5 @@
 {
-  "default_provider": "anthropic",
+  "default_provider": "9router",
   "providers": [
     {
       "id": "anthropic",

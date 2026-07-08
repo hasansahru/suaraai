@@ -111,12 +111,12 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
       "alasan_best_choice": "string"
     },
     "thumbnail": {
-      "konsep": "string",
-      "komposisi": "string",
-      "warna": ["string"],
+      "konsep": "string — konsep visual High-CTR, wajib sebutkan penempatan subjek, ekspresi emosional, dan detail objek simbolik pendukung di latar belakang (bukan sekadar ilustrasi acak)",
+      "komposisi": "string — tata letak (Rule of Thirds), penempatan subjek di kiri/kanan, area teks di sisi berlawanan, serta detail backlight/edge-glow pada subjek",
+      "warna": ["string — palet warna kontras utama (seperti kuning emas, putih, hijau neon, navy)"],
       "psikologi_warna": "string",
-      "prompt_ai_image": "string (in English)",
-      "teks_thumbnail": "string"
+      "prompt_ai_image": "string (in English) — prompt detail siap pakai untuk generator gambar AI, wajib mengandung deskripsi subjek, backlight glow, cinematic, 16:9, depth of field sempit",
+      "teks_thumbnail": "string — 3-5 kata tebal (bold), menggunakan maksimal 2 warna kontras, wajib diletakkan di atas kontainer kontras (seperti brush stroke banner) di sisi berlawanan dari subjek, dilarang keras mengulang kata judul"
     },
     "deskripsi_youtube": "string",
     "seo": {
@@ -170,12 +170,12 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         "alasan_best_choice": "string"
       },
       "thumbnail": {
-        "konsep": "string",
-        "komposisi": "string",
-        "warna": ["string"],
+        "konsep": "string — konsep visual High-CTR, wajib sebutkan penempatan subjek, ekspresi emosional, dan detail objek simbolik pendukung di latar belakang (bukan sekadar ilustrasi acak)",
+        "komposisi": "string — tata letak (Rule of Thirds), penempatan subjek di kiri/kanan, area teks di sisi berlawanan, serta detail backlight/edge-glow pada subjek",
+        "warna": ["string — palet warna kontras utama (seperti kuning emas, putih, hijau neon, navy)"],
         "psikologi_warna": "string",
-        "prompt_ai_image": "string (in English)",
-        "teks_thumbnail": "string"
+        "prompt_ai_image": "string (in English) — prompt detail siap pakai untuk generator gambar AI, wajib mengandung deskripsi subjek, backlight glow, cinematic, 9:16, depth of field sempit",
+        "teks_thumbnail": "string — 3-5 kata tebal (bold), menggunakan maksimal 2 warna kontras, wajib diletakkan di atas kontainer kontras (seperti brush stroke banner) di sisi berlawanan dari subjek, dilarang keras mengulang kata judul"
       },
       "deskripsi_youtube": "string",
       "seo": {
