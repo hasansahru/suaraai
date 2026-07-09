@@ -88,7 +88,16 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   custom: []
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://suarafilsuf-suaraai-backend.hf.space";
+const getApiBase = () => {
+  if (typeof window !== "undefined") {
+    if (window.location.hostname.includes("vercel.app") || window.location.hostname.includes("suaraai.vercel.app")) {
+      return "https://suarafilsuf-suaraai-backend.hf.space";
+    }
+  }
+  return process.env.NEXT_PUBLIC_API_URL || "https://suarafilsuf-suaraai-backend.hf.space";
+};
+
+const API_BASE = getApiBase();
 
 export default function Dashboard() {
   const [apiSettings, setApiSettings] = useState<any>(null);
