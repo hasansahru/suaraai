@@ -201,42 +201,76 @@ def repair_truncated_json(text: str) -> str:
     return cleaned_text
 
 
+def _fix_timestamp_string(text: str) -> str:
+    if not isinstance(text, str):
+        return text
+    
+    # Sub mm:ss where mm >= 60 into hh:mm:ss
+    def replace_match(match):
+        minutes = int(match.group(1))
+        seconds = int(match.group(2))
+        if minutes >= 60:
+            hours = minutes // 60
+            mins = minutes % 60
+            return f"{hours:02d}:{mins:02d}:{seconds:02d}"
+        return match.group(0)
+    
+    return re.sub(r"\b(\d{2,3}):([0-5]\d)\b", replace_match, text)
+
+
+def _traverse_and_fix_timestamps(data: Any) -> Any:
+    if isinstance(data, dict):
+        return {k: _traverse_and_fix_timestamps(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [_traverse_and_fix_timestamps(item) for item in data]
+    elif isinstance(data, str):
+        return _fix_timestamp_string(data)
+    return data
+
+
 def parse_ai_response(raw_text: str) -> Dict[str, Any]:
     if not raw_text or not raw_text.strip():
         raise AIResponseParseError("Respons AI kosong.")
 
+    parsed = None
     # 1. Coba parsing langsung kandidat teks
     candidates = [raw_text, _strip_code_fences(raw_text)]
     for candidate in candidates:
         try:
-            return json.loads(candidate)
+            parsed = json.loads(candidate)
+            break
         except (json.JSONDecodeError, TypeError):
             continue
 
-    # 2. Coba ekstraksi objek JSON pertama
-    stripped = _strip_code_fences(raw_text)
-    try:
-        extracted = _extract_first_json_object(stripped)
+    if parsed is None:
+        # 2. Coba ekstraksi objek JSON pertama
+        stripped = _strip_code_fences(raw_text)
         try:
-            return json.loads(extracted)
-        except json.JSONDecodeError:
+            extracted = _extract_first_json_object(stripped)
+            try:
+                parsed = json.loads(extracted)
+            except json.JSONDecodeError:
+                pass
+
+            if parsed is None:
+                try:
+                    repaired = _repair_common_json_issues(extracted)
+                    parsed = json.loads(repaired)
+                except json.JSONDecodeError:
+                    pass
+        except AIResponseParseError:
             pass
 
+    if parsed is None:
+        # 3. Coba perbaiki JSON jika terpotong (truncated)
         try:
-            repaired = _repair_common_json_issues(extracted)
-            return json.loads(repaired)
-        except json.JSONDecodeError:
-            pass
-    except AIResponseParseError:
-        pass
+            truncated_repaired = repair_truncated_json(stripped)
+            truncated_repaired = _repair_common_json_issues(truncated_repaired)
+            parsed = json.loads(truncated_repaired)
+        except Exception as exc:
+            raise AIResponseParseError(f"Respons AI tidak bisa diparsing (termasuk setelah dicoba perbaikan): {exc}")
 
-    # 3. Coba perbaiki JSON jika terpotong (truncated)
-    try:
-        truncated_repaired = repair_truncated_json(stripped)
-        truncated_repaired = _repair_common_json_issues(truncated_repaired)
-        return json.loads(truncated_repaired)
-    except Exception as exc:
-        raise AIResponseParseError(f"Respons AI tidak bisa diparsing (termasuk setelah dicoba perbaikan): {exc}")
+    return _traverse_and_fix_timestamps(parsed)
 
 
 def get_safe(data, path, default=None):
