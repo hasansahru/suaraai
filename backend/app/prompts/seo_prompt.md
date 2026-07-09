@@ -24,6 +24,10 @@ Rancang paket SEO YouTube untuk konten baru berdasarkan Big Idea, Unique Angle, 
 ## Prinsip SEO & Distribusi Waktu
 
 - Semua estimasi waktu (`start_estimate` / `end_estimate` di outline video baru) serta daftar timestamp babak **harus terdistribusi secara logis dari menit ke menit** menyesuaikan "Durasi Target" yang telah dipilih pengguna di dashboard. Jangan biarkan durasi terpotong setengah jalan atau melenceng jauh dari durasi target.
+- **FORMAT TIMESTAMPS MUTLAK (Sangat Penting):** Format penulisan waktu di timestamps deskripsi dan estimasi outline WAJIB mematuhi standar pemutar video YouTube:
+  - Jika waktu berada di atas 59 menit (misalnya 90 menit), **DILARANG KERAS** menulis format `90:00` atau format `MM:SS` apa pun di atas `59:59`.
+  - Untuk durasi ≥ 60 menit, Anda **WAJIB** menulis dalam format tiga bagian `hh:mm:ss` (contoh: `01:30:00` untuk 90 menit, `02:15:00` untuk 135 menit, dst.).
+  - YouTube hanya akan mengenali babak video (video chapters) jika formatnya benar dan dimulai dengan `00:00:00` (atau `00:00`).
 - Keyword harus mencerminkan **bagaimana audiens nyata mencari topik ini**, bukan istilah akademis atau istilah teknis yang kaku.
 - Sinkronkan keyword utama dengan judul terpilih dari `content_strategist.md` agar relevansi judul-deskripsi-tag konsisten (sinyal relevansi terkuat untuk algoritma rekomendasi YouTube).
 - Untuk Shorts, prioritaskan hashtag dan keyword yang juga relevan di tab Shorts/eksplorasi, bukan hanya pencarian biasa.
