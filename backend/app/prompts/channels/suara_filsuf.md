@@ -77,16 +77,16 @@ Prioritaskan **Kamis** (avg 994 views) dan **Minggu** (avg 938 views). Hindari S
 
 | Format | Hari | Jam |
 |---|---|---|
-| **Video Panjang** | Minggu, Jumat, Sabtu, Kamis | 17:00 - 18:00 |
+| **Video Panjang** | Minggu, Jumat, Rabu | 17:00 - 18:00 |
 | **Shorts** | Senin, Selasa, Kamis | 17:00 - 18:00 |
 
-**Logika:** Hari dengan intensitas penonton online tertinggi (Minggu, Jumat, Sabtu, dan Kamis) dialokasikan untuk video panjang — format dengan nilai tertinggi dan retensi terkuat — sedangkan hari biasa lainnya dialokasikan untuk Shorts. Jam 17:00 - 18:00 WIB dipilih agar video terdistribusi dan terindeks dengan baik tepat saat grafik aktivitas penonton melonjak naik mulai pukul 18:00 WIB.
+**Logika:** Hari dengan performa nyata terbaik (Minggu, Jumat, Rabu) dialokasikan untuk video panjang karena secara historis menghasilkan Jam Tayang (Watch Time) dan Pendapatan (Revenue) tertinggi dengan CTR stabil di atas 5%. Jam 17:00 - 18:00 WIB dipilih agar video terdistribusi dengan baik tepat saat grafik aktivitas penonton online melonjak naik mulai pukul 18:00 WIB.
 
 **⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true, khusus channel ini karena sudah ada data analytics):
-- `hari_terbaik`: ["Minggu", "Jumat", "Sabtu", "Kamis"]
+- `hari_terbaik`: ["Minggu", "Jumat", "Rabu"]
 - `jam_upload`: "17:00 - 18:00 WIB"
-- `alasan`: "Berdasarkan grafik heatmap 'Waktu penonton membuka YouTube' (GMT+07:00 / WIB), puncak aktivitas penonton yang sangat tinggi terjadi setiap hari pada pukul 18:00 - 21:00 WIB, dengan konsentrasi terluas dan terpadat pada hari Minggu, Jumat, Sabtu, dan Kamis. Mengunggah video pada pukul 17:00 - 18:00 WIB memberikan waktu sekitar 1-2 jam bagi sistem YouTube untuk memproses, mengindeks, dan mendistribusikan notifikasi video ke feed penonton tepat di awal puncak traffic."
-- `hindari`: "Hindari mengunggah video pada pukul 23:00 - 12:00 WIB karena aktivitas penonton di YouTube berada di titik terendah (area heatmap sangat gelap/hitam)."
+- `alasan`: "Berdasarkan analisis data performa 28 hari terakhir, hari Minggu (avg 273 views, 107 jam tayang), Jumat (avg 174 views, 87 jam tayang), dan Rabu (avg 136 views, 74 jam tayang) adalah 3 hari emas berkinerja terbaik dengan CTR stabil > 5%. Waktu upload optimal adalah pukul 17:00 - 18:00 WIB untuk memanfaatkan grafik heatmap puncak aktivitas penonton online pada pukul 18:00 - 21:00 WIB."
+- `hindari`: "Hindari mengunggah video pada hari Sabtu (CTR terendah 3.23% & retensi rendah) serta hindari jam upload pukul 23:00 - 12:00 WIB karena aktivitas traffic penonton di YouTube berada di titik terendah."
 
 
 
