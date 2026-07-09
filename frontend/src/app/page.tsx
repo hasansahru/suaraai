@@ -1483,28 +1483,38 @@ export default function Dashboard() {
               </div>
             </Card>
           )}
-
           {/* Result Showcase */}
           {result && (
-            <div className="space-y-6">
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
               
               {/* Video Title Header card */}
-              <div className="bg-card border border-border rounded-2xl p-5 border-l-4 border-l-emerald-500 shadow-sm">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="space-y-1.5">
-                    <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 dark:border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-                      Hasil Analisis
-                    </span>
-                    <h2 className="text-base font-bold text-foreground flex items-center gap-2 tracking-tight">
-                      <Play className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0 fill-current" />
-                      <span>{result.video_title}</span>
+              <div className="bg-card border border-border rounded-2xl p-6 relative overflow-hidden shadow-sm">
+                {/* Accent glow line at top */}
+                <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-violet-500 via-indigo-500 to-emerald-500" />
+                
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-500 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">
+                        HASIL ANALISIS SYSTEM
+                      </span>
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-violet-400 font-mono font-bold bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 rounded-md">
+                        {outputType === "shorts" ? "🎬 YouTube Shorts" : "🎥 Video Panjang"}
+                      </span>
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-indigo-400 font-mono font-bold bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-md">
+                        {DEFAULT_CHANNELS.find(c => c.id === channelDna)?.name || channelDna}
+                      </span>
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-extrabold text-foreground tracking-tight leading-tight">
+                      {result.video_title}
                     </h2>
                   </div>
+                  
                   {result.duration_warnings && result.duration_warnings.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 shrink-0">
                       {result.duration_warnings.map((w: string, i: number) => (
-                        <span key={i} className="text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1 font-medium font-mono">
-                          <AlertTriangle className="size-3 shrink-0" /> {w}
+                        <span key={i} className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg flex items-center gap-1.5 font-bold font-mono">
+                          <AlertTriangle className="size-3.5 shrink-0 text-amber-500" /> {w}
                         </span>
                       ))}
                     </div>
@@ -1514,86 +1524,100 @@ export default function Dashboard() {
 
               {/* Main Tabs result container */}
               <Tabs defaultValue="ringkasan" className="space-y-6">
-                <TabsList className="bg-muted border border-border/60 p-1 w-full md:w-auto h-auto grid grid-cols-3 gap-1 rounded-xl">
-                  <TabsTrigger value="ringkasan" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md font-bold transition-all">
-                    🔍 Ringkasan AI
-                  </TabsTrigger>
-                  <TabsTrigger value="segmen" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md font-bold transition-all">
-                    🎭 Segmen & Shots
-                  </TabsTrigger>
-                  <TabsTrigger value="raw_json" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md font-bold transition-all">
-                    📄 JSON Mentah
-                  </TabsTrigger>
-                </TabsList>
+                <div className="flex justify-between items-center border-b border-border/40 pb-3">
+                  <TabsList className="bg-muted border border-border/60 p-1 w-full md:w-auto h-auto grid grid-cols-3 gap-1 rounded-xl">
+                    <TabsTrigger value="ringkasan" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                      🔍 Ringkasan Eksekutif
+                    </TabsTrigger>
+                    <TabsTrigger value="segmen" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                      ⚡ Detail Segmen &amp; Strategi
+                    </TabsTrigger>
+                    <TabsTrigger value="raw_json" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                      📄 JSON Metadata
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
                 {/* Tab: Summary */}
                 <TabsContent value="ringkasan">
-                  <div className="bg-card border border-border rounded-2xl p-6 hover:border-border/80 transition-all duration-200 shadow-sm">
-                    <div className="flex items-center gap-2 mb-1 border-b border-border/40 pb-3">
+                  <div className="bg-card border border-border rounded-2xl p-6 hover:border-border/80 transition-all duration-200 shadow-sm space-y-6">
+                    <div className="flex items-center justify-between border-b border-border/40 pb-4">
                       <div>
-                        <h3 className="text-sm font-semibold text-foreground">Struktur Video & Target Audiens</h3>
-                        <p className="text-[11px] text-muted-foreground mt-0.5">Hasil reverse engineering modul awal AI.</p>
+                        <h3 className="text-base font-bold text-foreground">Struktur Video &amp; Target Audiens</h3>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">Hasil reverse engineering modul kecerdasan konten AI.</p>
                       </div>
                     </div>
-                    <div className="pt-4 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2.5">
-                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                            <CheckSquare className="size-3.5 text-violet-400" /> Inti Pesan
-                          </h4>
-                          <p className="text-sm text-foreground font-sans leading-relaxed">
-                            {result.result?.ringkasan?.inti_pesan || "Tidak tersedia."}
-                          </p>
-                        </div>
-                        <div className="space-y-2.5">
-                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                            <CheckSquare className="size-3.5 text-violet-400" /> Target Audiens
-                          </h4>
-                          <p className="text-sm text-foreground font-sans leading-relaxed">
-                            {result.result?.ringkasan?.target_audiens || "Tidak tersedia."}
-                          </p>
-                        </div>
-                        <div className="space-y-2.5">
-                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                            <CheckSquare className="size-3.5 text-violet-400" /> Hook Emosional
-                          </h4>
-                          <p className="text-sm text-foreground font-sans leading-relaxed">
-                            {result.result?.ringkasan?.hook_emosional || "Tidak tersedia."}
-                          </p>
-                        </div>
-                        <div className="space-y-2.5">
-                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                            <CheckSquare className="size-3.5 text-violet-400" /> Pacing & Ritme
-                          </h4>
-                          <p className="text-sm text-foreground font-sans leading-relaxed">
-                            {result.result?.ringkasan?.pacing_dan_ritme || "Tidak tersedia."}
-                          </p>
-                        </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      
+                      {/* Inti Pesan */}
+                      <div className="p-4 rounded-xl bg-background/50 border border-border hover:border-border/80 transition-all space-y-2.5">
+                        <h4 className="text-[10px] font-bold text-violet-400 uppercase tracking-widest flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+                          Inti Pesan Utama
+                        </h4>
+                        <p className="text-xs text-foreground/90 font-medium leading-relaxed">
+                          {result.result?.ringkasan?.inti_pesan || "Tidak tersedia."}
+                        </p>
                       </div>
 
-                      {/* Display citations if web search was enabled */}
-                      {result.web_sources && result.web_sources.length > 0 && (
-                        <div className="pt-4 border-t border-border">
-                          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 mb-2.5">
-                            <Search className="size-3.5 text-pink-400" /> Riset Pencarian Web Real-Time Claude
-                          </h4>
-                          <div className="flex flex-wrap gap-2.5">
-                            {result.web_sources.map((s: any, idx: number) => (
-                              <a 
-                                key={idx} 
-                                href={s.url} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="text-[11px] bg-muted border border-border text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-lg hover:border-border transition-all flex items-center gap-1.5"
-                              >
-                                <span className="bg-card text-foreground/90 font-bold px-1.5 py-0.5 rounded text-[9px]">{idx + 1}</span>
-                                <span className="truncate max-w-[200px]">{s.title}</span>
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                      {/* Target Audiens */}
+                      <div className="p-4 rounded-xl bg-background/50 border border-border hover:border-border/80 transition-all space-y-2.5">
+                        <h4 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                          Target Demografis &amp; Minat
+                        </h4>
+                        <p className="text-xs text-foreground/90 font-medium leading-relaxed">
+                          {result.result?.ringkasan?.target_audiens || "Tidak tersedia."}
+                        </p>
+                      </div>
+
+                      {/* Hook Emosional */}
+                      <div className="p-4 rounded-xl bg-background/50 border border-border hover:border-border/80 transition-all space-y-2.5">
+                        <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                          Hook Emosional &amp; Triger Psikologi
+                        </h4>
+                        <p className="text-xs text-foreground/90 font-medium leading-relaxed">
+                          {result.result?.ringkasan?.hook_emosional || "Tidak tersedia."}
+                        </p>
+                      </div>
+
+                      {/* Pacing & Ritme */}
+                      <div className="p-4 rounded-xl bg-background/50 border border-border hover:border-border/80 transition-all space-y-2.5">
+                        <h4 className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                          Rekomendasi Pacing &amp; Ritme
+                        </h4>
+                        <p className="text-xs text-foreground/90 font-medium leading-relaxed">
+                          {result.result?.ringkasan?.pacing_dan_ritme || "Tidak tersedia."}
+                        </p>
+                      </div>
+                      
                     </div>
+
+                    {/* Display citations if web search was enabled */}
+                    {result.web_sources && result.web_sources.length > 0 && (
+                      <div className="pt-6 border-t border-border/40">
+                        <h4 className="text-[10px] font-bold text-pink-400 uppercase tracking-widest flex items-center gap-2 mb-3">
+                          <Search className="size-3.5" /> Riset Pencarian Web Real-Time Claude
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {result.web_sources.map((s: any, idx: number) => (
+                            <a 
+                              key={idx} 
+                              href={s.url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="text-[11px] bg-muted border border-border hover:border-border/80 text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-lg transition-all flex items-center gap-2"
+                            >
+                              <span className="bg-card text-foreground/80 font-bold px-1.5 py-0.5 rounded text-[9px] border border-border/60">{idx + 1}</span>
+                              <span className="truncate max-w-[220px] font-medium">{s.title}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
 
@@ -1603,33 +1627,39 @@ export default function Dashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                       
                       {/* Shot selection sidebar on the left */}
-                      <div className="md:col-span-4 space-y-2">
-                        <div className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold mb-2 px-1">Daftar Shots Terkuat</div>
-                        {(result.result?.shots || []).map((shot: any, idx: number) => {
-                          const isSelected = selectedShotIndex === idx;
-                          return (
-                            <button
-                              key={idx}
-                              onClick={() => setSelectedShotIndex(idx)}
-                              className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start justify-between gap-3 ${
-                                isSelected 
-                                  ? "bg-violet-600/10 border-violet-500/40 text-violet-300 font-bold" 
-                                  : "bg-card text-card-foreground border-border/80 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                              }`}
-                            >
-                              <div className="space-y-1 truncate">
-                                <div className="text-[10px] tracking-wider uppercase font-semibold flex items-center gap-1">
-                                  <Clock className="size-3 text-muted-foreground" />
-                                  <span>{shot.segmen?.start_time || "00:00"} - {shot.segmen?.end_time || "00:00"}</span>
+                      <div className="md:col-span-4 space-y-2.5">
+                        <div className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold mb-1 px-1">
+                          📋 Daftar Segmen Terpilih ({result.result?.shots?.length || 0} Shots)
+                        </div>
+                        <div className="space-y-2">
+                          {(result.result?.shots || []).map((shot: any, idx: number) => {
+                            const isSelected = selectedShotIndex === idx;
+                            return (
+                              <button
+                                key={idx}
+                                onClick={() => setSelectedShotIndex(idx)}
+                                className={`w-full text-left p-4 rounded-xl border transition-all flex items-start justify-between gap-3 ${
+                                  isSelected 
+                                    ? "bg-violet-600/10 border-violet-500/50 text-foreground font-bold shadow-sm" 
+                                    : "bg-card text-card-foreground border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                                }`}
+                              >
+                                <div className="space-y-1.5 truncate">
+                                  <div className="text-[9px] tracking-widest uppercase font-mono font-bold flex items-center gap-1.5">
+                                    <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? 'bg-violet-500' : 'bg-muted-foreground/40'}`} />
+                                    <span>{shot.segmen?.start_time || "00:00"} - {shot.segmen?.end_time || "00:00"}</span>
+                                  </div>
+                                  <div className="text-xs font-semibold truncate leading-tight">
+                                    {shot.judul?.best_choice || `Shot #${idx + 1}`}
+                                  </div>
                                 </div>
-                                <div className="text-xs truncate">{shot.judul?.best_choice || `Shot #${idx + 1}`}</div>
-                              </div>
-                              <span className="h-6 w-6 rounded-full bg-muted border border-border flex items-center justify-center text-[10px] font-bold text-foreground/90">
-                                {idx + 1}
-                              </span>
-                            </button>
-                          );
-                        })}
+                                <span className={`h-6 w-6 rounded-lg flex items-center justify-center text-[10px] font-bold border transition-colors ${isSelected ? 'bg-violet-600/20 border-violet-500/30 text-violet-400' : 'bg-muted border-border text-muted-foreground'}`}>
+                                  {idx + 1}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
 
                       {/* Detailed Shot view on the right */}
@@ -1637,47 +1667,62 @@ export default function Dashboard() {
                         {result.result?.shots && result.result?.shots[selectedShotIndex] && (
                           <div className="space-y-6">
                             
-                            {/* Shot Header */}
-                             <Card className="bg-card/50 border-border">
-                               <CardContent className="p-6">
-                                 <div className="flex items-center gap-2 text-violet-400 text-xs font-bold uppercase tracking-wider mb-1.5">
-                                   <Flame className="size-3.5" /> <span>Shot {selectedShotIndex + 1} dari {result.result?.shots.length}</span>
-                                 </div>
-                                 <h3 className="text-base font-bold text-foreground font-semibold">"{result.result?.shots[selectedShotIndex].judul?.best_choice || `Shot #${selectedShotIndex + 1}`}"</h3>
-                                 <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 bg-muted/80 p-3 rounded-lg border border-border text-xs">
-                                   <div>
-                                     <span className="text-muted-foreground/80">Rentang Waktu:</span>
-                                     <div className="font-semibold text-foreground mt-0.5">{result.result?.shots[selectedShotIndex].segmen?.start_time} - {result.result?.shots[selectedShotIndex].segmen?.end_time} (Durasi: {result.result?.shots[selectedShotIndex].segmen?.durasi})</div>
-                                   </div>
-                                   <div>
-                                     <span className="text-muted-foreground/80">Big Idea:</span>
-                                     <div className="font-semibold text-foreground mt-0.5 leading-normal">{result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}</div>
-                                   </div>
-                                   <div>
-                                     <span className="text-muted-foreground/80">Hook Pembuka Baru:</span>
-                                     <div className="font-semibold text-foreground mt-0.5 leading-normal">"{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"</div>
-                                   </div>
-                                 </div>
-                                 {result.result?.shots[selectedShotIndex].segmen?.alasan && (
-                                   <p className="text-[11px] text-muted-foreground italic leading-relaxed mt-2.5 pt-2 border-t border-border/40">
-                                     <strong>Alasan Segmen:</strong> {result.result?.shots[selectedShotIndex].segmen?.alasan}
-                                   </p>
-                                 )}
-                               </CardContent>
-                             </Card>
+                            {/* Shot Header Card */}
+                            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-4">
+                              <div className="flex items-center justify-between border-b border-border/40 pb-3">
+                                <div className="flex items-center gap-2 text-violet-400 text-[10px] font-bold uppercase tracking-widest">
+                                  <Flame className="size-4 text-violet-400 animate-pulse" />
+                                  <span>Shot {selectedShotIndex + 1} dari {result.result?.shots.length}</span>
+                                </div>
+                                <span className="text-[10px] font-mono bg-muted border border-border px-2.5 py-1 rounded-md text-foreground font-semibold">
+                                  ⏱️ {result.result?.shots[selectedShotIndex].segmen?.start_time} - {result.result?.shots[selectedShotIndex].segmen?.end_time} ({result.result?.shots[selectedShotIndex].segmen?.durasi})
+                                </span>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <span className="text-[9px] text-muted-foreground font-bold tracking-widest uppercase">Judul Rekomendasi Utama</span>
+                                <h3 className="text-lg font-extrabold text-foreground leading-snug">
+                                  "{result.result?.shots[selectedShotIndex].judul?.best_choice || `Shot #${selectedShotIndex + 1}`}"
+                                </h3>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/30 p-4 border border-border rounded-xl text-xs">
+                                <div className="space-y-1">
+                                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Big Idea</span>
+                                  <div className="font-semibold text-foreground leading-relaxed">
+                                    {result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}
+                                  </div>
+                                </div>
+                                <div className="space-y-1">
+                                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Hook Pembuka</span>
+                                  <div className="font-bold text-foreground leading-relaxed text-indigo-400">
+                                    "{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {result.result?.shots[selectedShotIndex].segmen?.alasan && (
+                                <div className="bg-violet-500/5 p-3 rounded-lg border border-violet-500/10 text-xs">
+                                  <span className="font-bold text-violet-400 text-[10px] uppercase tracking-wider block mb-1">Analisis Pilihan Segmen:</span>
+                                  <p className="text-muted-foreground leading-relaxed font-sans italic">
+                                    {result.result?.shots[selectedShotIndex].segmen?.alasan}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
 
                             {/* Accordion detail folders */}
-                            <Accordion defaultValue={["titles"]} className="w-full space-y-4">
+                            <Accordion defaultValue={["titles", "thumbnail"]} className="w-full space-y-4">
                               
                               {/* Title Ideas Accordion */}
-                              <AccordionItem value="titles" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="titles" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <User className="size-4 text-sky-400" />
-                                    <span>Ide Judul Rekomendasi (SEO & CTR)</span>
+                                    <span>Alternatif Judul (SEO &amp; High CTR)</span>
                                   </div>
                                 </AccordionTrigger>
-                                  <AccordionContent className="pt-2 pb-4 space-y-3">
+                                <AccordionContent className="pb-5 pt-2 space-y-3">
                                   {(() => {
                                     const judulObj = result.result?.shots[selectedShotIndex].judul || {};
                                     const opsi = judulObj.opsi || [];
@@ -1685,20 +1730,21 @@ export default function Dashboard() {
                                     return opsi.map((t: string, i: number) => {
                                       const isBest = t === bestChoice;
                                       return (
-                                        <div key={i} className={`bg-muted p-3.5 rounded-lg border flex items-start justify-between gap-4 ${isBest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border"}`}>
-                                          <div className="space-y-1">
-                                            <div className="text-sm font-semibold text-foreground font-sans">"{t}"</div>
+                                        <div key={i} className={`bg-background/80 p-4 rounded-xl border flex items-center justify-between gap-4 ${isBest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border"}`}>
+                                          <div className="space-y-1.5">
+                                            <div className="text-xs font-bold text-foreground leading-relaxed">"{t}"</div>
                                             {isBest && (
-                                              <span className="inline-block bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider mt-1">
-                                                ★ Pilihan Terbaik (Best Choice)
+                                              <span className="inline-flex bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest">
+                                                ★ Best Choice
                                               </span>
                                             )}
                                           </div>
                                           <Button 
                                             onClick={() => copyToClipboard(t)} 
-                                            variant="ghost" 
+                                            variant="outline" 
                                             size="icon" 
-                                            className="h-8 w-8 hover:bg-muted text-muted-foreground/80 hover:text-foreground shrink-0"
+                                            className="h-8 w-8 hover:bg-muted border-border shrink-0 text-muted-foreground hover:text-foreground"
+                                            title="Salin judul"
                                           >
                                             <Copy className="size-3.5" />
                                           </Button>
@@ -1708,71 +1754,76 @@ export default function Dashboard() {
                                   })()}
                                 </AccordionContent>
                               </AccordionItem>
- 
+  
                               {/* Thumbnail Concept Accordion */}
-                              <AccordionItem value="thumbnail" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="thumbnail" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <ImageIcon className="size-4 text-emerald-400" />
                                     <span>Konsep Thumbnail Visual</span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="pt-2 pb-4 space-y-4">
+                                <AccordionContent className="pb-5 pt-2 space-y-5">
                                   {(() => {
                                     const thumb = result.result?.shots[selectedShotIndex].thumbnail || {};
                                     return (
                                       <>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                          <div className="space-y-1">
-                                            <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Konsep Visual</span>
+                                          <div className="p-4 rounded-xl bg-background/50 border border-border space-y-2">
+                                            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block">Konsep Visual Utama</span>
                                             <p className="text-xs text-foreground/90 leading-relaxed font-sans">
                                               {thumb.konsep || "-"}
                                             </p>
                                           </div>
-                                          <div className="space-y-1">
-                                            <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Teks Overlay (Kata Pemicu)</span>
-                                            <div className="bg-muted p-4 border border-border rounded-xl text-center flex items-center justify-center min-h-[60px]">
-                                              <span className="text-lg font-extrabold uppercase text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-sans tracking-tight">
+                                          <div className="p-4 rounded-xl bg-background/50 border border-border space-y-2">
+                                            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block">Teks Overlay (Kata Pemicu CTR)</span>
+                                            <div className="bg-muted p-4 border border-border/80 rounded-lg text-center flex items-center justify-center min-h-[60px]">
+                                              <span className="text-base font-extrabold uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-sans">
                                                 {thumb.teks_thumbnail || "(Tidak ada teks)"}
                                               </span>
                                             </div>
                                           </div>
                                         </div>
-                                        <div className="space-y-1 pt-2 border-t border-border">
-                                          <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Komposisi & Layout</span>
-                                          <p className="text-xs text-foreground/90 font-sans">
+                                        
+                                        <div className="p-4 rounded-xl bg-background/50 border border-border space-y-1.5">
+                                          <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block">Komposisi &amp; Layout Visual</span>
+                                          <p className="text-xs text-foreground/90 font-sans leading-relaxed">
                                             {thumb.komposisi || "-"}
                                           </p>
                                         </div>
+
                                         {thumb.warna && thumb.warna.length > 0 && (
-                                          <div className="space-y-1 pt-2 border-t border-border text-xs">
-                                            <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block mb-1">Palet Warna &amp; Psikologi</span>
-                                            <div className="flex flex-wrap gap-1.5 mb-1.5">
+                                          <div className="p-4 rounded-xl bg-background/50 border border-border space-y-3">
+                                            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block">Palet Warna &amp; Psikologi</span>
+                                            <div className="flex flex-wrap gap-2">
                                               {thumb.warna.map((w: string, idx: number) => (
-                                                <span key={idx} className="bg-muted border border-border text-foreground px-2 py-0.5 rounded text-[10px] font-semibold">{w}</span>
+                                                <span key={idx} className="bg-muted border border-border text-foreground px-2.5 py-1 rounded-md text-[10px] font-bold font-mono">
+                                                  🎨 {w}
+                                                </span>
                                               ))}
                                             </div>
-                                            <p className="text-[11px] text-muted-foreground leading-normal">{thumb.psikologi_warna}</p>
+                                            <p className="text-[11px] text-muted-foreground leading-relaxed font-sans">{thumb.psikologi_warna}</p>
                                           </div>
                                         )}
+
                                         {thumb.prompt_ai_image && (
-                                          <div className="space-y-2 pt-2 border-t border-border">
-                                            <div className="flex justify-between items-center text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">
-                                              <span>Prompt AI Image (Salin &amp; Kirim ke Gemini/Imagen)</span>
+                                          <div className="space-y-2.5 pt-3 border-t border-border/40">
+                                            <div className="flex justify-between items-center">
+                                              <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Prompt AI Image (Salin ke Gemini/Imagen)</span>
                                               <Button 
                                                 onClick={() => copyToClipboard(thumb.prompt_ai_image)} 
-                                                variant="ghost" 
+                                                variant="outline" 
                                                 size="xs" 
-                                                className="h-6 text-[10px] hover:bg-muted text-emerald-400 hover:text-emerald-300"
+                                                className="h-6 text-[10px] text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
                                               >
                                                 <Copy className="size-3 mr-1" /> Salin Prompt
                                               </Button>
                                             </div>
-                                            <div className="bg-emerald-500/5 p-3 rounded-lg border border-emerald-500/20 text-xs text-foreground/90 font-mono leading-relaxed select-text">
+                                            <div className="bg-emerald-500/5 p-3 rounded-lg border border-emerald-500/10 text-xs text-foreground/95 font-mono leading-relaxed select-text">
                                               {thumb.prompt_ai_image}
                                             </div>
-                                            <span className="text-[9px] text-muted-foreground italic leading-normal font-sans">
-                                              💡 Tips: Salin prompt bahasa Inggris di atas, kirim ke Google Gemini dengan tambahan perintah "Buat gambar dengan rasio 9:16 untuk YouTube Shorts..."
+                                            <span className="text-[10px] text-muted-foreground italic leading-normal block">
+                                              💡 Tips: Salin prompt bahasa Inggris di atas, kirim ke Google Gemini untuk membuat visual thumbnail super realistis.
                                             </span>
                                           </div>
                                         )}
@@ -1781,16 +1832,16 @@ export default function Dashboard() {
                                   })()}
                                 </AccordionContent>
                               </AccordionItem>
- 
+  
                               {/* Description & Tags Accordion */}
-                              <AccordionItem value="description" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="description" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <FileText className="size-4 text-violet-400" />
-                                    <span>Deskripsi Siap Upload &amp; Tags</span>
+                                    <span>Deskripsi &amp; Metadata SEO</span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="pt-2 pb-4 space-y-4">
+                                <AccordionContent className="pb-5 pt-2 space-y-4">
                                   {(() => {
                                     const shot = result.result?.shots[selectedShotIndex] || {};
                                     const desc = shot.deskripsi_youtube || "-";
@@ -1800,40 +1851,37 @@ export default function Dashboard() {
                                     return (
                                       <>
                                         <div className="space-y-2">
-                                          <div className="flex justify-between items-center text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">
-                                            <span>Naskah Deskripsi</span>
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Naskah Deskripsi Video</span>
                                             <Button 
                                               onClick={() => copyToClipboard(desc)} 
-                                              variant="ghost" 
+                                              variant="outline" 
                                               size="xs" 
-                                              className="h-6 text-[10px] hover:bg-muted text-muted-foreground hover:text-foreground"
+                                              className="h-6 text-[10px] text-muted-foreground hover:text-foreground"
                                             >
                                               <Copy className="size-3 mr-1" /> Salin Deskripsi
                                             </Button>
                                           </div>
-                                          <div className="bg-muted p-3.5 rounded-lg border border-border text-xs text-foreground/90 font-mono leading-relaxed whitespace-pre-wrap">
+                                          <div className="bg-background/80 p-4 rounded-xl border border-border text-xs text-foreground/90 font-mono leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
                                             {desc}
                                           </div>
                                         </div>
+
                                         {keywords.length > 0 && (
-                                          <div className="space-y-1">
+                                          <div className="space-y-2">
                                             <div className="flex items-center justify-between">
-                                              <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Utama</span>
+                                              <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Kata Kunci Utama</span>
                                               <button
-                                                onClick={() => {
-                                                  navigator.clipboard.writeText(keywords.join(', '));
-                                                }}
-                                                className="text-[10px] text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-400/50 px-2 py-0.5 rounded transition-colors flex items-center gap-1"
-                                                title="Salin semua kata kunci"
+                                                onClick={() => { navigator.clipboard.writeText(keywords.join(', ')); }}
+                                                className="text-[10px] text-amber-500 hover:text-amber-400 flex items-center gap-1 font-semibold"
                                               >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                                Salin
+                                                <Copy className="size-3" /> Salin Semua
                                               </button>
                                             </div>
                                             <div className="flex flex-wrap gap-1.5">
                                               {keywords.map((kw: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-semibold">
-                                                  {kw}{i < keywords.length - 1 ? ',' : ''}
+                                                <span key={i} className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded-md font-bold font-mono">
+                                                  🔑 {kw}
                                                 </span>
                                               ))}
                                             </div>
@@ -1841,24 +1889,20 @@ export default function Dashboard() {
                                         )}
 
                                         {keywordsTurunan.length > 0 && (
-                                          <div className="space-y-1">
+                                          <div className="space-y-2">
                                             <div className="flex items-center justify-between">
-                                              <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Turunan</span>
+                                              <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Kata Kunci Turunan</span>
                                               <button
-                                                onClick={() => {
-                                                  navigator.clipboard.writeText(keywordsTurunan.join(', '));
-                                                }}
-                                                className="text-[10px] text-sky-400 hover:text-sky-300 border border-sky-500/30 hover:border-sky-400/50 px-2 py-0.5 rounded transition-colors flex items-center gap-1"
-                                                title="Salin semua kata kunci turunan"
+                                                onClick={() => { navigator.clipboard.writeText(keywordsTurunan.join(', ')); }}
+                                                className="text-[10px] text-sky-500 hover:text-sky-400 flex items-center gap-1 font-semibold"
                                               >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                                Salin
+                                                <Copy className="size-3" /> Salin Semua
                                               </button>
                                             </div>
                                             <div className="flex flex-wrap gap-1.5">
                                               {keywordsTurunan.map((kw: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-sky-500/10 border border-sky-500/20 text-sky-400 px-2 py-0.5 rounded">
-                                                  {kw}{i < keywordsTurunan.length - 1 ? ',' : ''}
+                                                <span key={i} className="text-[10px] bg-sky-500/10 border border-sky-500/20 text-sky-400 px-2.5 py-1 rounded-md font-mono">
+                                                  🔑 {kw}
                                                 </span>
                                               ))}
                                             </div>
@@ -1867,10 +1911,10 @@ export default function Dashboard() {
 
                                         {tags.length > 0 && (
                                           <div className="space-y-2">
-                                            <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Tag Kata Kunci SEO</span>
+                                            <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block">Tag Kata Kunci SEO</span>
                                             <div className="flex flex-wrap gap-1.5">
                                               {tags.map((t: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-muted border border-border text-muted-foreground px-2.5 py-1 rounded-md">
+                                                <span key={i} className="text-[10px] bg-muted border border-border text-muted-foreground px-2.5 py-1 rounded-md font-bold font-mono">
                                                   #{t}
                                                 </span>
                                               ))}
@@ -1882,25 +1926,27 @@ export default function Dashboard() {
                                   })()}
                                 </AccordionContent>
                               </AccordionItem>
- 
+  
                               {/* Editing Recommendations Accordion */}
-                              <AccordionItem value="editing" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="editing" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <Scissors className="size-4 text-amber-400" />
                                     <span>Instruksi Editing (Visual &amp; Audio)</span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="pt-2 pb-4 space-y-4">
+                                <AccordionContent className="pb-5 pt-2 space-y-4">
                                   {(() => {
                                     const recommendations = result.result?.shots[selectedShotIndex].editing?.rekomendasi || [];
                                     return (
-                                      <div className="space-y-2">
+                                      <div className="space-y-2.5">
                                         {recommendations.length > 0 ? (
                                           recommendations.map((rec: string, i: number) => (
-                                            <div key={i} className="flex items-start gap-2.5 text-xs text-foreground leading-relaxed">
-                                              <span className="text-amber-500 font-bold shrink-0 mt-0.5">•</span>
-                                              <p className="font-sans text-foreground/90">{rec}</p>
+                                            <div key={i} className="flex items-start gap-3 text-xs text-foreground/90 leading-relaxed p-3 bg-background/50 border border-border rounded-xl">
+                                              <span className="h-5 w-5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center shrink-0 font-bold text-[10px] mt-0.5">
+                                                {i + 1}
+                                              </span>
+                                              <p className="font-sans font-medium">{rec}</p>
                                             </div>
                                           ))
                                         ) : (
@@ -1911,94 +1957,97 @@ export default function Dashboard() {
                                   })()}
                                 </AccordionContent>
                               </AccordionItem>
-
+  
                               {/* Beat Timeline / Outline Accordion */}
-                              <AccordionItem value="outline" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="outline" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <Clock className="size-4 text-indigo-400" />
-                                    <span>⏩ Beat Timeline &amp; Strategi</span>
+                                    <span>Outline &amp; Beat Timeline</span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="pt-2 pb-4 space-y-3">
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs border-b border-border/40 pb-3 mb-2">
-                                    <div>
-                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider">Big Idea</span>
-                                      <p className="text-foreground/90 font-sans leading-relaxed mt-0.5">{result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}</p>
+                                <AccordionContent className="pb-5 pt-2 space-y-4">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs border-b border-border/40 pb-4 mb-2">
+                                    <div className="space-y-1">
+                                      <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Big Idea</span>
+                                      <p className="text-foreground/95 font-sans leading-relaxed">{result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}</p>
                                     </div>
-                                    <div>
-                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider">Unique Angle</span>
-                                      <p className="text-foreground/90 font-sans leading-relaxed mt-0.5">{result.result?.shots[selectedShotIndex].strategi_konten?.unique_angle}</p>
+                                    <div className="space-y-1">
+                                      <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Unique Angle</span>
+                                      <p className="text-foreground/95 font-sans leading-relaxed">{result.result?.shots[selectedShotIndex].strategi_konten?.unique_angle}</p>
                                     </div>
                                   </div>
-                                  <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block mb-1">Beat Timeline:</span>
-                                  {(result.result?.shots[selectedShotIndex].strategi_konten?.outline || []).map((beat: any, i: number) => (
-                                    <div key={i} className="bg-muted/60 p-2.5 rounded-lg border border-border/40 flex items-start gap-2.5">
-                                      <span className="bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded shrink-0">
-                                        #{i+1}
-                                      </span>
-                                      <div className="text-xs leading-normal font-sans">
-                                        <strong>{beat.babak}</strong> — {beat.isi}
+                                  <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold block mb-1">Beat Timeline:</span>
+                                  <div className="space-y-2.5">
+                                    {(result.result?.shots[selectedShotIndex].strategi_konten?.outline || []).map((beat: any, i: number) => (
+                                      <div key={i} className="bg-background/80 p-3.5 rounded-xl border border-border flex items-start gap-3">
+                                        <span className="bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded shrink-0">
+                                          #{i+1}
+                                        </span>
+                                        <div className="text-xs leading-relaxed font-sans font-medium">
+                                          <strong className="text-foreground font-bold block mb-0.5">{beat.babak}</strong>
+                                          <p className="text-muted-foreground">{beat.isi}</p>
+                                        </div>
                                       </div>
-                                    </div>
-                                  ))}
+                                    ))}
+                                  </div>
                                   {result.result?.shots[selectedShotIndex].strategi_konten?.cta && (
-                                    <div className="bg-muted border border-border p-3.5 rounded-lg text-xs leading-relaxed mt-2">
-                                      <strong className="text-violet-400 block mb-0.5">Call To Action (CTA):</strong>
-                                      <p className="font-sans">"{result.result?.shots[selectedShotIndex].strategi_konten?.cta}"</p>
+                                    <div className="bg-rose-500/5 border border-rose-500/15 p-4 rounded-xl text-xs leading-relaxed mt-4 space-y-1">
+                                      <span className="text-rose-400 font-bold uppercase tracking-widest text-[9px] block">Call To Action (CTA):</span>
+                                      <p className="font-sans font-bold text-foreground">"{result.result?.shots[selectedShotIndex].strategi_konten?.cta}"</p>
                                     </div>
                                   )}
                                 </AccordionContent>
                               </AccordionItem>
-
+ 
                               {/* Performance & Checklists */}
-                              <AccordionItem value="checklist" className="bg-muted/30 border border-border rounded-xl overflow-hidden px-4 py-1">
-                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline">
-                                  <div className="flex items-center gap-2">
+                              <AccordionItem value="checklist" className="bg-card border border-border rounded-2xl overflow-hidden px-5 py-1">
+                                <AccordionTrigger className="text-sm font-bold text-foreground hover:no-underline py-4">
+                                  <div className="flex items-center gap-2.5">
                                     <CheckSquare className="size-4 text-emerald-400" />
-                                    <span>Checklist Produksi & Prediksi Performa</span>
+                                    <span>Checklist Produksi &amp; Prediksi Performa</span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="pt-2 pb-4 space-y-5">
+                                <AccordionContent className="pb-5 pt-2 space-y-6">
                                   
                                   {/* Performance cards */}
                                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="bg-muted p-3 border border-border rounded-lg">
-                                      <span className="text-[9px] text-muted-foreground/80 uppercase tracking-wider font-semibold">Estimasi CTR</span>
-                                      <div className="text-sm font-bold text-emerald-400 mt-0.5">{result.result?.shots[selectedShotIndex].prediksi_performa?.ctr_estimate}</div>
+                                    <div className="bg-background/80 p-4 border border-border rounded-xl space-y-1 text-center">
+                                      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Estimasi CTR</span>
+                                      <div className="text-base font-extrabold text-emerald-400">{result.result?.shots[selectedShotIndex].prediksi_performa?.ctr_estimate}</div>
                                     </div>
-                                    <div className="bg-muted p-3 border border-border rounded-lg">
-                                      <span className="text-[9px] text-muted-foreground/80 uppercase tracking-wider font-semibold">Kurva Retensi</span>
-                                      <div className="text-xs text-foreground/90 mt-0.5 font-medium leading-normal">{result.result?.shots[selectedShotIndex].prediksi_performa?.retention_prediction}</div>
+                                    <div className="bg-background/80 p-4 border border-border rounded-xl space-y-1 text-center">
+                                      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Target Retensi</span>
+                                      <div className="text-xs text-foreground font-semibold leading-normal">{result.result?.shots[selectedShotIndex].prediksi_performa?.retention_prediction}</div>
                                     </div>
-                                    <div className="bg-muted p-3 border border-border rounded-lg">
-                                      <span className="text-[9px] text-muted-foreground/80 uppercase tracking-wider font-semibold">Potensi Viral</span>
-                                      <div className="text-sm font-bold text-indigo-400 mt-0.5">{result.result?.shots[selectedShotIndex].prediksi_performa?.viral_potential}</div>
+                                    <div className="bg-background/80 p-4 border border-border rounded-xl space-y-1 text-center">
+                                      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Potensi Viral</span>
+                                      <div className="text-base font-extrabold text-indigo-400">{result.result?.shots[selectedShotIndex].prediksi_performa?.viral_potential}</div>
                                     </div>
                                   </div>
-
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-3 border-t border-border">
+ 
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border/40">
                                     {/* Production checklist */}
-                                    <div className="space-y-2">
-                                      <h4 className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Checklist Langkah Produksi</h4>
-                                      <div className="space-y-2">
+                                    <div className="space-y-3">
+                                      <h4 className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">🛠️ Langkah Produksi</h4>
+                                      <div className="space-y-2.5">
                                         {(result.result?.shots[selectedShotIndex].checklist?.produksi || []).map((item: string, i: number) => (
-                                          <div key={i} className="flex items-start gap-2 text-xs">
-                                            <input type="checkbox" id={`chk-prod-${i}`} className="mt-0.5 accent-violet-600 rounded" />
-                                            <label htmlFor={`chk-prod-${i}`} className="text-foreground/90 leading-normal font-sans cursor-pointer">{item}</label>
+                                          <div key={i} className="flex items-start gap-2.5 text-xs bg-background/50 border border-border p-2.5 rounded-lg">
+                                            <input type="checkbox" id={`chk-prod-${i}`} className="mt-0.5 accent-violet-600 rounded cursor-pointer size-3.5 border-border" />
+                                            <label htmlFor={`chk-prod-${i}`} className="text-foreground/90 leading-normal font-sans cursor-pointer font-medium">{item}</label>
                                           </div>
                                         ))}
                                       </div>
                                     </div>
-
+ 
                                     {/* Upload/Publish checklist */}
-                                    <div className="space-y-2">
-                                      <h4 className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Checklist Saat Upload</h4>
-                                      <div className="space-y-2">
+                                    <div className="space-y-3">
+                                      <h4 className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">📤 Langkah Upload &amp; SEO</h4>
+                                      <div className="space-y-2.5">
                                         {(result.result?.shots[selectedShotIndex].checklist?.publikasi || []).map((item: string, i: number) => (
-                                          <div key={i} className="flex items-start gap-2 text-xs">
-                                            <input type="checkbox" id={`chk-pub-${i}`} className="mt-0.5 accent-violet-600 rounded" />
-                                            <label htmlFor={`chk-pub-${i}`} className="text-foreground/90 leading-normal font-sans cursor-pointer">{item}</label>
+                                          <div key={i} className="flex items-start gap-2.5 text-xs bg-background/50 border border-border p-2.5 rounded-lg">
+                                            <input type="checkbox" id={`chk-pub-${i}`} className="mt-0.5 accent-violet-600 rounded cursor-pointer size-3.5 border-border" />
+                                            <label htmlFor={`chk-pub-${i}`} className="text-foreground/90 leading-normal font-sans cursor-pointer font-medium">{item}</label>
                                           </div>
                                         ))}
                                       </div>
@@ -2015,298 +2064,337 @@ export default function Dashboard() {
                     /* Renders for Video Panjang */
                     <div className="space-y-6">
                       {result.result?.video_panjang && (
-                        <Card className="bg-card text-card-foreground border-border p-6 space-y-6">
-                          <div className="space-y-2">
-                            <span className="text-[10px] text-violet-400 font-bold uppercase tracking-wider">
-                              Konsep Produksi Video Panjang
-                            </span>
-                            <h3 className="text-lg font-bold text-foreground font-semibold">
+                        <div className="bg-card text-card-foreground border border-border rounded-2xl p-6 md:p-8 space-y-8 shadow-sm">
+                          
+                          {/* Title block */}
+                          <div className="space-y-3.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[9px] text-violet-400 font-bold uppercase tracking-widest bg-violet-500/10 border border-violet-500/25 px-2.5 py-1 rounded-md">
+                                Konsep Utama Video Panjang
+                              </span>
+                              <span className="text-[9px] text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md">
+                                Target CTR &gt; 10%
+                              </span>
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-extrabold text-foreground tracking-tight leading-tight">
                               "{result.result?.video_panjang?.judul?.best_choice || "Judul Rekomendasi"}"
                             </h3>
                             {result.result?.video_panjang?.judul?.alasan_best_choice && (
-                              <p className="text-xs text-muted-foreground leading-relaxed mt-1 italic font-sans">
-                                Alasan: {result.result?.video_panjang?.judul?.alasan_best_choice}
+                              <p className="text-xs text-muted-foreground leading-relaxed italic font-sans bg-muted/40 p-3 rounded-lg border border-border/30">
+                                💡 <strong>Analisis Judul:</strong> {result.result?.video_panjang?.judul?.alasan_best_choice}
                               </p>
                             )}
                             {result.result?.video_panjang?.judul?.opsi && result.result?.video_panjang?.judul?.opsi.length > 0 && (
-                              <div className="pt-2">
-                                <span className="text-[10px] text-muted-foreground/80 uppercase font-bold tracking-wider">Opsi Judul Lainnya:</span>
-                                <ul className="list-disc pl-4 text-xs text-foreground/80 space-y-1 mt-1 font-sans">
+                              <div className="pt-2.5">
+                                <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mb-2">Alternatif Judul CTR Tinggi:</span>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                   {result.result?.video_panjang?.judul?.opsi.map((op: string, idx: number) => (
-                                    <li key={idx}>"{op}"</li>
+                                    <div key={idx} className="bg-background/80 p-3 border border-border rounded-xl flex items-center justify-between gap-3">
+                                      <span className="text-xs font-semibold text-foreground/90">"{op}"</span>
+                                      <Button 
+                                        onClick={() => copyToClipboard(op)}
+                                        variant="outline" 
+                                        size="icon" 
+                                        className="h-7 w-7 shrink-0 hover:bg-muted border-border"
+                                        title="Salin judul"
+                                      >
+                                        <Copy className="size-3" />
+                                      </Button>
+                                    </div>
                                   ))}
-                                </ul>
+                                </div>
                               </div>
                             )}
                           </div>
-
-                          <Separator className="bg-card" />
-
-                          {/* Strategi Konten & Outline */}
-                          <div className="space-y-4 bg-muted/40 p-4 border border-border rounded-xl">
-                            <h4 className="text-xs font-bold text-foreground/90 flex items-center gap-1.5 text-indigo-400">
-                              <Sparkles className="size-4" /> Strategi Konten &amp; Outline
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+ 
+                          <Separator className="bg-border/60" />
+ 
+                          {/* Hook Terkuat & Opening 60 Detik */}
+                          <div className="space-y-4 bg-gradient-to-br from-violet-500/10 to-indigo-500/5 p-6 border border-violet-500/20 rounded-2xl">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-violet-500/20 pb-3.5 mb-2">
                               <div>
-                                <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block">Big Idea</span>
-                                <p className="text-foreground/90 font-sans leading-relaxed mt-0.5">{result.result?.video_panjang?.strategi_konten?.big_idea}</p>
+                                <h4 className="text-sm font-bold text-violet-300 flex items-center gap-2">
+                                  <Flame className="size-5 text-violet-400 animate-pulse" /> Hook &amp; Opening Terkuat (60 Detik Pertama)
+                                </h4>
+                                <p className="text-[11px] text-muted-foreground mt-0.5">Dirancang khusus untuk menahan retensi penonton dari detik ke-0.</p>
                               </div>
-                              <div>
-                                <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block">Unique Angle</span>
-                                <p className="text-foreground/90 font-sans leading-relaxed mt-0.5">{result.result?.video_panjang?.strategi_konten?.unique_angle}</p>
+                              <span className="text-[9px] font-bold text-violet-400 bg-violet-500/20 border border-violet-500/30 px-2 py-0.5 rounded-full font-mono uppercase">
+                                RETENSI CRITICAL ZONE
+                              </span>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                              <div className="bg-background/60 p-3.5 border border-violet-500/20 rounded-xl space-y-1">
+                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Big Idea</span>
+                                <p className="text-foreground/95 font-sans leading-relaxed font-semibold">{result.result?.video_panjang?.strategi_konten?.big_idea}</p>
+                              </div>
+                              <div className="bg-background/60 p-3.5 border border-violet-500/20 rounded-xl space-y-1">
+                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Unique Angle</span>
+                                <p className="text-foreground/95 font-sans leading-relaxed font-semibold">{result.result?.video_panjang?.strategi_konten?.unique_angle}</p>
+                              </div>
+                              <div className="bg-background/60 p-3.5 border border-violet-500/20 rounded-xl space-y-1">
+                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Hook Pembuka Baru</span>
+                                <p className="text-violet-300 font-sans leading-relaxed font-bold">"{result.result?.video_panjang?.strategi_konten?.hook_baru}"</p>
                               </div>
                             </div>
-                            <div className="text-xs pt-1">
-                              <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block">Hook Pembuka Baru</span>
-                              <p className="text-foreground/90 font-sans font-semibold leading-relaxed mt-0.5">"{result.result?.video_panjang?.strategi_konten?.hook_baru}"</p>
-                            </div>
-
-                            {/* Opening 60 Detik */}
+ 
+                            {/* Opening 60 Detik Segment Outline */}
                             {result.result?.video_panjang?.strategi_konten?.opening_60_detik && (
-                              <div className="mt-3 pt-3 border-t border-border/40 text-xs">
-                                <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-2 text-violet-400">⏱️ Rekomendasi Opening 60 Detik</span>
-                                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                              <div className="mt-4 pt-4 border-t border-violet-500/20 space-y-3">
+                                <span className="text-xs text-violet-300 font-bold block">⏱️ Naskah &amp; Instruksi Visual 60 Detik Pertama</span>
+                                <div className="space-y-3">
                                   {(result.result?.video_panjang?.strategi_konten?.opening_60_detik?.klip || []).map((klip: any, idx: number) => (
-                                    <div key={idx} className="bg-background/40 p-2.5 rounded-lg border border-border/30 space-y-1.5">
+                                    <div key={idx} className="bg-background/80 p-4 rounded-xl border border-violet-500/20 space-y-2">
                                       <div className="flex items-center justify-between text-[10px]">
-                                        <span className="font-bold text-violet-400">🎬 Video Baru: {klip.video_baru_start} - {klip.video_baru_end}</span>
-                                        <span className="text-muted-foreground">Sumber: {klip.sumber_start} - {klip.sumber_end}</span>
+                                        <span className="font-bold text-violet-400 bg-violet-500/20 px-2 py-0.5 rounded">Detik {klip.video_baru_start} - {klip.video_baru_end}</span>
+                                        <span className="text-muted-foreground/80 font-mono">Sumber Referensi: {klip.sumber_start} - {klip.sumber_end}</span>
                                       </div>
-                                      <p className="text-[11px] leading-relaxed italic font-sans">"{klip.narasi_sumber}"</p>
+                                      <p className="text-xs leading-relaxed italic text-foreground/95 font-sans bg-muted/30 p-2.5 rounded border border-border/40">
+                                        "{klip.narasi_sumber}"
+                                      </p>
                                       {klip.catatan_editing && (
-                                        <p className="text-[10px] text-muted-foreground">✏️ Editing: {klip.catatan_editing}</p>
+                                        <div className="text-[11px] text-indigo-300 font-semibold bg-indigo-500/5 p-2 rounded border border-indigo-500/10 flex items-start gap-1">
+                                          <span className="shrink-0 mt-0.5">🎬</span>
+                                          <span><strong>Visual/Editing:</strong> {klip.catatan_editing}</span>
+                                        </div>
                                       )}
                                     </div>
                                   ))}
                                 </div>
                                 {result.result?.video_panjang?.strategi_konten?.opening_60_detik?.alasan && (
-                                  <p className="text-[10px] text-muted-foreground italic mt-2 font-sans">Alasan Pilihan: {result.result?.video_panjang?.strategi_konten?.opening_60_detik?.alasan}</p>
+                                  <div className="bg-violet-500/5 p-3 rounded-lg border border-violet-500/15 text-xs">
+                                    <span className="text-[9px] text-violet-400 font-bold block mb-1">Pola Psikologis Hook:</span>
+                                    <p className="text-muted-foreground font-sans leading-relaxed italic">{result.result?.video_panjang?.strategi_konten?.opening_60_detik?.alasan}</p>
+                                  </div>
                                 )}
                               </div>
                             )}
-
-                            {/* Detailed Outline */}
-                            <div className="pt-3 border-t border-border/40 text-xs">
-                              <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-2">📑 Outline &amp; Chapter Timeline</span>
-                              <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                                {(result.result?.video_panjang?.strategi_konten?.outline || []).map((chapter: any, idx: number) => (
-                                  <div key={idx} className="bg-background/30 p-3 rounded-lg border border-border/20">
-                                    <div className="flex items-center justify-between font-bold mb-1">
-                                      <span>Babak {idx+1}: {chapter.babak}</span>
-                                      <span className="text-indigo-400 text-[10px]">{chapter.start_estimate} - {chapter.end_estimate}</span>
+                          </div>
+ 
+                          {/* Detailed Outline Chapter Timeline */}
+                          <div className="space-y-4">
+                            <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                              <Compass className="size-5 text-indigo-400" /> Babak Outline &amp; Chapter Timeline (Urutan Pembahasan)
+                            </h4>
+                            <div className="space-y-3">
+                              {(result.result?.video_panjang?.strategi_konten?.outline || []).map((chapter: any, idx: number) => (
+                                <div key={idx} className="bg-background border border-border p-4 rounded-2xl flex flex-col sm:flex-row sm:items-start gap-4 hover:border-border/80 transition-colors">
+                                  <div className="h-7 w-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">
+                                    {idx + 1}
+                                  </div>
+                                  <div className="space-y-2 w-full">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <h5 className="text-xs font-bold text-foreground">{chapter.babak}</h5>
+                                      <span className="text-[10px] font-mono font-bold bg-muted px-2 py-0.5 rounded text-indigo-400 border border-border">
+                                        ⏱️ Estimasi: {chapter.start_estimate} - {chapter.end_estimate}
+                                      </span>
                                     </div>
-                                    <p className="text-muted-foreground text-[11px] font-sans leading-relaxed">{chapter.isi}</p>
+                                    <p className="text-xs text-muted-foreground leading-relaxed font-sans">{chapter.isi}</p>
                                     {chapter.sumber_segmen && chapter.sumber_segmen.map((src: any, srcIdx: number) => (
-                                      <div key={srcIdx} className="text-[10px] text-muted-foreground/80 mt-1 border-t border-border/10 pt-1 font-sans">
-                                        📹 Ambil dari video sumber {src.start} - {src.end} {src.catatan && `· ${src.catatan}`}
+                                      <div key={srcIdx} className="text-[10px] text-emerald-400/90 font-medium bg-emerald-500/5 p-2 rounded border border-emerald-500/10 inline-flex items-center gap-1.5 mt-2">
+                                        📹 <span>Ambil dari video referensi {src.start} - {src.end}</span>
+                                        {src.catatan && <span className="text-muted-foreground/60">({src.catatan})</span>}
                                       </div>
                                     ))}
                                   </div>
-                                ))}
-                              </div>
+                                </div>
+                              ))}
                             </div>
-
-                            {/* CTA */}
-                            {result.result?.video_panjang?.strategi_konten?.cta && (() => {
-                              const ctaObj = result.result.video_panjang.strategi_konten.cta;
-                              if (typeof ctaObj === "string") {
-                                return (
-                                  <div className="pt-3 border-t border-border/40 text-xs">
-                                    <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1.5 text-rose-400">📣 Call To Action (CTA)</span>
-                                    <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
-                                      {ctaObj}
-                                    </p>
-                                  </div>
-                                );
-                              }
-                              return (
-                                <div className="pt-3 border-t border-border/40 text-xs space-y-3">
-                                  {ctaObj.teks_video && (
-                                    <div>
-                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block mb-1 text-rose-400">📣 Call To Action (CTA) Video</span>
-                                      <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2">
-                                        {ctaObj.teks_video}
-                                      </p>
-                                    </div>
-                                  )}
-                                  {ctaObj.komentar_pin && (
-                                    <div>
-                                      <div className="flex justify-between items-center mb-1">
-                                        <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block text-rose-400">📌 Draf Komentar Pin</span>
-                                        <Button 
-                                          onClick={() => copyToClipboard(ctaObj.komentar_pin)} 
-                                          variant="ghost" 
-                                          size="xs" 
-                                          className="h-5 text-[9px] text-rose-400 hover:text-rose-300"
-                                        >
-                                          <Copy className="size-3 mr-1" /> Salin Komentar
-                                        </Button>
-                                      </div>
-                                      <p className="text-foreground/90 font-sans leading-relaxed bg-rose-500/5 border border-rose-500/20 rounded-lg px-3 py-2 italic">
-                                        "{ctaObj.komentar_pin}"
-                                      </p>
-                                    </div>
-                                  )}
-                                  {ctaObj.postingan_komunitas && (ctaObj.postingan_komunitas.teks || ctaObj.postingan_komunitas.rekomendasi_gambar) && (
-                                    <div className="bg-rose-500/5 border border-rose-500/10 rounded-lg p-3 space-y-2">
-                                      <span className="text-muted-foreground/80 font-bold uppercase text-[9px] tracking-wider block text-rose-400">💬 Rekomendasi Postingan Komunitas</span>
-                                      {ctaObj.postingan_komunitas.teks && (
-                                        <div className="space-y-1">
-                                          <div className="flex justify-between items-center">
-                                            <span className="text-[10px] text-muted-foreground/60 font-medium">Teks Postingan:</span>
-                                            <Button 
-                                              onClick={() => copyToClipboard(ctaObj.postingan_komunitas.teks)} 
-                                              variant="ghost" 
-                                              size="xs" 
-                                              className="h-5 text-[9px] text-rose-400 hover:text-rose-300"
-                                            >
-                                              <Copy className="size-3 mr-1" /> Salin Postingan
-                                            </Button>
-                                          </div>
-                                          <div className="bg-background/40 p-2.5 rounded text-foreground/90 font-sans whitespace-pre-wrap leading-relaxed text-[11px]">
-                                            {ctaObj.postingan_komunitas.teks}
-                                          </div>
-                                        </div>
-                                      )}
-                                      {ctaObj.postingan_komunitas.rekomendasi_gambar && (
-                                        <div className="pt-1.5 border-t border-rose-500/10">
-                                          <span className="text-[10px] text-muted-foreground/60 font-medium block mb-1">🖼️ Rekomendasi Gambar/Visual:</span>
-                                          <p className="text-muted-foreground text-[11px] leading-relaxed italic">{ctaObj.postingan_komunitas.rekomendasi_gambar}</p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })()}
-
                           </div>
-
-                          <Separator className="bg-card" />
-
+ 
+                          {/* CTA (Call To Action) */}
+                          {result.result?.video_panjang?.strategi_konten?.cta && (() => {
+                            const ctaObj = result.result.video_panjang.strategi_konten.cta;
+                            return (
+                              <div className="space-y-4">
+                                <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                  <Activity className="size-5 text-rose-400" /> Strategi Call To Action (Optimasi Konversi)
+                                </h4>
+                                
+                                {typeof ctaObj === "string" ? (
+                                  <div className="bg-rose-500/5 border border-rose-500/15 p-4 rounded-xl text-xs space-y-1.5">
+                                    <span className="text-rose-400 font-bold uppercase tracking-widest text-[9px] block">Narasi CTA Utama</span>
+                                    <p className="text-foreground leading-relaxed font-sans font-bold">"{ctaObj}"</p>
+                                  </div>
+                                ) : (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {ctaObj.teks_video && (
+                                      <div className="bg-rose-500/5 border border-rose-500/15 p-4 rounded-xl text-xs space-y-2">
+                                        <span className="text-rose-400 font-bold uppercase tracking-widest text-[9px] block">Narasi Video</span>
+                                        <p className="text-foreground font-semibold font-sans leading-relaxed">"{ctaObj.teks_video}"</p>
+                                      </div>
+                                    )}
+                                    {ctaObj.komentar_pin && (
+                                      <div className="bg-rose-500/5 border border-rose-500/15 p-4 rounded-xl text-xs space-y-2">
+                                        <div className="flex justify-between items-center">
+                                          <span className="text-rose-400 font-bold uppercase tracking-widest text-[9px]">Draf Komentar Pin</span>
+                                          <Button 
+                                            onClick={() => copyToClipboard(ctaObj.komentar_pin)} 
+                                            variant="outline" 
+                                            size="xs" 
+                                            className="h-5 text-[9px] text-rose-400 hover:bg-rose-500/10 border-rose-500/20"
+                                          >
+                                            <Copy className="size-3 mr-1" /> Salin Komentar
+                                          </Button>
+                                        </div>
+                                        <p className="text-foreground font-semibold font-sans italic leading-relaxed">"{ctaObj.komentar_pin}"</p>
+                                      </div>
+                                    )}
+                                    {ctaObj.postingan_komunitas && (ctaObj.postingan_komunitas.teks || ctaObj.postingan_komunitas.rekomendasi_gambar) && (
+                                      <div className="col-span-1 md:col-span-2 bg-rose-500/5 border border-rose-500/10 rounded-xl p-4 space-y-3">
+                                        <span className="text-rose-400 font-bold uppercase tracking-widest text-[9px] block">Draf Postingan Komunitas (Untuk Promosi Silang)</span>
+                                        {ctaObj.postingan_komunitas.teks && (
+                                          <div className="space-y-1.5">
+                                            <div className="flex justify-between items-center">
+                                              <span className="text-[10px] text-muted-foreground/80">Teks Postingan:</span>
+                                              <Button 
+                                                onClick={() => copyToClipboard(ctaObj.postingan_komunitas.teks)} 
+                                                variant="outline" 
+                                                size="xs" 
+                                                className="h-5 text-[9px] text-rose-400 hover:bg-rose-500/10 border-rose-500/25"
+                                              >
+                                                <Copy className="size-3 mr-1" /> Salin Postingan
+                                              </Button>
+                                            </div>
+                                            <div className="bg-background/60 p-3 rounded-lg border border-border/80 text-foreground font-sans whitespace-pre-wrap leading-relaxed text-xs">
+                                              {ctaObj.postingan_komunitas.teks}
+                                            </div>
+                                          </div>
+                                        )}
+                                        {ctaObj.postingan_komunitas.rekomendasi_gambar && (
+                                          <div className="pt-2 border-t border-rose-500/15">
+                                            <span className="text-[10px] text-muted-foreground/80 block mb-1">🖼️ Rekomendasi Gambar/Visual:</span>
+                                            <p className="text-muted-foreground text-xs leading-relaxed italic">{ctaObj.postingan_komunitas.rekomendasi_gambar}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
+ 
+                          <Separator className="bg-border/60" />
+ 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
                             {/* Visual Thumbnail */}
-                            <div className="space-y-3 bg-muted p-4 border border-border rounded-xl">
-                              <h4 className="text-xs font-bold text-foreground/90 flex items-center gap-1.5">
-                                <ImageIcon className="size-4 text-emerald-400" /> Konsep Thumbnail
+                            <div className="space-y-4 bg-background border border-border p-5 rounded-2xl">
+                              <h4 className="text-xs font-extrabold text-foreground flex items-center gap-2">
+                                <ImageIcon className="size-4 text-emerald-400" /> Konsep Visual Thumbnail
                               </h4>
-                              <div className="space-y-2.5 text-xs">
+                              <div className="space-y-3.5 text-xs">
                                 <div>
-                                  <span className="text-muted-foreground/80">Teks Utama:</span>
-                                  <div className="text-sm font-bold text-emerald-400 uppercase mt-0.5">"{result.result?.video_panjang?.thumbnail?.teks_thumbnail}"</div>
+                                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider block">Teks Overlay Pemicu CTR</span>
+                                  <div className="text-sm font-extrabold text-emerald-400 uppercase mt-1">"{result.result?.video_panjang?.thumbnail?.teks_thumbnail}"</div>
                                 </div>
                                 <div>
-                                  <span className="text-muted-foreground/80">Deskripsi Visual:</span>
-                                  <p className="text-foreground/90 leading-relaxed mt-0.5 font-sans">{result.result?.video_panjang?.thumbnail?.konsep}</p>
+                                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider block">Visual Deskripsi Utama</span>
+                                  <p className="text-foreground/90 leading-relaxed mt-1 font-sans font-medium">{result.result?.video_panjang?.thumbnail?.konsep}</p>
                                 </div>
                                 <div>
-                                  <span className="text-muted-foreground/80">Gaya Tata Letak:</span>
-                                  <p className="text-foreground/90 leading-relaxed mt-0.5 font-sans">{result.result?.video_panjang?.thumbnail?.komposisi}</p>
+                                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider block">Komposisi &amp; Fokus</span>
+                                  <p className="text-foreground/90 leading-relaxed mt-1 font-sans font-medium">{result.result?.video_panjang?.thumbnail?.komposisi}</p>
                                 </div>
                                 {result.result?.video_panjang?.thumbnail?.prompt_ai_image && (
-                                  <div className="space-y-1.5 pt-2 border-t border-border/40">
+                                  <div className="space-y-2 pt-2 border-t border-border/40">
                                     <div className="flex justify-between items-center">
-                                      <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">Prompt AI Image (Kirim ke Gemini)</span>
+                                      <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Prompt Imagen/Gemini</span>
                                       <Button 
                                         onClick={() => copyToClipboard(result.result?.video_panjang?.thumbnail?.prompt_ai_image)}
-                                        variant="ghost" 
+                                        variant="outline" 
                                         size="xs" 
-                                        className="h-5 text-[9px] text-emerald-400 hover:text-emerald-300"
+                                        className="h-5 text-[9px] text-emerald-400 hover:bg-emerald-500/10 border-emerald-500/20"
                                       >
                                         <Copy className="size-3 mr-1" /> Salin Prompt
                                       </Button>
                                     </div>
-                                    <div className="bg-emerald-500/5 p-2.5 rounded border border-emerald-500/10 text-[11px] font-mono select-text leading-relaxed">
+                                    <div className="bg-emerald-500/5 p-3 rounded-lg border border-emerald-500/10 text-xs font-mono select-text leading-relaxed">
                                       {result.result?.video_panjang?.thumbnail?.prompt_ai_image}
                                     </div>
                                     <span className="text-[9px] text-muted-foreground italic leading-normal">
-                                      💡 Tips: Kirim prompt bahasa Inggris ini ke Google Gemini dengan instruksi "Buat gambar dengan rasio 16:9 untuk Thumbnail YouTube..."
+                                      💡 Kirim prompt ini ke AI Generator dengan instruksi "Rasio 16:9 untuk Thumbnail YouTube".
                                     </span>
                                   </div>
                                 )}
                               </div>
                             </div>
-
+ 
                             {/* Description & Tags */}
-                            <div className="space-y-3 bg-muted p-4 border border-border rounded-xl">
+                            <div className="space-y-4 bg-background border border-border p-5 rounded-2xl">
                               <div className="flex justify-between items-center">
-                                <h4 className="text-xs font-bold text-foreground/90 flex items-center gap-1.5">
-                                  <FileText className="size-4 text-sky-400" /> Deskripsi Siap Upload
+                                <h4 className="text-xs font-extrabold text-foreground flex items-center gap-2">
+                                  <FileText className="size-4 text-sky-400" /> Deskripsi Siap Upload &amp; Tags
                                 </h4>
                                 <Button 
                                   onClick={() => copyToClipboard(result.result?.video_panjang?.deskripsi_youtube)}
-                                  variant="ghost" 
+                                  variant="outline" 
                                   size="xs" 
                                   className="h-6 text-[10px] text-muted-foreground hover:text-foreground"
                                 >
-                                  <Copy className="size-3 mr-1" /> Salin
+                                  <Copy className="size-3 mr-1" /> Salin Deskripsi
                                 </Button>
                               </div>
-                              <div className="bg-muted p-3 rounded-lg text-xs font-mono max-h-36 overflow-y-auto whitespace-pre-wrap leading-normal">
+                              <div className="bg-muted/40 p-4 rounded-xl border border-border text-xs font-mono max-h-48 overflow-y-auto whitespace-pre-wrap leading-relaxed">
                                 {result.result?.video_panjang?.deskripsi_youtube}
                               </div>
+                              
                               {(() => {
                                 const keywords = result.result?.video_panjang?.seo?.keyword_utama || [];
                                 if (keywords.length === 0) return null;
                                 return (
-                                  <div className="space-y-1 mt-3">
+                                  <div className="space-y-2 mt-2">
                                     <div className="flex items-center justify-between">
-                                      <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Utama</span>
+                                      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Kata Kunci Utama</span>
                                       <button
-                                        onClick={() => {
-                                          navigator.clipboard.writeText(keywords.join(', '));
-                                        }}
-                                        className="text-[10px] text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-400/50 px-2 py-0.5 rounded transition-colors flex items-center gap-1"
-                                        title="Salin semua kata kunci"
+                                        onClick={() => { navigator.clipboard.writeText(keywords.join(', ')); }}
+                                        className="text-[10px] text-amber-500 hover:text-amber-400 font-semibold"
                                       >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                        Salin
+                                        Salin Semua
                                       </button>
                                     </div>
                                     <div className="flex flex-wrap gap-1.5">
                                       {keywords.map((kw: string, i: number) => (
-                                        <span key={i} className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-semibold">
-                                          {kw}{i < keywords.length - 1 ? ',' : ''}
+                                        <span key={i} className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded-md font-mono font-bold">
+                                          🔑 {kw}
                                         </span>
                                       ))}
                                     </div>
                                   </div>
                                 );
                               })()}
-
+ 
                               {(() => {
                                 const kwTurunan = result.result?.video_panjang?.seo?.keyword_turunan || [];
                                 if (kwTurunan.length === 0) return null;
                                 return (
-                                  <div className="space-y-1 mt-3">
+                                  <div className="space-y-2 mt-2">
                                     <div className="flex items-center justify-between">
-                                      <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold block">Kata Kunci Turunan</span>
+                                      <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Kata Kunci Turunan</span>
                                       <button
                                         onClick={() => { navigator.clipboard.writeText(kwTurunan.join(', ')); }}
-                                        className="text-[10px] text-sky-400 hover:text-sky-300 border border-sky-500/30 hover:border-sky-400/50 px-2 py-0.5 rounded transition-colors flex items-center gap-1"
-                                        title="Salin semua kata kunci turunan"
+                                        className="text-[10px] text-sky-500 hover:text-sky-400 font-semibold"
                                       >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                        Salin
+                                        Salin Semua
                                       </button>
                                     </div>
                                     <div className="flex flex-wrap gap-1.5">
                                       {kwTurunan.map((kw: string, i: number) => (
-                                        <span key={i} className="text-[10px] bg-sky-500/10 border border-sky-500/20 text-sky-400 px-2 py-0.5 rounded">
-                                          {kw}{i < kwTurunan.length - 1 ? ',' : ''}
+                                        <span key={i} className="text-[10px] bg-sky-500/10 border border-sky-500/20 text-sky-400 px-2.5 py-1 rounded-md font-mono">
+                                          🔑 {kw}
                                         </span>
                                       ))}
                                     </div>
                                   </div>
                                 );
                               })()}
-
-                              <div className="space-y-1 mt-3">
-                                <span className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-bold">SEO Tags</span>
+ 
+                              <div className="space-y-2 mt-2">
+                                <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">SEO Tags</span>
                                 <div className="flex flex-wrap gap-1.5">
                                   {(result.result?.video_panjang?.seo?.tags || []).map((t: string, i: number) => (
-                                    <span key={i} className="text-[10px] bg-muted border border-border text-muted-foreground px-2 py-0.5 rounded">
+                                    <span key={i} className="text-[10px] bg-muted border border-border text-muted-foreground px-2.5 py-1 rounded-md font-bold font-mono">
                                       #{t}
                                     </span>
                                   ))}
@@ -2314,62 +2402,64 @@ export default function Dashboard() {
                               </div>
                             </div>
                           </div>
-
-                          <Separator className="bg-card" />
-
+ 
+                          <Separator className="bg-border/60" />
+ 
                           {/* Editing & Pacing */}
-                          <div className="space-y-3 bg-muted p-4 border border-border rounded-xl">
-                            <h4 className="text-xs font-bold text-foreground/90 flex items-center gap-1.5">
-                              <Scissors className="size-4 text-amber-400" /> Rekomendasi Editing
+                          <div className="space-y-4 bg-background border border-border p-5 rounded-2xl">
+                            <h4 className="text-xs font-extrabold text-foreground flex items-center gap-2">
+                              <Scissors className="size-4 text-amber-400" /> Rekomendasi Editing Detail
                             </h4>
-                            <div className="space-y-2 text-xs">
+                            <div className="space-y-2.5 text-xs">
                               {(result.result?.video_panjang?.editing?.rekomendasi || []).map((rec: string, i: number) => (
-                                <div key={i} className="flex items-start gap-2.5 leading-relaxed text-foreground/90 font-sans">
-                                  <span className="text-amber-500 font-bold mt-0.5">•</span>
-                                  <p>{rec}</p>
+                                <div key={i} className="flex items-start gap-3 leading-relaxed text-foreground/90 font-sans p-3 bg-muted/30 border border-border rounded-xl">
+                                  <span className="h-5 w-5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center shrink-0 font-bold text-[10px] mt-0.5">
+                                    {i+1}
+                                  </span>
+                                  <p className="font-medium">{rec}</p>
                                 </div>
                               ))}
                             </div>
                           </div>
-                          {/* Rekomendasi Upload — hanya Suara Filsuf */}
+                          
+                          {/* Rekomendasi Upload */}
                           {channelDna === "suara_filsuf" && result.result?.video_panjang?.rekomendasi_upload?.tersedia && (
                             <>
-                              <Separator className="bg-card" />
-                              <div className="space-y-3 bg-gradient-to-br from-violet-500/10 to-indigo-500/5 p-4 border border-violet-500/30 rounded-xl">
-                                <h4 className="text-xs font-bold text-violet-300 flex items-center gap-1.5">
+                              <Separator className="bg-border/60" />
+                              <div className="space-y-4 bg-gradient-to-br from-violet-500/10 to-indigo-500/5 p-5 border border-violet-500/20 rounded-2xl">
+                                <h4 className="text-xs font-bold text-violet-300 flex items-center gap-2">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                                  📅 Rekomendasi Waktu Upload <span className="text-[9px] text-violet-400/70 font-normal ml-1">(Data Suara Filsuf — 357 video)</span>
+                                  📅 Jadwal &amp; Waktu Upload Terbaik <span className="text-[9px] text-violet-400/70 font-normal ml-1">(Database Suara Filsuf)</span>
                                 </h4>
-                                <div className="grid grid-cols-2 gap-3 text-xs">
-                                  <div className="bg-background/40 rounded-lg p-3 border border-violet-500/20">
-                                    <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider font-bold block mb-1.5">✅ Hari Terbaik</span>
-                                    <div className="flex flex-wrap gap-1.5">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                                  <div className="bg-background/80 rounded-xl p-4 border border-violet-500/20 space-y-2">
+                                    <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-bold block">Hari Upload Optimal</span>
+                                    <div className="flex flex-wrap gap-2">
                                       {(result.result?.video_panjang?.rekomendasi_upload?.hari_terbaik || []).map((hari: string, i: number) => (
-                                        <span key={i} className="bg-violet-500/20 border border-violet-500/40 text-violet-300 px-2.5 py-1 rounded-lg font-bold text-[11px]">{hari}</span>
+                                        <span key={i} className="bg-violet-500/20 border border-violet-500/30 text-violet-300 px-3 py-1 rounded-lg font-bold text-[11px]">{hari}</span>
                                       ))}
                                     </div>
                                   </div>
-                                  <div className="bg-background/40 rounded-lg p-3 border border-violet-500/20">
-                                    <span className="text-[9px] text-muted-foreground/70 uppercase tracking-wider font-bold block mb-1.5">🕐 Jam Upload</span>
-                                    <span className="text-violet-300 font-bold text-xl">{result.result?.video_panjang?.rekomendasi_upload?.jam_upload}</span>
+                                  <div className="bg-background/80 rounded-xl p-4 border border-violet-500/20 space-y-1">
+                                    <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-bold block">Rekomendasi Jam</span>
+                                    <span className="text-violet-300 font-extrabold text-2xl block">{result.result?.video_panjang?.rekomendasi_upload?.jam_upload}</span>
                                   </div>
                                 </div>
                                 {result.result?.video_panjang?.rekomendasi_upload?.alasan && (
-                                  <p className="text-[11px] text-muted-foreground/80 font-sans leading-relaxed">
-                                    💡 {result.result?.video_panjang?.rekomendasi_upload?.alasan}
+                                  <p className="text-xs text-muted-foreground/90 font-sans leading-relaxed">
+                                    💡 <strong>Alasan:</strong> {result.result?.video_panjang?.rekomendasi_upload?.alasan}
                                   </p>
                                 )}
                                 {result.result?.video_panjang?.rekomendasi_upload?.hindari && (
-                                  <div className="bg-red-500/5 border border-red-500/20 rounded-lg px-3 py-2">
-                                    <span className="text-[10px] text-red-400 font-bold">❌ Hindari: </span>
-                                    <span className="text-[10px] text-muted-foreground/80 font-sans">{result.result?.video_panjang?.rekomendasi_upload?.hindari}</span>
+                                  <div className="bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-2.5">
+                                    <span className="text-[10px] text-red-400 font-bold block mb-1">⚠️ Hindari Waktu Ini:</span>
+                                    <span className="text-xs text-muted-foreground/80 font-sans">{result.result?.video_panjang?.rekomendasi_upload?.hindari}</span>
                                   </div>
                                 )}
                               </div>
                             </>
                           )}
-                        </Card>
-
+                        </div>
                       )}
                     </div>
                   )}
