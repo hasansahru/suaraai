@@ -139,6 +139,9 @@ Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMB
 
 - Minimalis, dominan gelap/monokrom + satu aksen kontras (mis. biru tua + emas, atau hitam + putih).
 - Satu objek/simbol visual kuat (siluet, mata, jalan sepi) — bukan wajah ekspresif berlebihan.
+- **Komposisi Tata Letak (Wajib Dipatuhi):**
+  - **Teks Overlay & Elemen Gambar Pendukung:** Wajib diletakkan di bagian **KIRI** (left).
+  - **Bagian KANAN (right):** Wajib dibiarkan **kosong/blank total** (tanpa objek, tanpa teks, tanpa backlight subjek), karena sisi kanan akan digunakan untuk meletakkan foto narasumber secara manual menggunakan Photoshop.
 - Teks singkat, bold, tipografi serif/sans-serif elegan.
 - Hindari warna cerah/pastel.
 
