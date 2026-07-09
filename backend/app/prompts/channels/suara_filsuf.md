@@ -77,16 +77,16 @@ Prioritaskan **Kamis** (avg 994 views) dan **Minggu** (avg 938 views). Hindari S
 
 | Format | Hari | Jam |
 |---|---|---|
-| **Video Panjang** | Kamis, Jumat, Minggu | 19:00 |
-| **Shorts** | Selasa, Rabu, Sabtu | 18:00 |
+| **Video Panjang** | Minggu, Jumat, Sabtu, Kamis | 17:00 - 18:00 |
+| **Shorts** | Senin, Selasa, Kamis | 17:00 - 18:00 |
 
-**Logika:** hari dengan performa views terbaik (Kamis, Minggu) dialokasikan untuk video panjang — format dengan nilai tertinggi (avg 770 views, CTR 6,66%, revenue Rp21.930/video) — bukan untuk Shorts yang nilainya jauh lebih kecil per video. Jam 18:00–19:00 sudah sesuai window puncak audiens online sehingga tidak perlu diubah.
+**Logika:** Hari dengan intensitas penonton online tertinggi (Minggu, Jumat, Sabtu, dan Kamis) dialokasikan untuk video panjang — format dengan nilai tertinggi dan retensi terkuat — sedangkan hari biasa lainnya dialokasikan untuk Shorts. Jam 17:00 - 18:00 WIB dipilih agar video terdistribusi dan terindeks dengan baik tepat saat grafik aktivitas penonton melonjak naik mulai pukul 18:00 WIB.
 
 **⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true, khusus channel ini karena sudah ada data analytics):
-- `hari_terbaik`: ["Kamis", "Jumat", "Minggu"]
-- `jam_upload`: "19:00 WIB"
-- `alasan`: "Berdasarkan data 357 video (31 Mar–29 Jun 2026): Kamis avg 994 views dan Minggu avg 938 views adalah hari performa terbaik. Jam puncak penonton membuka YouTube adalah 18:00–21:00 WIB (data heatmap penonton Suara Filsuf, GMT+7). Upload jam 19:00 memberi waktu bagi YouTube untuk mengindeks video sebelum traffic malam puncak."
-- `hindari`: "Senin (avg 290 views, performa terburuk). Hindari upload sebelum jam 10:00 WIB karena traffic penonton masih rendah."
+- `hari_terbaik`: ["Minggu", "Jumat", "Sabtu", "Kamis"]
+- `jam_upload`: "17:00 - 18:00 WIB"
+- `alasan`: "Berdasarkan grafik heatmap 'Waktu penonton membuka YouTube' (GMT+07:00 / WIB), puncak aktivitas penonton yang sangat tinggi terjadi setiap hari pada pukul 18:00 - 21:00 WIB, dengan konsentrasi terluas dan terpadat pada hari Minggu, Jumat, Sabtu, dan Kamis. Mengunggah video pada pukul 17:00 - 18:00 WIB memberikan waktu sekitar 1-2 jam bagi sistem YouTube untuk memproses, mengindeks, dan mendistribusikan notifikasi video ke feed penonton tepat di awal puncak traffic."
+- `hindari`: "Hindari mengunggah video pada pukul 23:00 - 12:00 WIB karena aktivitas penonton di YouTube berada di titik terendah (area heatmap sangat gelap/hitam)."
 
 
 
