@@ -4,16 +4,19 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, LogIn, UserPlus, Eye, EyeOff, Sparkles, Brain } from "lucide-react";
 
-const getApiBase = () => {
-  if (typeof window !== "undefined") {
-    if (window.location.hostname.includes("vercel.app") || window.location.hostname.includes("suaraai.vercel.app")) {
-      return "https://suarafilsuf-suaraai-backend.hf.space";
-    }
-  }
-  return process.env.NEXT_PUBLIC_API_URL || "https://suarafilsuf-suaraai-backend.hf.space";
-};
+const FALLBACK_API_BASE = "https://suarafilsuf-suaraai-backend.hf.space";
 
-const API_BASE = getApiBase();
+function resolveApiBase(): string {
+  if (typeof window === "undefined") return FALLBACK_API_BASE;
+  const hostname = window.location.hostname;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return process.env.NEXT_PUBLIC_API_URL || FALLBACK_API_BASE;
+  }
+  return FALLBACK_API_BASE;
+}
+
+const API_BASE = resolveApiBase();
+
 
 export default function LoginPage() {
   const router = useRouter();

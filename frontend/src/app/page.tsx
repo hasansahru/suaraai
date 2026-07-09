@@ -88,16 +88,22 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   custom: []
 };
 
-const getApiBase = () => {
-  if (typeof window !== "undefined") {
-    if (window.location.hostname.includes("vercel.app") || window.location.hostname.includes("suaraai.vercel.app")) {
-      return "https://suarafilsuf-suaraai-backend.hf.space";
-    }
-  }
-  return process.env.NEXT_PUBLIC_API_URL || "https://suarafilsuf-suaraai-backend.hf.space";
-};
+// API_BASE dihitung di runtime (client-side) saja, tidak saat SSR,
+// agar nilai env variable yang dibake saat build (misalnya localhost) tidak ikut terbawa.
+const FALLBACK_API_BASE = "https://suarafilsuf-suaraai-backend.hf.space";
 
-const API_BASE = getApiBase();
+function resolveApiBase(): string {
+  if (typeof window === "undefined") return FALLBACK_API_BASE;
+  const hostname = window.location.hostname;
+  // Jika akses dari localhost / 127.0.0.1, gunakan backend lokal
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return process.env.NEXT_PUBLIC_API_URL || FALLBACK_API_BASE;
+  }
+  // Untuk semua deploy online (Vercel, dll), selalu ke HF Space
+  return FALLBACK_API_BASE;
+}
+
+const API_BASE = resolveApiBase();
 
 export default function Dashboard() {
   const [apiSettings, setApiSettings] = useState<any>(null);
