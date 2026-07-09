@@ -1596,6 +1596,56 @@ export default function Dashboard() {
                       
                     </div>
 
+                    {/* Rekomendasi Upload Terintegrasi */}
+                    {channelDna === "suara_filsuf" && (
+                      <div className="pt-6 border-t border-border/40 space-y-4">
+                        <h4 className="text-[10px] font-bold text-violet-400 uppercase tracking-widest flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                          📅 Jadwal &amp; Waktu Upload Terbaik <span className="text-[9px] text-violet-400/70 font-normal ml-1">({outputType === "shorts" ? "YouTube Shorts" : "Video Panjang"})</span>
+                        </h4>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                          <div className="bg-background/50 rounded-xl p-4 border border-border space-y-2">
+                            <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-bold block">Hari Upload Optimal</span>
+                            <div className="flex flex-wrap gap-2">
+                              {outputType === "shorts" ? (
+                                ["Senin", "Selasa", "Kamis"].map((hari, i) => (
+                                  <span key={i} className="bg-violet-500/20 border border-violet-500/30 text-violet-300 px-3 py-1 rounded-lg font-bold text-[11px]">{hari}</span>
+                                ))
+                              ) : (
+                                (result.result?.video_panjang?.rekomendasi_upload?.hari_terbaik || ["Minggu", "Jumat", "Rabu"]).map((hari: string, i: number) => (
+                                  <span key={i} className="bg-violet-500/20 border border-violet-500/30 text-violet-300 px-3 py-1 rounded-lg font-bold text-[11px]">{hari}</span>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                          <div className="bg-background/50 rounded-xl p-4 border border-border space-y-1">
+                            <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-bold block">Rekomendasi Jam</span>
+                            <span className="text-violet-300 font-extrabold text-2xl block">
+                              {outputType === "shorts" ? "17:00 WIB" : (result.result?.video_panjang?.rekomendasi_upload?.jam_upload || "17:00 WIB")}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <p className="text-xs text-muted-foreground/90 font-sans leading-relaxed">
+                          💡 <strong>Alasan:</strong> {outputType === "shorts" 
+                            ? "Berdasarkan pembagian jadwal optimal channel Suara Filsuf, hari biasa (Senin, Selasa, Kamis) dialokasikan untuk format Shorts guna mengisi traffic harian penonton. Waktu upload terbaik adalah tepat pukul 17:00 WIB untuk menangkap traffic penonton online yang mulai naik di grafik heatmap pada pukul 18:00 - 21:00 WIB."
+                            : (result.result?.video_panjang?.rekomendasi_upload?.alasan || "Berdasarkan analisis performa, hari Minggu, Jumat, dan Rabu adalah 3 hari emas berkinerja terbaik dengan CTR stabil > 5%. Waktu upload paling optimal adalah tepat pukul 17:00 WIB.")
+                          }
+                        </p>
+                        
+                        <div className="bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-2.5">
+                          <span className="text-[10px] text-red-400 font-bold block mb-1">⚠️ Hindari Waktu Ini:</span>
+                          <span className="text-xs text-muted-foreground/80 font-sans">
+                            {outputType === "shorts"
+                              ? "Hindari mengunggah di luar jam aktif utama (seperti pukul 23:00 - 12:00 WIB) karena traffic penonton harian berada di titik terendah."
+                              : (result.result?.video_panjang?.rekomendasi_upload?.hindari || "Hindari upload pada hari Sabtu (retensi rendah) dan jam 23:00 - 12:00 WIB.")
+                            }
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Display citations if web search was enabled */}
                     {result.web_sources && result.web_sources.length > 0 && (
                       <div className="pt-6 border-t border-border/40">
