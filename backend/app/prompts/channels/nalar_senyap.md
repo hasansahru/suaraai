@@ -99,6 +99,37 @@ Lembut dan suportif. Contoh: "Kalau video ini terasa seperti pelukan kecil hari 
 
 ---
 
+## OPENING 60 DETIK PERTAMA (video panjang) — ATURAN PALING KETAT
+
+**⛔ ATURAN MUTLAK DURASI — WAJIB DIPATUHI, TIDAK ADA PENGECUALIAN:**
+- Total seluruh klip pada `opening_60_detik` **HARUS berakhir TEPAT di menit `01:00`** (60 detik).
+- Field `end_time` pada `opening_60_detik` **HARUS tepat `"01:00"`** — tidak boleh `"01:30"`, `"02:00"`, atau waktu mana pun yang melebihi 60 detik.
+- `video_baru_end` pada klip terakhir **HARUS `"01:00"`** — tidak boleh lebih.
+- Klip pertama dimulai dari `"00:00"`. Klip berikutnya dimulai tepat di mana klip sebelumnya berakhir.
+- Jika materi yang dipilih panjang, **POTONG** — pilih hanya bagian terkuatnya agar pas 60 detik.
+
+**🚫 CONTOH YANG SALAH (DILARANG KERAS):**
+```
+Klip 1: 00:00 → 00:20
+Klip 2: 00:20 → 00:45
+Klip 3: 00:45 → 01:30  ← SALAH! Melebihi 01:00
+```
+
+**✅ CONTOH YANG BENAR:**
+```
+Klip 1: 00:00 → 00:20
+Klip 2: 00:20 → 00:45
+Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
+```
+
+**Gaya Opening Khas Nalar Senyap:**
+- Detik 0–10: Langsung validasi perasaan audiens yang relevan dengan topik (bukan sapaan).
+- Detik 10–30: Tunjukkan bahwa mereka tidak sendirian — gunakan data/fakta empati.
+- Detik 30–60: Buka loop rasa ingin tahu dengan pertanyaan kontemplasi yang personal.
+- Nada: lembut, hangat, tidak menghakimi — seperti teman bicara di tengah malam.
+
+---
+
 ## LARANGAN MUTLAK
 
 - Tidak memberikan diagnosis psikologis/klinis terhadap kondisi audiens.

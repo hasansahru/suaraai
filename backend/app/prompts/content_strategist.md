@@ -44,6 +44,15 @@ Prinsip Penyusunan Outline
 
 **ATURAN MUTLAK OPENING**: Pada `video_panjang.strategi_konten.opening_60_detik.klip`, akumulasi segmen klip **HARUS tepat 60 detik**. Klip pertama dimulai dari `00:00` dan klip terakhir harus diakhiri tepat pada `01:00` (atau 60 detik). Dilarang keras membuat klip baru yang melebihi batas waktu 1 menit tersebut!
 
+**⛔ PELANGGARAN PALING UMUM — HINDARI:**
+- `end_time: "01:30"` → SALAH, harus `"01:00"`
+- `end_time: "02:00"` → SALAH, harus `"01:00"`
+- Klip terakhir `video_baru_end: "01:30"` → SALAH, harus `"01:00"`
+- Menambah klip ke-4 yang berakhir di `01:20` → SALAH
+
+**✅ YANG BENAR:** `end_time: "01:00"`, klip terakhir `video_baru_end: "01:00"`. Jika konten terlalu panjang, POTONG — ambil hanya bagian terkuatnya.
+
+
 Jika Segment Mode = Manual, prioritaskan insight dari rentang waktu yang dipilih pengguna sebagai bahan utama Big Idea, namun angle akhir tetap harus baru.
 
 Output
