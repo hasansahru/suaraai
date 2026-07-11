@@ -13,12 +13,23 @@ Aturan Mutlak
 Yang Harus Dihasilkan (per shot, ATAU satu kali untuk video panjang — lihat aturan di atas)
 1. **Big Idea** — satu kalimat tajam yang menjadi inti dari konten baru. Harus merupakan sintesis ulang, bukan rewording dari ide utama video sumber.
 2. **Unique Angle** — sudut pandang spesifik yang membedakan konten ini dari video sumber dan dari konten sejenis lain di niche yang sama. Jelaskan secara singkat mengapa angle ini relevan untuk audiens channel tujuan.
-3. **Hook** — kalimat pembuka baru (bukan terjemahan/parafrase dari hook sumber) yang dirancang berdasarkan mekanisme psikologis yang terbukti efektif dari analisis sebelumnya, namun dieksekusi dengan cara baru dan suara channel tujuan.
+3. **Hook Utama & Alternatif (Viral Hook Generation Framework)**:
+   * **Hook Utama (`hook_baru`)**: Kalimat pembuka 0-10 detik terkuat yang langsung diposisikan untuk menahan penonton di detik pertama (Pattern Interrupt).
+   * **Hook Alternatif (`alternatif_hook`)**: Hasilkan **minimal 3 alternatif hook** yang kuat, masing-masing mewakili salah satu kategori di bawah ini (yang berbeda dari hook utama):
+     1. **Disonansi Kognitif (Cognitive Dissonance)**: Menabrakkan keyakinan umum audiens dengan fakta sebaliknya. (Contoh: "Berbuat baik itu mulia, tapi kadang justru itu yang menghancurkan mentalmu.")
+     2. **Kesenjangan Informasi (Curiosity Gap)**: Menggantung informasi kunci sehingga otak penonton dipaksa untuk mencari jawabannya. (Contoh: "Ada satu kebiasaan kecil di malam hari yang merusak fokusmu besok pagi. Dan hampir semua kita melakukannya.")
+     3. **Emosi Ekstrem & Validasi (Emotional Target)**: Masuk langsung ke titik kerapuhan/luka batin terdalam audiens. (Contoh: "Capek ya, pura-pura kuat padahal di dalam sudah hancur lebur?")
+     4. **Paradoks Eksistensial (Paradox Hook)**: Menggabungkan dua kenyataan berlawanan yang tidak terpisahkan. (Contoh: "Semakin keras kamu mengejar ketenangan, ia justru akan semakin menjauh.")
+   * Setiap hook dalam `alternatif_hook` harus dilengkapi dengan:
+     - `tipe`: Salah satu dari 4 kategori di atas.
+     - `teks`: Naskah hook dalam bahasa Indonesia sesuai gaya DNA channel.
+     - `alasan`: Penjelasan pemicu psikologis hook tersebut dan instruksi intonasi/tempo untuk pengisi suara.
 4. **Opening 60 Detik** (KHUSUS Video Panjang, WAJIB diisi, jangan dikosongkan) — rancangan konkret menit pertama video baru detik-per-detik untuk mencegah penonton melakukan skip/exit:
-   * **Detik 0–10 (Pattern Interrupt & Silent Intro)**: DILARANG menggunakan sapaan pembuka ("Halo", "Selamat datang") atau logo animasi. Langsung lempar hook terkuat berbasis disonansi kognitif (pertanyaan retoris/fakta kontradiktif).
+   * **Detik 0–10 (Pattern Interrupt & Silent Intro)**: DILARANG menggunakan sapaan pembuka ("Halo", "Selamat datang") atau logo animasi. Langsung lempar hook terkuat berbasis disonansi kognitif (pertanyaan retoris/fakta kontradiktif) dari `hook_baru` yang terpilih.
    * **Detik 10–20 (Open Loop & Stakes)**: Tunjukkan konsekuensi emosional jika penonton tidak mengetahui rahasia ini (buka loop rasa ingin tahu).
    * **Detail Visual & Audio (AV Sync)**: Tulis instruksi editing yang dinamis di menit awal (zoom lambat ke wajah/subjek, teks tebal berkedip di layar, visual B-roll kontras tinggi, dan SFX *whoosh*/*heartbeat*).
    * **Durasi**: Klip-klip penyusun harus berurutan kumulatif mulai dari `00:00:00` hingga berakhir tepat di `00:01:00` (60 detik). Field ini TIDAK ADA untuk Shorts (karena seluruh durasi Shorts pada dasarnya adalah "opening").
+
 5. **Outline** — kerangka konten baru secara berurutan (babak per babak), proporsional dengan Output Type dan Durasi yang dipilih. Setiap babak diberi label singkat + 1 kalimat isi.
 6. **3 Judul Terbaik** — tiga opsi judul yang masing-masing mengeksplorasi angle/emosi yang sedikit berbeda (misalnya: satu berbasis curiosity gap, satu berbasis pernyataan kontroversial-sehat, satu berbasis pertanyaan langsung ke audiens). Sesuaikan gaya judul dengan DNA channel.
 7. **1 Best Choice** — pilih judul terbaik dari ketiganya, dan jelaskan alasan pemilihannya berdasarkan skor growth (CTR, SEO, evergreen, dll).

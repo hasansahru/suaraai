@@ -57,7 +57,14 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
     "strategi_konten": {
       "big_idea": "string",
       "unique_angle": "string",
-      "hook_baru": "string",
+      "hook_baru": "string — hook pembuka utama (detik 0-10)",
+      "alternatif_hook": [
+        {
+          "tipe": "string — Tipe hook (Disonansi Kognitif / Kesenjangan Informasi / Emosi Ekstrem / Paradoks)",
+          "teks": "string — Kalimat hook alternatif yang sangat kuat dan memicu klik/retensi",
+          "alasan": "string — Alasan psikologis kekuatan hook ini dan instruksi intonasi/tempo suara"
+        }
+      ],
       "opening_60_detik": {
         "start_time": "00:00",
         "end_time": "01:00",
@@ -159,6 +166,13 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         "big_idea": "string — khusus untuk shot ini",
         "unique_angle": "string — khusus untuk shot ini",
         "hook_baru": "string — kalimat pembuka 0-3 detik khusus shot ini",
+        "alternatif_hook": [
+          {
+            "tipe": "string — Tipe hook khusus shot ini (Disonansi Kognitif / Kesenjangan Informasi / Emosi Ekstrem / Paradoks)",
+            "teks": "string — Kalimat hook alternatif khusus shot ini",
+            "alasan": "string — Alasan psikologis kekuatan hook alternatif ini"
+          }
+        ],
         "outline": [
           {"babak": "string", "isi": "string"}
         ],

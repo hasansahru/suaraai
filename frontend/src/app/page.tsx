@@ -1757,13 +1757,33 @@ export default function Dashboard() {
                                   <div className="font-semibold text-foreground leading-relaxed">
                                     {result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}
                                   </div>
-                                </div>
-                                <div className="space-y-1">
-                                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Hook Pembuka</span>
-                                  <div className="font-bold text-foreground leading-relaxed text-indigo-400">
-                                    "{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"
-                                  </div>
-                                </div>
+                                  <div className="space-y-1">
+                                   <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Hook Pembuka</span>
+                                   <div className="font-bold text-foreground leading-relaxed text-indigo-400">
+                                     "{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"
+                                   </div>
+                                 </div>
+                               </div>
+
+                               {/* Alternatif Hook Rekomendasi untuk Shorts */}
+                               {result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook && result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook.length > 0 && (
+                                 <div className="space-y-2 border-t border-border/40 pt-4 mt-2">
+                                   <span className="text-[10px] text-indigo-400 font-bold block flex items-center gap-1">
+                                     💡 Pilihan Hook Alternatif (Meningkatkan Virality):
+                                   </span>
+                                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                     {result.result.shots[selectedShotIndex].strategi_konten.alternatif_hook.map((hook: any, hIdx: number) => (
+                                       <div key={hIdx} className="bg-background/40 p-3 border border-indigo-500/15 rounded-xl space-y-1 text-xs">
+                                         <span className="text-[8px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded font-bold uppercase inline-block w-fit">{hook.tipe}</span>
+                                         <p className="text-foreground/90 font-medium italic mt-1">"{hook.teks}"</p>
+                                         {hook.alasan && (
+                                           <p className="text-[10px] text-muted-foreground leading-relaxed mt-1">{hook.alasan}</p>
+                                         )}
+                                       </div>
+                                     ))}
+                                   </div>
+                                 </div>
+                               )}
                               </div>
                               
                               {result.result?.shots[selectedShotIndex].segmen?.alasan && (
@@ -2202,6 +2222,27 @@ export default function Dashboard() {
                                 <p className="text-violet-300 font-sans leading-relaxed font-bold">"{result.result?.video_panjang?.strategi_konten?.hook_baru}"</p>
                               </div>
                             </div>
+
+                            {/* Alternatif Hook Rekomendasi untuk Video Panjang */}
+                            {result.result?.video_panjang?.strategi_konten?.alternatif_hook && result.result?.video_panjang?.strategi_konten?.alternatif_hook.length > 0 && (
+                              <div className="mt-4 pt-4 border-t border-violet-500/20 space-y-2">
+                                <span className="text-xs text-indigo-300 font-bold block flex items-center gap-1">
+                                  💡 Pilihan Hook Alternatif untuk Meningkatkan Virality
+                                </span>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                  {result.result.video_panjang.strategi_konten.alternatif_hook.map((hook: any, hIdx: number) => (
+                                    <div key={hIdx} className="bg-background/40 p-3.5 border border-indigo-500/15 rounded-xl space-y-1.5 text-xs">
+                                      <span className="text-[8px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded font-bold uppercase inline-block w-fit">{hook.tipe}</span>
+                                      <p className="text-foreground/90 font-medium italic mt-1">"{hook.teks}"</p>
+                                      {hook.alasan && (
+                                        <p className="text-[10px] text-muted-foreground leading-relaxed mt-1">{hook.alasan}</p>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
  
                             {/* Opening 60 Detik Segment Outline */}
                             {result.result?.video_panjang?.strategi_konten?.opening_60_detik && (

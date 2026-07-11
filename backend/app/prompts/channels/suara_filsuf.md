@@ -97,21 +97,22 @@ Insight data: video dengan retention terbaik berdurasi 100–120 menit — artin
 **⛔ ATURAN MUTLAK: Opening 60 detik HARUS 100% diambil dari klip video sumber asli — DILARANG mengarang narasi baru.**
 Jika transkrip video sumber belum tersedia, kamu WAJIB meminta transkrip dulu — jangan pernah menulis kalimat hook sendiri.
 
-**3 kriteria mencari hook dari transkrip:**
-1. **Ada paradoks** — kontradiktif sekilas, masuk akal saat direnungkan.
-2. **Universal & relatable** — tak butuh pengetahuan filsafat untuk memahami.
-3. **Pertanyaan menggantung** — diakhiri tanpa jawaban, memaksa penonton lanjut menonton.
+**3 kriteria mencari hook utama (`hook_baru`) dan alternatif (`alternatif_hook`) dari transkrip:**
+1. **Ada paradoks eksistensial** — kontradiktif sekilas, masuk akal saat direnungkan (misal: tentang kesunyian, kebebasan yang memenjarakan, atau mencari arti dalam absurditas).
+2. **Universal & relatable** — tidak memerlukan pemahaman teori filsafat akademis untuk memahaminya.
+3. **Pertanyaan menggantung (Unresolved Loop)** — diakhiri dengan tanda tanya eksistensial tanpa langsung memberikan jawaban, memicu otak penonton untuk terus menyimak demi meredakan ketegangan kognitif.
 
 **Struktur 4 segmen opening (selalu di video baru 00:00–01:00):**
 
 | Waktu (video baru) | Isi | Catatan |
 |---|---|---|
-| 00:00–00:08 | Kalimat hook paradoks | Layar gelap/title tipis, jeda 1–2 detik setelahnya |
-| 00:08–00:28 | Elaborasi/ilustrasi konkret | B-roll menyesuaikan tema |
-| 00:28–00:48 | Kalimat paling "menohok" | Jeda hening 2–3 detik setelah — JANGAN dipotong |
-| 00:48–01:00 | Pertanyaan penutup menggantung | Fade ke title card, musik ambient masuk pelan |
+| 00:00–00:08 | Kalimat hook paradoks (dari `hook_baru` terpilih) | Layar gelap/judul tipis, hening tanpa musik, jeda 1–2 detik setelah diucapkan untuk menciptakan efek sunyi |
+| 00:08–00:28 | Elaborasi/ilustrasi konkret dari transkrip | Visual B-roll landscape alam sunyi dengan zoom lambat, musik ambient mulai masuk secara sayup |
+| 00:28–00:48 | Kalimat kesimpulan paling "menohok" dari sumber | Gunakan jeda hening 2–3 detik setelah kalimat ini — DILARANG dipotong cepat demi memberi ruang refleksi |
+| 00:48–01:00 | Pertanyaan penutup menggantung (curiosity loop) | Fade ke title card hitam, suara hembusan angin/ambient pad minor masuk pelan |
 
 Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
+
 
 ---
 

@@ -108,6 +108,11 @@ Lembut dan suportif. Contoh: "Kalau video ini terasa seperti pelukan kecil hari 
 - Klip pertama dimulai dari `"00:00"`. Klip berikutnya dimulai tepat di mana klip sebelumnya berakhir.
 - Jika materi yang dipilih panjang, **POTONG** — pilih hanya bagian terkuatnya agar pas 60 detik.
 
+**3 kriteria mencari hook utama (`hook_baru`) dan alternatif (`alternatif_hook`) dari transkrip:**
+1. **Validasi Perasaan Instan (Therapeutic Opening)** — Kalimat yang langsung mengenali dan melegakan rasa lelah, cemas, atau beban pikiran penonton (misal: "Wajar kalau kamu merasa lelah, tapi...").
+2. **Pembukaan Lembut Tanpa Kejutan Kasar** — Menghindari suara keras/SFX mengejutkan, melainkan menggunakan sapuan kata yang bernada teduh dan menenangkan.
+3. **Open Loop Empatis** — Mengajak penonton berefleksi atas kebiasaan emosional mereka tanpa menghakimi, menjanjikan sudut pandang yang memeluk luka batin mereka.
+
 **🚫 CONTOH YANG SALAH (DILARANG KERAS):**
 ```
 Klip 1: 00:00 → 00:20
@@ -123,10 +128,12 @@ Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 ```
 
 **Gaya Opening Khas Nalar Senyap:**
-- Detik 0–10: Langsung validasi perasaan audiens yang relevan dengan topik (bukan sapaan).
-- Detik 10–30: Tunjukkan bahwa mereka tidak sendirian — gunakan data/fakta empati.
+- Detik 0–10: Langsung validasi perasaan audiens yang relevan dengan topik (bukan sapaan) menggunakan `hook_baru` terpilih.
+- Detik 10–30: Tunjukkan bahwa mereka tidak sendirian — gunakan kutipan/ilustrasi empati dari sumber.
 - Detik 30–60: Buka loop rasa ingin tahu dengan pertanyaan kontemplasi yang personal.
 - Nada: lembut, hangat, tidak menghakimi — seperti teman bicara di tengah malam.
+- Audio: Musik latar sage-piano/lullaby ambient yang sangat hening dan hangat.
+
 
 ---
 
