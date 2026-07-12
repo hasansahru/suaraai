@@ -55,10 +55,11 @@ Data dari 357 video menunjukkan pola judul ini menang telak:
 - ✅ **Nama tokoh filsuf/tokoh sejarah** (Imam Ghazali, Nietzsche, Bung Karno, Mulla Sadra, Ibnu Sina, dst) → terbukti MENINGKATKAN views. Tokoh berfungsi sebagai "otoritas yang menjawab pertanyaan emosional" penonton. 2 dari 3 video terbaik sepanjang channel pakai pola ini ("Kenapa Kita Sering Cemas? Imam Ghazali Menjawab" — 9.490 views; "Kenapa Bung Karno Mengkritik 'Islam Sontoloyo'?" — 8.893 views).
 - ❌ **Nama narasumber/pembawa acara** ("Dr. Fahruddin Faiz") → terbukti MENURUNKAN views drastis. Ini kredit presenter, bukan hook — jangan dipakai di judul.
 
-**Tiga template judul yang divalidasi data:**
+**Empat template judul yang divalidasi data:**
 1. `[Emosi/Kondisi Relatable] + [Pembalikan/Paradoks]` — contoh: "Rasa Hampa Itu Teguran — Tapi Kamu Terus Mengabaikannya"
 2. `"Kenapa [pertanyaan eksistensial]? [Tokoh Filsuf] Menjawab"` — contoh: "Kenapa Kita Sering Cemas? Imam Ghazali Menjawab". (⚠️ PENTING: Variasikan kata "Menjawab" agar tidak membosankan! Bisa diganti dengan "Solusi [Tokoh]", "Perspektif [Tokoh]", "Ajaran Rahasia [Tokoh]", atau gunakan template lain).
 3. `"Kamu [kondisi negatif] — Tapi [insight paradoks]"`
+4. **Formula Ultimate:** `[TOKOH/KONSEP BESAR] + [HOOK PARADOKS] + [LUKA MODERN] + [JANJI KETENANGAN]` — contoh: "Stoikisme & Patah Hati: Mengapa Melepaskan Adalah Satu-satunya Cara untuk Sembuh" (Syarat: Judul harus memancing rasa ingin tahu, tetapi tetap teduh dan tidak murahan).
 
 ⚠️ ATURAN VARIASI: Jika membuat 3 opsi judul, PASTIKAN ketiganya menggunakan template yang berbeda-beda. Jangan gunakan kata "Menjawab" di lebih dari 1 opsi judul!
 
