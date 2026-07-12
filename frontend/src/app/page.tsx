@@ -1751,19 +1751,21 @@ export default function Dashboard() {
                                 </h3>
                               </div>
 
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/30 p-4 border border-border rounded-xl text-xs">
-                                <div className="space-y-1">
-                                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Big Idea</span>
-                                  <div className="font-semibold text-foreground leading-relaxed">
-                                    {result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}
+                              <div className="bg-muted/30 p-4 border border-border rounded-xl text-xs space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div className="space-y-1">
+                                    <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Big Idea</span>
+                                    <div className="font-semibold text-foreground leading-relaxed">
+                                      {result.result?.shots[selectedShotIndex].strategi_konten?.big_idea}
+                                    </div>
                                   </div>
                                   <div className="space-y-1">
-                                   <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Hook Pembuka</span>
-                                   <div className="font-bold text-foreground leading-relaxed text-indigo-400">
-                                     "{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"
-                                   </div>
-                                 </div>
-                               </div>
+                                    <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">Hook Pembuka</span>
+                                    <div className="font-bold text-foreground leading-relaxed text-indigo-400">
+                                      "{result.result?.shots[selectedShotIndex].strategi_konten?.hook_baru}"
+                                    </div>
+                                  </div>
+                                </div>
 
                                {/* Alternatif Hook Rekomendasi untuk Shorts */}
                                {result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook && result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook.length > 0 && (
