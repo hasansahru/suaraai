@@ -22,8 +22,8 @@ Yang Harus Dihasilkan (per shot, ATAU satu kali untuk video panjang — lihat at
      4. **Paradoks Eksistensial (Paradox Hook)**: Menggabungkan dua kenyataan berlawanan yang tidak terpisahkan. (Contoh: "Semakin keras kamu mengejar ketenangan, ia justru akan semakin menjauh.")
    * Setiap hook dalam `alternatif_hook` harus dilengkapi dengan:
      - `tipe`: Salah satu dari 4 kategori di atas.
-     - `teks`: Naskah hook dalam bahasa Indonesia sesuai gaya DNA channel.
-     - `alasan`: Penjelasan pemicu psikologis hook tersebut dan instruksi intonasi/tempo untuk pengisi suara.
+     - `teks`: Naskah hook dalam bahasa Indonesia sesuai gaya DNA channel. PENTING: Jika menganalisis video panjang, teks ini WAJIB berupa KUTIPAN ASLI dari transkrip sumber yang paling memicu emosi, BUKAN karangan bebas buatan AI.
+     - `alasan`: Penjelasan pemicu psikologis hook tersebut, instruksi intonasi/tempo suara, DAN WAJIB SERTAKAN TIMESTAMP (hh:mm:ss) dari mana kutipan tersebut diambil agar kreator bisa langsung memotong video aslinya.
 4. **Opening 60 Detik** (KHUSUS Video Panjang, WAJIB diisi, jangan dikosongkan) — rancangan konkret menit pertama video baru detik-per-detik untuk mencegah penonton melakukan skip/exit:
    * **Detik 0–10 (Pattern Interrupt & Silent Intro)**: DILARANG menggunakan sapaan pembuka ("Halo", "Selamat datang") atau logo animasi. Langsung lempar hook terkuat berbasis disonansi kognitif (pertanyaan retoris/fakta kontradiktif) dari `hook_baru` yang terpilih.
    * **Detik 10–20 (Open Loop & Stakes)**: Tunjukkan konsekuensi emosional jika penonton tidak mengetahui rahasia ini (buka loop rasa ingin tahu).

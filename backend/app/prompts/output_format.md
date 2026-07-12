@@ -123,7 +123,7 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
       "warna": ["string — palet warna kontras utama (seperti kuning emas, putih, hijau neon, navy)"],
       "psikologi_warna": "string",
       "prompt_ai_image": "string (in English) — prompt detail siap pakai untuk generator gambar AI, wajib mengandung deskripsi subjek, backlight glow, cinematic, 16:9, depth of field sempit",
-      "teks_thumbnail": "string — 3-5 kata tebal (bold), menggunakan maksimal 2 warna kontras, wajib diletakkan di atas kontainer kontras (seperti brush stroke banner) di sisi berlawanan dari subjek, dilarang keras mengulang kata judul"
+      "teks_thumbnail": "string — MAKSIMAL 3-5 KATA SAJA! WAJIB BERBEDA DARI JUDUL (DILARANG KERAS MENGULANG/MENDUPLIKASI KATA YANG ADA DI JUDUL). Gunakan frase pemicu rasa penasaran (curiosity gap) yang melengkapi judul, bukan mengulangnya."
     },
     "deskripsi_youtube": "string",
     "seo": {
@@ -189,7 +189,7 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
         "warna": ["string — palet warna kontras utama (seperti kuning emas, putih, hijau neon, navy)"],
         "psikologi_warna": "string",
         "prompt_ai_image": "string (in English) — prompt detail siap pakai untuk generator gambar AI, wajib mengandung deskripsi subjek, backlight glow, cinematic, 9:16, depth of field sempit",
-        "teks_thumbnail": "string — 3-5 kata tebal (bold), menggunakan maksimal 2 warna kontras, wajib diletakkan di atas kontainer kontras (seperti brush stroke banner) di sisi berlawanan dari subjek, dilarang keras mengulang kata judul"
+        "teks_thumbnail": "string — MAKSIMAL 3-5 KATA SAJA! WAJIB BERBEDA DARI JUDUL (DILARANG KERAS MENGULANG/MENDUPLIKASI KATA YANG ADA DI JUDUL). Gunakan frase pemicu rasa penasaran (curiosity gap) yang melengkapi judul, bukan mengulangnya."
       },
       "deskripsi_youtube": "string",
       "seo": {
