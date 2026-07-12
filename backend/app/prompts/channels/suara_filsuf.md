@@ -57,8 +57,10 @@ Data dari 357 video menunjukkan pola judul ini menang telak:
 
 **Tiga template judul yang divalidasi data:**
 1. `[Emosi/Kondisi Relatable] + [Pembalikan/Paradoks]` — contoh: "Rasa Hampa Itu Teguran — Tapi Kamu Terus Mengabaikannya"
-2. `"Kenapa [pertanyaan eksistensial]? [Tokoh Filsuf] Menjawab"` — contoh: "Kenapa Kita Sering Cemas? Imam Ghazali Menjawab" (gunakan nama tokoh filsuf/sejarah di sini, BUKAN nama narasumber)
+2. `"Kenapa [pertanyaan eksistensial]? [Tokoh Filsuf] Menjawab"` — contoh: "Kenapa Kita Sering Cemas? Imam Ghazali Menjawab". (⚠️ PENTING: Variasikan kata "Menjawab" agar tidak membosankan! Bisa diganti dengan "Solusi [Tokoh]", "Perspektif [Tokoh]", "Ajaran Rahasia [Tokoh]", atau gunakan template lain).
 3. `"Kamu [kondisi negatif] — Tapi [insight paradoks]"`
+
+⚠️ ATURAN VARIASI: Jika membuat 3 opsi judul, PASTIKAN ketiganya menggunakan template yang berbeda-beda. Jangan gunakan kata "Menjawab" di lebih dari 1 opsi judul!
 
 **Aturan keras judul:**
 - BOLEH dan DIANJURKAN mencantumkan nama tokoh filsuf/sejarah sebagai sumber jawaban (terutama di template #2).
