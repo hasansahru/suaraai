@@ -1768,7 +1768,7 @@ export default function Dashboard() {
                                 </div>
 
                                {/* Alternatif Hook Rekomendasi untuk Shorts */}
-                               {result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook && result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook.length > 0 && (
+                               {Array.isArray(result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook) && result.result?.shots[selectedShotIndex].strategi_konten?.alternatif_hook.length > 0 && (
                                  <div className="space-y-2 border-t border-border/40 pt-4 mt-2">
                                    <span className="text-[10px] text-indigo-400 font-bold block flex items-center gap-1">
                                      💡 Pilihan Hook Alternatif (Meningkatkan Virality):
@@ -2226,7 +2226,7 @@ export default function Dashboard() {
                             </div>
 
                             {/* Alternatif Hook Rekomendasi untuk Video Panjang */}
-                            {result.result?.video_panjang?.strategi_konten?.alternatif_hook && result.result?.video_panjang?.strategi_konten?.alternatif_hook.length > 0 && (
+                            {Array.isArray(result.result?.video_panjang?.strategi_konten?.alternatif_hook) && result.result?.video_panjang?.strategi_konten?.alternatif_hook.length > 0 && (
                               <div className="mt-4 pt-4 border-t border-violet-500/20 space-y-2">
                                 <span className="text-xs text-indigo-300 font-bold block flex items-center gap-1">
                                   💡 Pilihan Hook Alternatif untuk Meningkatkan Virality
