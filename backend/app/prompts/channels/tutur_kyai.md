@@ -86,19 +86,20 @@ Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 
 ## RESULT ANALYSIS – TUTUR KYAI
 
-**Total video teranalisis:** 138
-**Rata‑rata views per video:** 112 345
-**CTR rata‑rata:** 0 % (majority Shorts dengan klik rendah)
+**Total video teranalisis:** 159 (Gabungan Historis & Terbaru)
 
-**Top 5 video (berdasarkan views):**
-1. "Story Gus Kautsar | Manyala Gus #santrikyai #shorts" — 1 356 794 views
-2. "Story Gus Kautsar \"Gus E, Melaksanakan Dawuh Saking NING\" #santrikyai #shorts" — 84 144 views
-3. "Story Gus Kautsar | Takdir Terbaik Gus E #santrikyai #shorts" — 50 984 views
-4. "Story Gus Kautsar \"Perempuan Ketika Dilamar\" #santrikyai #shorts" — 36 749 views
-5. "Jangan Bangga Akan Nasabmu, Turunan Siapa - Gus Kautsar #santrikyai #guskautsar" — 22 032 views
+**Top Performa Historis (Pilar Viralitas):**
+1. "Story Gus Kautsar | Manyala Gus #santrikyai #shorts" — 1.356.794 views
+2. "Story Gus Kautsar \"Gus E, Melaksanakan Dawuh Saking NING\" #santrikyai #shorts" — 84.144 views
+3. "Story Gus Kautsar | Takdir Terbaik Gus E #santrikyai #shorts" — 50.984 views
 
-**Insight utama:**
-- Video‑video dengan tag **#santrikyai** menghasilkan **views** sangat tinggi, terutama yang menampilkan kisah personal atau humor ringan. 
-- **CTR** tetap rendah karena mayoritas merupakan Shorts; pertimbangkan membuat versi panjang dengan narasi lebih mendalam untuk memaksimalkan engagement.
+**Top Performa Terbaru (Pilar Retensi Harian):**
+1. "Vitamin Terbaik untuk Seorang Suami #short" — 1.867 views
+2. "Siapa Teman Sekamarmu di Neraka? #short" — 1.255 views
+3. "Hadis Pengingat untuk Kaum Wanita #short" — 1.212 views
 
-***Catatan:** Data ini diambil dari CSV `Nalar Senyap - Data tabel.csv` setelah memisahkan video #santrikyai. Konten non‑santrikyai (Nalar Senyap) tidak dimasukkan ke sini.
+**Insight Utama:**
+- Ada dua pilar konten utama yang terbukti menghasilkan *traffic* besar di channel ini.
+- **Pilar 1 (Karisma & Kisah):** Video ber-tag **#santrikyai** (terutama kisah personal/dawuh Gus Kautsar) memiliki potensi viralitas yang sangat masif hingga menembus jutaan views.
+- **Pilar 2 (Spiritual Praktis):** Video berformat **#short** dengan topik pengingat spiritual harian (suami-istri, muhasabah, sakit hati) dan judul berformat pertanyaan retoris terbukti stabil mendatangkan views harian yang konsisten.
+- **Kesimpulan Strategi:** AI harus terus memproduksi konten Shorts yang memadukan kedalaman nilai keseharian (Pilar 2) dan pesona gaya penceritaan pesantren/kyai (Pilar 1). Jika membuat video panjang, wajib memiliki *hook* yang sangat kuat di 60 detik pertama untuk menahan audiens yang terbiasa dengan kecepatan format pendek.

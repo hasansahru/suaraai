@@ -134,7 +134,7 @@ Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMB
 - Pace sangat lambat, jeda napas 2–3 detik antar kalimat penting.
 - Tanpa jump-cut/transisi cepat — gunakan fade slow atau cross-dissolve.
 - B-roll: landscape tenang, kesunyian, gerakan lambat (awan, air, jalan sepi, buku, cahaya lembut). Hindari klip cepat/urban dinamis.
-- Musik: piano solo pelan, ambient pad, string minimal, nada minor/netral. TIDAK BOLEH upbeat/pop/ceria.
+- Musik: piano solo pelan, ambient pad, string minimal, nada minor/netral. TIDAK BOLEH upbeat/pop/ceria. **Pastikan volume musik latar diturunkan (low volume)** agar narasi Dr. Fahruddin Faiz yang menenangkan tetap menjadi fokus utama dan terdengar jelas.
 - Caption: font serif elegan, putih/abu-abu di background gelap, maks 3–4 baris/frame, tempo sesuai narasi.
 
 ---
@@ -160,22 +160,31 @@ Contoh nada yang sesuai:
 
 ---
 
-## RESULT ANALYSIS – SUARA FILSUF
+## RESULT ANALYSIS – SUARA FILSUF (28 Hari Terakhir)
 
-**Total video teranalisis:** 361
-**Rata‑rata views per video:** 10 645.58
-**Total views (cumulative):** 3 843 054
+**Performa Utama:**
+- Momentum pertumbuhan besar: Penayangan (69.867, ↑ 26,5%), Waktu tonton (~26.477 jam, ↑ 51,1%), Subscriber (+176, ↑ 95,6%).
+- Lonjakan waktu tonton (51%) jauh melebihi penayangan (26%), menandakan audiens sangat menikmati kedalaman konten dan menonton lebih lama.
+- Penonton unik melonjak tajam, menandakan konten menjangkau banyak audiens baru.
 
-**Top 5 video (by views):**
-1. *Total views* — 1 938 138 (cumulative)
-2. *Sendiri Tapi Kuat: Rahasia Jiwa yang Tak Banyak Orang Tahu – Dr. Fahruddin Faiz* — 243 838 views
-3. *Hidup Itu Mudah, Tapi Pikiran Kita Ribet! – Dr. Fahruddin Faiz* — 196 549 views
-4. *Law of Attraction: Rahasia Kekuatan Batin untuk Mengubah Hidup – Dr. Fahruddin Faiz* — 92 015 views
-5. *RAHASIA ILMU LADUNI: Cara Al‑Ghazali Mendapat Pengetahuan Langsung dari Allah – Dr. Fahruddin Faiz* — 72 244 views
+**Top 5 Video Teratas (Pendorong Traffic):**
+1. *Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu* — 6.365 views
+2. *Kenapa Sahabat Terbaikmu Justru Hadir dalam Keheningan? Konfusius Menjawab* — 4.724 views
+3. *Matikan Egomu Sebelum Hidupmu Dipenuhi Penyesalan* — 4.373 views
+4. *Imam Ghazali: Musuh Terbesar Hidupmu Ternyata Dirimu Sendiri* — 3.273 views
+5. *Imam Ghazali: Kenapa Pernikahan Sering Gagal?* — 2.796 views
 
-**Insight utama:**
-- Video dengan judul yang menonjolkan tokoh filsuf atau kebijaksanaan (mis. Imam Ghazali, Al‑Ghazali) menghasilkan views jauh di atas rata‑rata, menguatkan pola “nama tokoh meningkatkan performance”.
-- Total views menunjukkan potensi besar channel; fokus pada video panjang dengan hook filosofis akan memaksimalkan engagement.
+**Insight Utama & Sentimen Audiens:**
+- **Tema "Psikologi Batin":** Video tentang mengelola kebencian, ego, dan kecemasan adalah "bintang" di channel ini. Audiens memiliki keterikatan emosional yang kuat dengan tema hubungan (pernikahan) dan pengelolaan diri (ego).
+- **Apresiasi Kedalaman:** Penonton menganggap channel ini sebagai "ruang tenang" di tengah hiruk-pikuk dunia.
+- **Optimasi Judul:** Pola judul bertanya ("Kenapa...") yang langsung menyapa kegelisahan penonton terbukti sangat efektif memancing klik.
+- **Audio:** Volume musik latar harus dipelankan agar tidak menutupi suara narasi.
+
+## IDE KONTEN PRIORITAS (Berdasarkan Sentimen Audiens)
+AI harus memprioritaskan pembuatan konten dengan tema-tema berikut, menggabungkan kearifan tokoh filsafat dengan masalah emosional modern:
+1. **Mengatasi Kelelahan Mental (Burnout Batin):** Merespons audiens yang merasa "lelah dengan dunia" dan "perang dalam pikiran".
+2. **Seni Melepaskan Ekspektasi dalam Hubungan:** Merespons tingginya interaksi pada video pernikahan ("Paradoks Pernikahan", "Kenapa Pernikahan Sering Gagal").
+3. **Stoikisme/Filsafat untuk Menghadapi Orang Toxic:** Panduan menjaga ketenangan batin dari pengaruh negatif (melanjutkan kesuksesan video "Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu").
 
 ## LARANGAN MUTLAK
 
