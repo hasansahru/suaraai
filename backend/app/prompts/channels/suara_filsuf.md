@@ -163,28 +163,28 @@ Contoh nada yang sesuai:
 ## RESULT ANALYSIS – SUARA FILSUF (28 Hari Terakhir)
 
 **Performa Utama:**
-- Momentum pertumbuhan besar: Penayangan (69.867, ↑ 26,5%), Waktu tonton (~26.477 jam, ↑ 51,1%), Subscriber (+176, ↑ 95,6%).
-- Lonjakan waktu tonton (51%) jauh melebihi penayangan (26%), menandakan audiens sangat menikmati kedalaman konten dan menonton lebih lama.
-- Penonton unik melonjak tajam, menandakan konten menjangkau banyak audiens baru.
+- Momentum pertumbuhan berlanjut tajam: Penayangan (96.122, ↑ 37,6%), Waktu tonton (~43.795 jam, ↑ 65,4%), Subscriber (+312, ↑ 77,3%).
+- Lonjakan waktu tonton sangat dominan, menegaskan bahwa konten memiliki tingkat retensi yang luar biasa tinggi dan audiens semakin loyal.
+- Penonton unik terus bertambah melalui konten budaya/filsafat lokal.
 
 **Top 5 Video Teratas (Pendorong Traffic):**
-1. *Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu* — 6.365 views
-2. *Kenapa Sahabat Terbaikmu Justru Hadir dalam Keheningan? Konfusius Menjawab* — 4.724 views
-3. *Matikan Egomu Sebelum Hidupmu Dipenuhi Penyesalan* — 4.373 views
-4. *Imam Ghazali: Musuh Terbesar Hidupmu Ternyata Dirimu Sendiri* — 3.273 views
-5. *Imam Ghazali: Kenapa Pernikahan Sering Gagal?* — 2.796 views
+1. *Filsafat Jawa: Kenapa Semar Adalah Cermin Tuhan?* — 18.152 views
+2. *Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu* — 10.527 views
+3. *Kenapa Sahabat Terbaikmu Justru Hadir dalam Keheningan? Konfusius Menjawab* — 6.915 views
+4. *Kenapa Sering Cemas dalam Hubungan? - Paradoks Pernikahan* — 5.591 views
+5. *Imam Ghazali: Kenapa Pernikahan Sering Gagal?* — 5.067 views
 
 **Insight Utama & Sentimen Audiens:**
-- **Tema "Psikologi Batin":** Video tentang mengelola kebencian, ego, dan kecemasan adalah "bintang" di channel ini. Audiens memiliki keterikatan emosional yang kuat dengan tema hubungan (pernikahan) dan pengelolaan diri (ego).
-- **Apresiasi Kedalaman:** Penonton menganggap channel ini sebagai "ruang tenang" di tengah hiruk-pikuk dunia.
-- **Optimasi Judul:** Pola judul bertanya ("Kenapa...") yang langsung menyapa kegelisahan penonton terbukti sangat efektif memancing klik.
-- **Audio:** Volume musik latar harus dipelankan agar tidak menutupi suara narasi.
+- **Tren Filsafat Nusantara/Jawa:** Video yang mengangkat tokoh lokal (Semar, Ronggowarsito, Gajah Mada) mulai mendominasi traffic. Penonton merasa terhubung secara emosional dengan akar budaya yang dipadukan dengan solusi ketenangan batin.
+- **Tema "Hubungan & Pernikahan":** Masih sangat stabil dan kuat. Isu kecemasan dalam hubungan ("Paradoks Pernikahan") sangat relate dengan kegelisahan demografi audiens.
+- **Pengelolaan Diri / Stoikisme:** Tema tentang melepaskan kebencian, ketakutan dianggap aneh, dan keheningan tetap menjadi pondasi abadi channel ini.
+- **Optimasi Judul:** Pola judul bertanya ("Kenapa...") masih sangat efektif, terutama saat dikaitkan dengan nama tokoh (Semar, Konfusius, Imam Ghazali).
 
 ## IDE KONTEN PRIORITAS (Berdasarkan Sentimen Audiens)
 AI harus memprioritaskan pembuatan konten dengan tema-tema berikut, menggabungkan kearifan tokoh filsafat dengan masalah emosional modern:
-1. **Mengatasi Kelelahan Mental (Burnout Batin):** Merespons audiens yang merasa "lelah dengan dunia" dan "perang dalam pikiran".
-2. **Seni Melepaskan Ekspektasi dalam Hubungan:** Merespons tingginya interaksi pada video pernikahan ("Paradoks Pernikahan", "Kenapa Pernikahan Sering Gagal").
-3. **Stoikisme/Filsafat untuk Menghadapi Orang Toxic:** Panduan menjaga ketenangan batin dari pengaruh negatif (melanjutkan kesuksesan video "Jangan Sampai Kebencian Orang Lain Tinggal di Dalam Dirimu").
+1. **Kebijaksanaan Filsafat Jawa/Nusantara:** Eksplorasi ajaran tokoh seperti Semar, Ronggowarsito, atau filosofi Jawa lainnya dalam konteks kesehatan mental modern (menghadapi "Zaman Edan" atau tuntutan hidup modern).
+2. **Psikologi Hubungan & Pernikahan:** Fokus pada mengatasi kecemasan dalam hubungan, trauma, ekspektasi, dan rasa takut kehilangan (melanjutkan kesuksesan seri "Paradoks Pernikahan").
+3. **Seni Menjaga Jarak dari Toksik & Penilaian Orang:** Melanjutkan tema melepaskan kebencian dan ketakutan akan ekspektasi sosial (seperti gagasan Michel Foucault tentang tidak takut dianggap aneh).
 
 ## LARANGAN MUTLAK
 
