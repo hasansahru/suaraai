@@ -1539,15 +1539,15 @@ export default function Dashboard() {
 
               {/* Main Tabs result container */}
               <Tabs defaultValue="ringkasan" className="space-y-6">
-                <div className="flex justify-between items-center border-b border-border/40 pb-3">
-                  <TabsList className="bg-muted border border-border/60 p-1 w-full md:w-auto h-auto grid grid-cols-3 gap-1 rounded-xl">
-                    <TabsTrigger value="ringkasan" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                <div className="flex justify-between items-center border-b border-border/20 pb-4 mb-2">
+                  <TabsList className="bg-transparent p-0 w-full md:w-auto h-auto flex flex-wrap gap-2 md:gap-4 rounded-none border-none">
+                    <TabsTrigger value="ringkasan" className="text-xs md:text-sm py-2.5 px-4 rounded-xl text-muted-foreground/70 data-[state=active]:bg-muted/30 data-[state=active]:text-foreground data-[state=active]:border-border/60 border border-transparent font-semibold transition-all">
                       🔍 Ringkasan Eksekutif
                     </TabsTrigger>
-                    <TabsTrigger value="segmen" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                    <TabsTrigger value="segmen" className="text-xs md:text-sm py-2.5 px-4 rounded-xl text-muted-foreground/70 data-[state=active]:bg-muted/30 data-[state=active]:text-foreground data-[state=active]:border-border/60 border border-transparent font-semibold transition-all">
                       ⚡ Detail Segmen &amp; Strategi
                     </TabsTrigger>
-                    <TabsTrigger value="raw_json" className="text-xs py-2 px-4 rounded-lg text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-bold transition-all">
+                    <TabsTrigger value="raw_json" className="text-xs md:text-sm py-2.5 px-4 rounded-xl text-muted-foreground/70 data-[state=active]:bg-muted/30 data-[state=active]:text-foreground data-[state=active]:border-border/60 border border-transparent font-semibold transition-all">
                       📄 JSON Metadata
                     </TabsTrigger>
                   </TabsList>
