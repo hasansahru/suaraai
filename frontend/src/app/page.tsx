@@ -83,7 +83,7 @@ const DEFAULT_DURATIONS = [
 const DEFAULT_MODELS: Record<string, string[]> = {
   anthropic: ["claude-3-5-sonnet-latest", "claude-3-5-sonnet-20241022", "claude-3-opus-latest"],
   openai: ["gpt-4o", "gpt-4o-mini", "o1-mini"],
-  gemini: ["gemini-2.5-flash", "gemini-2.5-pro"],
+  gemini: ["gemini-3.5-flash", "gemini-3.1-pro", "gemini-3.1-flash-lite"],
   "9router": ["cc/claude-sonnet-4-6", "openai/gpt-4o"],
   custom: []
 };
