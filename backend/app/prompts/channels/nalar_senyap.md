@@ -97,9 +97,9 @@ Pola yang muncul: Penggunaan figur otentik (Dr. Fahruddin Faiz, Ibnu Sina) atau 
 
 ## JADWAL UPLOAD
 
-Prioritaskan hari **Senin, Selasa, Rabu, Jumat, dan Minggu** yang terbukti memiliki puncak aktivitas (heatmap) terpekat. Hindari larut malam hingga pagi hari (00.00–06.00) karena merupakan titik terendah aktivitas penonton.
+Prioritaskan hari **Senin, Selasa, Jumat, dan Minggu** yang terbukti memiliki puncak aktivitas (heatmap) paling terang/pekat. Hindari hari Kamis dan Sabtu karena aktivitas penonton cenderung lebih sepi.
 
-**Jam puncak audiens online** (dari grafik "Waktu penonton membuka YouTube" — GMT+0700): **18.00–20.00 WIB** setiap hari.
+**Jam puncak audiens online** (dari grafik "Waktu penonton membuka YouTube" — GMT+0700): **18.00–20.00 WIB** (terutama Senin, Selasa, Jumat) dan **12.00-15.00 WIB** (khusus hari Minggu).
 
 ### Jadwal Upload Final (Hari + Jam)
 
@@ -107,16 +107,16 @@ Mengingat video panjang adalah format inti (dan Shorts sangat lemah), fokuskan u
 
 | Format | Hari | Jam |
 |---|---|---|
-| **Video Panjang** | Minggu, Jumat, Rabu | 17:00 WIB |
-| **Shorts** | Senin, Selasa | 17:00 WIB |
+| **Video Panjang** | Senin, Jumat, Minggu | Senin & Jumat: 17:00 WIB. Minggu: 11:00 WIB |
+| **Shorts** | Selasa, Rabu | 17:00 WIB |
 
-**Logika:** Hari dengan puncak kepadatan tertinggi (Minggu, Jumat, Rabu) dialokasikan untuk video panjang agar mendapatkan dorongan algoritma maksimal. Jam 17:00 WIB dipilih agar video terdistribusi dengan baik tepat saat grafik aktivitas penonton online mulai meledak naik pada pukul 18:00 WIB.
+**Logika:** Hari Senin dan Jumat memiliki puncak grafik paling terang di jam 18:00, sehingga diunggah jam 17:00. Hari Minggu memiliki aktivitas yang sudah mulai ramai sejak siang hari, sehingga jadwal upload dimajukan ke 11:00 WIB agar mengumpulkan traksi lebih panjang. Selasa dan Rabu digunakan untuk Shorts pendukung.
 
 **⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true):
-- `hari_terbaik`: ["Minggu", "Jumat", "Rabu"]
-- `jam_upload`: "17:00 WIB"
-- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak kehadiran audiens (Prime Time) Nalar Senyap terjadi pekat setiap hari pada pukul 18:00 - 20:00 WIB, dengan hari teramai di Minggu, Jumat, dan Rabu. Mengunggah video pada jam 17:00 WIB akan memberikan momentum sempurna saat grafik traffic mulai melonjak naik."
-- `hindari`: "Hindari mengunggah video larut malam atau pagi hari (00:00 - 06:00 WIB) karena aktivitas penonton berada di titik paling sepi/rendah."
+- `hari_terbaik`: ["Senin", "Jumat", "Minggu"]
+- `jam_upload`: "17:00 WIB (Senin/Jumat), 11:00 WIB (Minggu)"
+- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak tertinggi (Prime Time) Nalar Senyap ada di hari Senin dan Jumat pukul 18:00 - 20:00 WIB, serta hari Minggu yang sudah ramai sejak pukul 12:00 siang. Upload pada waktu tersebut memaksimalkan dorongan algoritma tepat sebelum puncak keramaian."
+- `hindari`: "Hindari mengunggah video pada hari Kamis dan Sabtu karena aktivitas penonton paling sepi, serta hindari rentang jam 00:00 - 06:00 WIB."
 
 ---
 
