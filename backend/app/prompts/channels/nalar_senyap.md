@@ -111,11 +111,11 @@ Mengingat format Shorts kini sangat mendominasi *views*, pastikan distribusi kon
 
 **Logika:** Hari Senin dan Jumat memiliki puncak grafik paling terang di jam 18:00, sehingga diunggah jam 17:00. Hari Minggu memiliki aktivitas yang sudah mulai ramai sejak siang hari, sehingga jadwal upload dimajukan ke 11:00 WIB agar mengumpulkan traksi lebih panjang. Selasa dan Rabu digunakan untuk Shorts pendukung.
 
-**⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true):
-- `hari_terbaik`: ["Senin", "Jumat", "Minggu"]
-- `jam_upload`: "17:00 WIB (Senin/Jumat), 11:00 WIB (Minggu)"
-- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak tertinggi (Prime Time) Nalar Senyap ada di hari Senin dan Jumat pukul 18:00 - 20:00 WIB, serta hari Minggu yang sudah ramai sejak pukul 12:00 siang. Upload pada waktu tersebut memaksimalkan dorongan algoritma tepat sebelum puncak keramaian."
-- `hindari`: "Hindari mengunggah video pada hari Kamis dan Sabtu karena aktivitas penonton paling sepi, serta hindari rentang jam 00:00 - 06:00 WIB."
+**⚠️ WAJIB UNTUK SEMUA FORMAT (Video Panjang maupun Shorts):** Isi field `rekomendasi_upload` di JSON output (set `tersedia` = true) dengan ketentuan:
+- Jika format `Video Panjang` → `hari_terbaik`: ["Senin", "Jumat", "Minggu"], `jam_upload`: "17:00 WIB (Senin/Jumat), 11:00 WIB (Minggu)".
+- Jika format `Shorts` → `hari_terbaik`: ["Selasa", "Rabu"], `jam_upload`: "17:00 WIB".
+- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak tertinggi Nalar Senyap ada di jam 18:00 - 20:00 WIB. Jadwal ini dipilih untuk memaksimalkan momentum algoritma."
+- `hindari`: "Hindari mengunggah video pada hari Kamis dan Sabtu karena penonton paling sepi, serta rentang jam 00:00 - 06:00 WIB."
 
 ---
 
