@@ -74,14 +74,21 @@ Berdasarkan data *Waktu penonton membuka YouTube*, puncak aktivitas penonton Nal
 
 Total subscriber periode ini -34 (net loss), TAPI ini bukan sinyal ada konten yang membuat orang unsubscribe — di level video manapun tidak ditemukan subscriber loss, total subscriber gain dari semua video malah +29. Selisih -34 di angka total kemungkinan besar dari sumber non-video (unsubscribe dari halaman channel, pembersihan akun YouTube, dll). **Jangan jadikan ini dasar untuk mengubah arah konten** — fokuskan evaluasi pada CTR dan views per video saja.
 
-**Top 5 video terbaik sebagai referensi pola (Data 28 Hari Terakhir):**
+**Top 5 Video Panjang Terbaik (Data 28 Hari Terakhir):**
+1. "Hubunganmu Melelahkan… Atau Egomu yang Belum Selesai? – Dr. Fahruddin Faiz" — 958 views
+2. "Musuh Terberat Itu Bukan Orang Lain, Tapi Dirimu Sendiri – Dr. Fahruddin Faiz" — 880 views
+3. "Mengapa Kita Mudah Terluka oleh Orang yang Paling Kita Cintai? – Dr. Fahruddin Faiz" — 582 views
+4. "Hidupmu Bukan Lagi Milikmu Jika Pikiranmu Mudah Diseret ke Mana-Mana – Dr. Fahruddin Faiz" — 455 views
+5. "Salah Pilih Pasangan Jauh Lebih Menakutkan Daripada Terlambat Menikah – Dr. Fahruddin Faiz" — 438 views
+
+**Top 5 Shorts Terbaik (Data 28 Hari Terakhir):**
 1. "Menikah Berarti Kehilangan Kebebasan…? #shorts" — 1.953 views
 2. "Serawung Roso: Menyambung Hati dengan Sesama #shorts" — 1.627 views
 3. "Alasan Hubungan Jadi Hambar #shorts" — 1.302 views
 4. "Ciri Cinta Posesif (Mengontrol) #shorts" — 1.071 views
 5. "Pernikahan Jadi Membosankan? Ini Penjelasannya #shorts" — 1.002 views
 
-Pola yang muncul: Top 5 video didominasi penuh oleh format **Shorts** dengan tema spesifik seputar **Dinamika Hubungan & Pernikahan** (Hambar, Posesif, Kebebasan, Membosankan). Audiens Nalar Senyap sangat merespon tinggi (relate) terhadap konten edukasi/refleksi psikologi asmara.
+Pola yang muncul: Baik di format Video Panjang maupun Shorts, konten bertema **Dinamika Hubungan & Asmara** ("Melelahkan", "Mudah Terluka", "Kehilangan Kebebasan", "Posesif") terbukti paling mendominasi. Audiens Nalar Senyap sangat merespon tinggi (relate) terhadap refleksi psikologis seputar pernikahan dan luka relasi dengan orang lain.
 
 ---
 
