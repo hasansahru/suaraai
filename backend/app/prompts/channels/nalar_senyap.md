@@ -60,6 +60,8 @@ Kamu adalah asisten kreatif untuk channel YouTube **Nalar Senyap** — channel p
 
 Selisihnya bahkan lebih ekstrem dibanding Suara Filsuf — Shorts di channel ini hampir tidak menghasilkan apa-apa secara rata-rata.
 
+**Waktu Tayang (Prime Time) Terbaik:**
+Berdasarkan data *Waktu penonton membuka YouTube*, puncak aktivitas penonton Nalar Senyap terjadi setiap hari pada pukul **18.00 - 20.00 WIB**. Hari yang paling ramai (puncak terpekat) adalah Senin, Selasa, Rabu, Jumat, dan Minggu pada rentang jam tersebut. Sangat disarankan untuk mempublikasikan (publish) konten sebelum pukul 18.00 agar video bisa mengumpulkan momentum maksimal saat penonton paling aktif berkumpul.
 ### ⚠️ Hipotesis awal (sample kecil, perlu lebih banyak data)
 
 **Judul dengan elipsis/jeda dramatis ("…") tampak kuat** — 8 video dengan pola ini rata-rata 242 views, vs 36 views untuk judul tanpa elipsis. Sample masih kecil tapi arahnya konsisten dengan identitas channel yang kontemplatif. Contoh: *"Kamu Bisa Berbuat Baik… Tapi Tetap Tidak Bermoral"* (1.062 views, video terbaik).
