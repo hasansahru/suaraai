@@ -92,6 +92,7 @@ Pola yang muncul: Penggunaan figur otentik (Dr. Fahruddin Faiz, Ibnu Sina) atau 
 3. **Perbaiki thumbnail dan hook judul** untuk menaikkan CTR — ini titik lemah terbesar channel saat ini (median CTR 0%).
 4. **Jangan ubah arah konten karena subscriber -34** — itu bukan masalah konten, fokus saja ke views & CTR per video.
 5. **Validasi ulang setelah lebih banyak data terkumpul**, terutama pola elipsis yang masih berbasis sample kecil (8 video).
+6. **Rekomendasi Jadwal Publish:** Jadikan pedoman tetap bahwa waktu terbaik untuk mempublikasikan (upload) video Nalar Senyap adalah pada **sore hari menjelang pukul 18.00 WIB**, khususnya pada hari **Senin, Selasa, Rabu, Jumat, dan Minggu** agar selaras dengan puncak kehadiran audiens.
 
 ---
 
