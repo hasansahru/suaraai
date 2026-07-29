@@ -92,7 +92,31 @@ Pola yang muncul: Penggunaan figur otentik (Dr. Fahruddin Faiz, Ibnu Sina) atau 
 3. **Perbaiki thumbnail dan hook judul** untuk menaikkan CTR — ini titik lemah terbesar channel saat ini (median CTR 0%).
 4. **Jangan ubah arah konten karena subscriber -34** — itu bukan masalah konten, fokus saja ke views & CTR per video.
 5. **Validasi ulang setelah lebih banyak data terkumpul**, terutama pola elipsis yang masih berbasis sample kecil (8 video).
-6. **Rekomendasi Jadwal Publish:** Jadikan pedoman tetap bahwa waktu terbaik untuk mempublikasikan (upload) video Nalar Senyap adalah pada **sore hari menjelang pukul 18.00 WIB**, khususnya pada hari **Senin, Selasa, Rabu, Jumat, dan Minggu** agar selaras dengan puncak kehadiran audiens.
+
+---
+
+## JADWAL UPLOAD
+
+Prioritaskan hari **Senin, Selasa, Rabu, Jumat, dan Minggu** yang terbukti memiliki puncak aktivitas (heatmap) terpekat. Hindari larut malam hingga pagi hari (00.00–06.00) karena merupakan titik terendah aktivitas penonton.
+
+**Jam puncak audiens online** (dari grafik "Waktu penonton membuka YouTube" — GMT+0700): **18.00–20.00 WIB** setiap hari.
+
+### Jadwal Upload Final (Hari + Jam)
+
+Mengingat video panjang adalah format inti (dan Shorts sangat lemah), fokuskan upload video panjang pada 3 hari teramai dalam seminggu, dan gunakan 2 hari lainnya untuk Shorts pendukung.
+
+| Format | Hari | Jam |
+|---|---|---|
+| **Video Panjang** | Minggu, Jumat, Rabu | 17:00 WIB |
+| **Shorts** | Senin, Selasa | 17:00 WIB |
+
+**Logika:** Hari dengan puncak kepadatan tertinggi (Minggu, Jumat, Rabu) dialokasikan untuk video panjang agar mendapatkan dorongan algoritma maksimal. Jam 17:00 WIB dipilih agar video terdistribusi dengan baik tepat saat grafik aktivitas penonton online mulai meledak naik pada pukul 18:00 WIB.
+
+**⚠️ WAJIB untuk Output Type = Video Panjang:** Isi field `rekomendasi_upload` di JSON output dengan data berikut (field `tersedia` = true):
+- `hari_terbaik`: ["Minggu", "Jumat", "Rabu"]
+- `jam_upload`: "17:00 WIB"
+- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak kehadiran audiens (Prime Time) Nalar Senyap terjadi pekat setiap hari pada pukul 18:00 - 20:00 WIB, dengan hari teramai di Minggu, Jumat, dan Rabu. Mengunggah video pada jam 17:00 WIB akan memberikan momentum sempurna saat grafik traffic mulai melonjak naik."
+- `hindari`: "Hindari mengunggah video larut malam atau pagi hari (00:00 - 06:00 WIB) karena aktivitas penonton berada di titik paling sepi/rendah."
 
 ---
 
