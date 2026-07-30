@@ -148,16 +148,16 @@ Lembut dan suportif. Contoh: "Kalau video ini terasa seperti pelukan kecil hari 
 
 **🚫 CONTOH YANG SALAH (DILARANG KERAS):**
 ```
-Klip 1: 00:00 → 00:20
-Klip 2: 00:20 → 00:45
-Klip 3: 00:45 → 01:30  ← SALAH! Melebihi 01:00
+Klip 1: 00:00 → 00:10
+Klip 2: 00:10 → 00:30
+Klip 3: 00:30 → 01:30  ← SALAH! Melebihi 01:00
 ```
 
-**✅ CONTOH YANG BENAR:**
+**✅ CONTOH YANG BENAR (WAJIB IKUTI TABEL):**
 ```
-Klip 1: 00:00 → 00:20
-Klip 2: 00:20 → 00:45
-Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
+Klip 1: 00:00 → 00:10
+Klip 2: 00:10 → 00:30
+Klip 3: 00:30 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 ```
 
 **Struktur 3 segmen opening (selalu di video baru 00:00–01:00):**
