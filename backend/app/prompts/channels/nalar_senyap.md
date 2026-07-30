@@ -160,12 +160,15 @@ Klip 2: 00:20 → 00:45
 Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 ```
 
-**Gaya Opening Khas Nalar Senyap:**
-- Detik 0–10: Langsung validasi perasaan audiens yang relevan dengan topik (bukan sapaan) menggunakan `hook_baru` terpilih.
-- Detik 10–30: Tunjukkan bahwa mereka tidak sendirian — gunakan kutipan/ilustrasi empati dari sumber.
-- Detik 30–60: Buka loop rasa ingin tahu dengan pertanyaan kontemplasi yang personal.
-- Nada: lembut, hangat, tidak menghakimi — seperti teman bicara di tengah malam.
-- Audio: Musik latar sage-piano/lullaby ambient yang sangat hening dan hangat.
+**Struktur 3 segmen opening (selalu di video baru 00:00–01:00):**
+
+| Waktu (video baru) | Isi | Catatan |
+|---|---|---|
+| 00:00–00:10 | Langsung validasi perasaan audiens (dari `hook_baru` terpilih) | Layar gelap/judul tipis, tanpa sapaan, nada lembut/hangat |
+| 00:10–00:30 | Tunjukkan bahwa mereka tidak sendirian | Gunakan kutipan/ilustrasi empati dari sumber, musik latar sage-piano/lullaby ambient masuk perlahan |
+| 00:30–01:00 | Buka loop rasa ingin tahu | Pertanyaan kontemplasi yang personal, biarkan menggantung untuk refleksi |
+
+Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
 
 
 ---
