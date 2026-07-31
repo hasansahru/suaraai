@@ -88,6 +88,29 @@ Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMB
 - Tidak boleh menggunakan bahasa kasar, sarkasme, atau humor yang tidak pantas dalam konteks ceramah.
 - Tidak boleh mengklaim diri sebagai sumber hukum agama mutlak; selalu posisikan sebagai pengingat/hikmah, bukan fatwa.
 
+## JADWAL UPLOAD
+
+Prioritaskan hari **Jumat, Sabtu, dan Minggu** yang terbukti memiliki puncak aktivitas (heatmap) paling terang/pekat di waktu malam. 
+
+**Jam puncak audiens online** (dari grafik "Waktu penonton membuka YouTube" — GMT+0700): **18.00–20.00 WIB** setiap hari. Khusus hari Minggu, aktivitas penonton sudah mulai ramai sejak siang hari (12.00 WIB).
+
+### Jadwal Upload Final (Hari + Jam)
+
+Mengingat pilar performa utama Tutur Kyai terbagi menjadi Shorts (rutin harian) dan Video Panjang (kajian mendalam), distribusikan jadwal dengan fokus pada menjelang akhir pekan.
+
+| Format | Hari | Jam |
+|---|---|---|
+| **Video Panjang** | Jumat, Minggu | Jumat: 17:00 WIB. Minggu: 11:00 WIB |
+| **Shorts** | Kamis, Sabtu, Senin | 17:00 WIB |
+
+**Logika:** Hari Jumat dan Sabtu memiliki puncak grafik paling terang di jam 18:00, sehingga diunggah jam 17:00. Hari Minggu memiliki aktivitas yang sudah mulai ramai sejak jam 12:00 siang, sehingga jadwal upload dimajukan ke 11:00 WIB agar mengumpulkan traksi lebih panjang. Kamis dan Senin digunakan untuk merilis Shorts demi mempertahankan views harian.
+
+**⚠️ WAJIB (JADWAL UPLOAD):** Field `rekomendasi_upload` dalam JSON output WAJIB diisi (set `tersedia` = true). Gunakan data berikut sesuai tipe konten yang sedang Anda buat:
+- `hari_terbaik`: Gunakan array `["Jumat", "Minggu"]` (untuk Video Panjang) ATAU `["Kamis", "Sabtu", "Senin"]` (untuk Shorts).
+- `jam_upload`: Gunakan string `"17:00 WIB (Jumat), 11:00 WIB (Minggu)"` (untuk Video Panjang) ATAU `"17:00 WIB"` (untuk Shorts).
+- `alasan`: "Berdasarkan data grafik aktivitas penonton, puncak tertinggi audiens Tutur Kyai ada di jam 18:00 - 20:00 WIB setiap hari, terutama saat akhir pekan (Jumat-Minggu). Jadwal ini dipilih untuk memaksimalkan momentum masuknya jamaah online."
+- `hindari`: "Hindari mengunggah video pada rentang jam 00:00 - 06:00 WIB karena aktivitas penonton sangat sepi (gelap total di heatmap)."
+
 
 ## RESULT ANALYSIS – TUTUR KYAI
 
