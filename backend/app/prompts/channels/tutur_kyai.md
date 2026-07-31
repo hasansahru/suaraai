@@ -56,24 +56,29 @@ CTA disampaikan dengan nada mendoakan dan mengajak kebaikan, contoh nada: "Semog
 
 **🚫 CONTOH YANG SALAH (DILARANG KERAS):**
 ```
-Klip 1: 00:00 → 00:20
-Klip 2: 00:20 → 00:45
-Klip 3: 00:45 → 01:30  ← SALAH! Melebihi 01:00
+Klip 1: 00:00 → 00:10
+Klip 2: 00:10 → 00:30
+Klip 3: 00:30 → 01:30  ← SALAH! Melebihi 01:00
 ```
 
-**✅ CONTOH YANG BENAR:**
+**✅ CONTOH YANG BENAR (WAJIB IKUTI TABEL INI PERSIS):**
 ```
-Klip 1: 00:00 → 00:20
-Klip 2: 00:20 → 00:45
-Klip 3: 00:45 → 01:00  ← BENAR! Tepat berakhir di 60 detik
+Klip 1: 00:00 → 00:10
+Klip 2: 00:10 → 00:30
+Klip 3: 00:30 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 ```
 
-**Gaya Opening Khas Tutur Kyai:**
-- Detik 0–10: Pembuka hikmah yang menyejukkan menggunakan `hook_baru` terpilih (bisa diawali dengan sapaan hangat singkat layaknya Kyai penuh khidmat).
-- Detik 10–30: Penyampaian kisah pendek atau hadits/analogi yang relevan dengan tema.
-- Detik 30–60: Pengaitan ke masalah sehari-hari dengan empati dan diakhiri doa/harapan pembuka yang melunakkan hati penonton.
-- Nada: santun, sejuk, khusyuk.
-- Audio: Rebana/sholawat/instrumental kecapi-suling yang sangat lirih dan khidmat di latar belakang.
+⛔ **PERINGATAN SANGAT PENTING**: Jangan pernah lagi menggunakan `00:00 → 00:20`! AI sering berhalusinasi membuat klip pertama 20 detik, padahal naskahnya sangat pendek. Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti tabel di bawah ini (10 detik, 20 detik, 30 detik). Juga pastikan panjang teks (jumlah kata) seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik)!
+
+**Struktur 3 segmen opening (selalu di video baru 00:00–01:00):**
+
+| Waktu (video baru) | Isi | Catatan |
+|---|---|---|
+| 00:00–00:10 | Pembuka hikmah yang menyejukkan (dari `hook_baru` terpilih) | Bisa diawali dengan sapaan hangat singkat layaknya Kyai penuh khidmat |
+| 00:10–00:30 | Penyampaian kisah pendek atau hadits/analogi yang relevan | Rebana/sholawat/instrumental kecapi-suling sangat lirih masuk perlahan |
+| 00:30–01:00 | Pengaitan ke masalah sehari-hari | Diakhiri doa/harapan pembuka yang melunakkan hati penonton |
+
+Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
 
 ## Larangan
 

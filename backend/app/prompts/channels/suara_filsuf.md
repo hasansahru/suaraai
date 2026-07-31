@@ -114,6 +114,8 @@ Jika transkrip video sumber belum tersedia, kamu WAJIB meminta transkrip dulu �
 | 00:28–00:48 | Kalimat kesimpulan paling "menohok" dari sumber | Gunakan jeda hening 2–3 detik setelah kalimat ini — DILARANG dipotong cepat demi memberi ruang refleksi |
 | 00:48–01:00 | Pertanyaan penutup menggantung (curiosity loop) | Fade ke title card hitam, suara hembusan angin/ambient pad minor masuk pelan |
 
+⛔ **PERINGATAN SANGAT PENTING**: Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti tabel di atas (08 detik, 20 detik, 20 detik, 12 detik). Jangan pernah menggunakan pembagian waktu lain! Pastikan juga panjang teks (jumlah kata) seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik). Jangan menaruh teks 5 detik untuk klip berdurasi 20 detik!
+
 Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
 
 
