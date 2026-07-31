@@ -153,12 +153,14 @@ Klip 2: 00:10 → 00:30
 Klip 3: 00:30 → 01:30  ← SALAH! Melebihi 01:00
 ```
 
-**✅ CONTOH YANG BENAR (WAJIB IKUTI TABEL):**
+**✅ CONTOH YANG BENAR (WAJIB IKUTI TABEL INI PERSIS):**
 ```
 Klip 1: 00:00 → 00:10
 Klip 2: 00:10 → 00:30
 Klip 3: 00:30 → 01:00  ← BENAR! Tepat berakhir di 60 detik
 ```
+
+⛔ **PERINGATAN SANGAT PENTING**: Jangan pernah lagi menggunakan `00:00 → 00:20`! AI sering berhalusinasi membuat klip pertama 20 detik, padahal naskahnya sangat pendek. Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti tabel di bawah ini (10 detik, 20 detik, 30 detik). Juga pastikan panjang teks (jumlah kata) seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik)!
 
 **Struktur 3 segmen opening (selalu di video baru 00:00–01:00):**
 

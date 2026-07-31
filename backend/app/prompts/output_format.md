@@ -74,7 +74,7 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
             "video_baru_end": "mm:ss — estimasi waktu selesai di video baru, akumulasi klip terakhir HARUS tepat berakhir di 01:00 (tidak boleh lebih dari 60 detik)",
             "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
             "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
-            "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini, BUKAN kalimat baru buatan AI",
+            "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini. WAJIB pastikan jumlah kata MASUK AKAL dengan durasi klip ini (rata-rata bicara 2-3 kata per detik). JANGAN menaruh teks sangat pendek untuk durasi yang panjang (misal teks 5 detik ditaruh untuk durasi 20 detik)!",
             "catatan_editing": "string — instruksi editing untuk segmen ini (B-roll, musik, jeda, dll)"
           }
         ],
