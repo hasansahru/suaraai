@@ -121,13 +121,14 @@ Mengingat pilar performa utama Tutur Kyai terbagi menjadi Shorts (rutin harian) 
 2. "Story Gus Kautsar \"Gus E, Melaksanakan Dawuh Saking NING\" #santrikyai #shorts" — 84.144 views
 3. "Story Gus Kautsar | Takdir Terbaik Gus E #santrikyai #shorts" — 50.984 views
 
-**Top Performa Terbaru (Pilar Retensi Harian):**
-1. "Vitamin Terbaik untuk Seorang Suami #short" — 1.867 views
-2. "Siapa Teman Sekamarmu di Neraka? #short" — 1.255 views
-3. "Hadis Pengingat untuk Kaum Wanita #short" — 1.212 views
+**Top Performa Terbaru (28 Hari Terakhir):**
+1. "Masih Maksiat Tapi Ingin Salat #short" — 1.143 views
+2. "Teman Setia di Kubur Bagi Pelalai Salat #shorts" — 1.104 views
+3. "Jangan Jadi Tuhan bagi Orang Lain #short" — 1.092 views
+4. "Rahasia Waktu yang Hilang #shorts" — 1.083 views
 
 **Insight Utama:**
 - Ada dua pilar konten utama yang terbukti menghasilkan *traffic* besar di channel ini.
-- **Pilar 1 (Karisma & Kisah):** Video ber-tag **#santrikyai** (terutama kisah personal/dawuh Gus Kautsar) memiliki potensi viralitas yang sangat masif hingga menembus jutaan views.
-- **Pilar 2 (Spiritual Praktis):** Video berformat **#short** dengan topik pengingat spiritual harian (suami-istri, muhasabah, sakit hati) dan judul berformat pertanyaan retoris terbukti stabil mendatangkan views harian yang konsisten.
-- **Kesimpulan Strategi:** AI harus terus memproduksi konten Shorts yang memadukan kedalaman nilai keseharian (Pilar 2) dan pesona gaya penceritaan pesantren/kyai (Pilar 1). Jika membuat video panjang, wajib memiliki *hook* yang sangat kuat di 60 detik pertama untuk menahan audiens yang terbiasa dengan kecepatan format pendek.
+- **Pilar 1 (Karisma & Kisah):** Video ber-tag **#santrikyai** (terutama kisah personal/dawuh tokoh terkenal seperti Gus Kautsar) memiliki potensi viralitas yang sangat masif hingga menembus jutaan views.
+- **Pilar 2 (Spiritual Praktis & Eskatologi):** Berdasarkan tren 28 hari terakhir, audiens sangat merespons Shorts bertema **Shalat dan Alam Kubur** (peringatan lalai salat, keadaan di alam kubur) serta **Muhasabah Sosial** (jangan merasa paling benar). Tema-tema ini stabil mendatangkan ~1.000 views dalam waktu singkat.
+- **Kesimpulan Strategi (SANGAT PENTING):** Performa **Video Panjang** (durasi >10 menit) dalam 28 hari terakhir sangat memprihatinkan (di bawah 10 views). Channel ini saat ini **sepenuhnya didorong oleh Shorts**. Jika AI diminta membuat video panjang, AI WAJIB menyertakan strategi *hook* (60 detik pertama) yang sangat provokatif secara emosional atau mengambil topik yang terbukti sukses di Shorts (seperti: Shalat & Alam Kubur) agar audiens mau bertahan. Fokuslah merancang naskah Shorts sebagai ujung tombak *traffic* harian.
