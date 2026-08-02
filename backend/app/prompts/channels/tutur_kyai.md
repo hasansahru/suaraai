@@ -61,24 +61,53 @@ Klip 2: 00:10 → 00:30
 Klip 3: 00:30 → 01:30  ← SALAH! Melebihi 01:00
 ```
 
-**✅ CONTOH YANG BENAR (WAJIB IKUTI TABEL INI PERSIS):**
+**✅ FORMAT JSON YANG WAJIB DIIKUTI UNTUK KLIP 60 DETIK (JANGAN DIUBAH MENITNYA):**
+Kamu **DIWAJIBKAN** untuk menghasilkan array `klip` dengan struktur waktu PERSIS seperti ini:
+```json
+"klip": [
+  {
+    "video_baru_start": "00:00",
+    "video_baru_end": "00:10",
+    "catatan_editing": "Bisa diawali dengan sapaan hangat singkat layaknya Kyai penuh khidmat",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  },
+  {
+    "video_baru_start": "00:10",
+    "video_baru_end": "00:30",
+    "catatan_editing": "Rebana/sholawat/instrumental kecapi-suling sangat lirih masuk perlahan",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  },
+  {
+    "video_baru_start": "00:30",
+    "video_baru_end": "01:00",
+    "catatan_editing": "Diakhiri doa/harapan pembuka yang melunakkan hati penonton",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  }
+]
 ```
-Klip 1: 00:00 → 00:10
-Klip 2: 00:10 → 00:30
-Klip 3: 00:30 → 01:00  ← BENAR! Tepat berakhir di 60 detik
-```
 
-⛔ **PERINGATAN SANGAT PENTING**: Jangan pernah lagi menggunakan `00:00 → 00:20`! AI sering berhalusinasi membuat klip pertama 20 detik, padahal naskahnya sangat pendek. Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti tabel di bawah ini (10 detik, 20 detik, 30 detik). Juga pastikan panjang teks (jumlah kata) seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik)!
+⛔ **PERINGATAN SANGAT PENTING**: Jangan pernah lagi menggunakan `00:00 → 00:20`! AI sering berhalusinasi membuat klip pertama 20 detik, padahal naskahnya sangat pendek. Wajib patuhi format JSON di atas (10 detik, 20 detik, 30 detik). Pastikan panjang teks `narasi_sumber` seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik)! Jika teks narasi sangat pendek tapi durasi di-set 20 detik, maka **audio tidak akan sesuai dengan teks (text tidak sesuai dengan durasi)**, ini adalah kesalahan fatal!
 
-**Struktur 3 segmen opening (selalu di video baru 00:00–01:00):**
+---
 
-| Waktu (video baru) | Isi | Catatan |
-|---|---|---|
-| 00:00–00:10 | Pembuka hikmah yang menyejukkan (dari `hook_baru` terpilih) | Bisa diawali dengan sapaan hangat singkat layaknya Kyai penuh khidmat |
-| 00:10–00:30 | Penyampaian kisah pendek atau hadits/analogi yang relevan | Rebana/sholawat/instrumental kecapi-suling sangat lirih masuk perlahan |
-| 00:30–01:00 | Pengaitan ke masalah sehari-hari | Diakhiri doa/harapan pembuka yang melunakkan hati penonton |
+## STRUKTUR BABAK OUTLINE (CHAPTER TIMELINE)
 
-Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
+Untuk `video_panjang.strategi_konten.outline`, kamu WAJIB mematuhi urutan pembahasan (Babak) berikut ini. Durasi (`start_estimate`/`end_estimate`) harus menyesuaikan target durasi yang dipilih pengguna, **tetapi Babak 1 wajib berakhir di `00:01:00`**.
+
+1. **Babak 1: Muqaddimah / Pembuka Hikmah (Opening 60 Detik)**
+   - `start_estimate`: `"00:00:00"`
+   - `end_estimate`: `"00:01:00"` (HARUS TEPAT 1 MENIT)
+   - Isi: Sesuai dengan apa yang dirancang di `opening_60_detik`.
+2. **Babak 2: Pengenalan Kisah atau Hadits**
+   - Mulai dari `"00:01:00"`.
+   - Isi: Penjelasan awal mengenai kisah keteladanan, analogi, atau masalah yang diangkat.
+3. **Babak 3: Penjabaran Makna Tersirat (Hakikat)**
+   - Isi: Menyelami hikmah lebih dalam, memisahkan antara syariat (kulit) dan hakikat (isi) dari ibadah/kehidupan.
+4. **Babak 4: Kontekstualisasi (Muhasabah)**
+   - Isi: Mengaitkan hikmah tersebut dengan kehidupan nyata penonton sehari-hari secara relevan.
+5. **Babak 5: Doa & Penutup (Closing)**
+   - `end_estimate`: Wajib berakhir **pas** di dalam rentang Durasi Target.
+   - Isi: Kalimat penutup yang menyejukkan dan untaian doa.
 
 ## Larangan
 

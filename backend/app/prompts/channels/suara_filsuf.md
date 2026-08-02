@@ -105,29 +105,59 @@ Jika transkrip video sumber belum tersedia, kamu WAJIB meminta transkrip dulu �
 2. **Universal & relatable** — tidak memerlukan pemahaman teori filsafat akademis untuk memahaminya.
 3. **Pertanyaan menggantung (Unresolved Loop)** — diakhiri dengan tanda tanya eksistensial tanpa langsung memberikan jawaban, memicu otak penonton untuk terus menyimak demi meredakan ketegangan kognitif.
 
-**Struktur 4 segmen opening (selalu di video baru 00:00–01:00):**
+**✅ FORMAT JSON YANG WAJIB DIIKUTI UNTUK KLIP 60 DETIK (JANGAN DIUBAH MENITNYA):**
+Kamu **DIWAJIBKAN** untuk menghasilkan array `klip` dengan struktur waktu PERSIS seperti ini (4 klip untuk Suara Filsuf):
+```json
+"klip": [
+  {
+    "video_baru_start": "00:00",
+    "video_baru_end": "00:08",
+    "catatan_editing": "Layar gelap/judul tipis, hening tanpa musik, jeda 1–2 detik setelah diucapkan untuk menciptakan efek sunyi",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  },
+  {
+    "video_baru_start": "00:08",
+    "video_baru_end": "00:28",
+    "catatan_editing": "Visual B-roll landscape alam sunyi dengan zoom lambat, musik ambient mulai masuk secara sayup",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  },
+  {
+    "video_baru_start": "00:28",
+    "video_baru_end": "00:48",
+    "catatan_editing": "Gunakan jeda hening 2–3 detik setelah kalimat ini — DILARANG dipotong cepat demi memberi ruang refleksi",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  },
+  {
+    "video_baru_start": "00:48",
+    "video_baru_end": "01:00",
+    "catatan_editing": "Fade ke title card hitam, suara hembusan angin/ambient pad minor masuk pelan",
+    "...": "isi field lain (sumber_start, narasi_sumber) sesuai teks"
+  }
+]
+```
 
-| Waktu (video baru) | Isi | Catatan |
-|---|---|---|
-| 00:00–00:08 | Kalimat hook paradoks (dari `hook_baru` terpilih) | Layar gelap/judul tipis, hening tanpa musik, jeda 1–2 detik setelah diucapkan untuk menciptakan efek sunyi |
-| 00:08–00:28 | Elaborasi/ilustrasi konkret dari transkrip | Visual B-roll landscape alam sunyi dengan zoom lambat, musik ambient mulai masuk secara sayup |
-| 00:28–00:48 | Kalimat kesimpulan paling "menohok" dari sumber | Gunakan jeda hening 2–3 detik setelah kalimat ini — DILARANG dipotong cepat demi memberi ruang refleksi |
-| 00:48–01:00 | Pertanyaan penutup menggantung (curiosity loop) | Fade ke title card hitam, suara hembusan angin/ambient pad minor masuk pelan |
-
-⛔ **PERINGATAN SANGAT PENTING**: Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti tabel di atas (08 detik, 20 detik, 20 detik, 12 detik). Jangan pernah menggunakan pembagian waktu lain! Pastikan juga panjang teks (jumlah kata) seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik). Jangan menaruh teks 5 detik untuk klip berdurasi 20 detik!
-
-Setiap segmen WAJIB menyebutkan asal klip dengan format: `[ambil dari VIDEO SUMBER hh:mm:ss–hh:mm:ss]`, dihitung dari posisi relatif teks dalam transkrip × durasi video, dan selalu diberi catatan `⚠️ verifikasi manual sebelum editing`.
-
+⛔ **PERINGATAN SANGAT PENTING**: Kamu **DIWAJIBKAN** untuk menggunakan pembagian waktu yang **PERSIS** seperti JSON di atas (08 detik, 20 detik, 20 detik, 12 detik). Jangan pernah menggunakan pembagian waktu lain! Pastikan juga panjang teks (jumlah kata) `narasi_sumber` seimbang dengan durasinya (rata-rata bicara 2-3 kata per detik). Jangan menaruh teks 5 detik untuk klip berdurasi 20 detik, nanti audio dan durasinya tidak cocok!
 
 ---
 
-## STRUKTUR NARASI VIDEO PANJANG (gambaran 60 detik pertama, lalu berkembang)
+## STRUKTUR BABAK OUTLINE (CHAPTER TIMELINE)
 
-1. Paradoks/pertanyaan pembuka mengganggu (0–5 detik)
-2. Ilustrasi situasi sehari-hari yang relatable (5–20 detik)
-3. Pengenalan gagasan filosofis relevan, tanpa menggurui (20–40 detik)
-4. Pembalikan perspektif — "ternyata yang sebenarnya terjadi adalah..." (40–55 detik)
-5. Penutup mengundang refleksi pribadi, bukan jawaban instan (55–60 detik)
+Untuk `video_panjang.strategi_konten.outline`, kamu WAJIB mematuhi urutan pembahasan (Babak) berikut ini. Durasi (`start_estimate`/`end_estimate`) harus menyesuaikan target durasi yang dipilih pengguna, **tetapi Babak 1 wajib berakhir di `00:01:00`**.
+
+1. **Babak 1: Paradoks & Ilustrasi Situasi (Opening 60 Detik)**
+   - `start_estimate`: `"00:00:00"`
+   - `end_estimate`: `"00:01:00"` (HARUS TEPAT 1 MENIT)
+   - Isi: Sesuai dengan apa yang dirancang di `opening_60_detik`.
+2. **Babak 2: Pengenalan Gagasan Filosofis**
+   - Mulai dari `"00:01:00"`.
+   - Isi: Menjelaskan akar masalah dari sudut pandang filosofi / filsuf relevan.
+3. **Babak 3: Pembalikan Perspektif (Plot Twist)**
+   - Isi: "Ternyata yang sebenarnya terjadi adalah..." (Memberi insight tajam).
+4. **Babak 4: Relevansi Praktis**
+   - Isi: Bagaimana gagasan berat ini diaplikasikan dalam kebingungan hidup modern (kerja, cinta, pencarian makna).
+5. **Babak 5: Pertanyaan Penutup (Closing)**
+   - `end_estimate`: Wajib berakhir **pas** di dalam rentang Durasi Target.
+   - Isi: Penutup mengundang refleksi pribadi, bukan jawaban instan.
 
 ---
 
