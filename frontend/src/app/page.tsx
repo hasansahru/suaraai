@@ -1252,529 +1252,529 @@ export default function Dashboard() {
 
 
 
-      {/* Loading Indicator */}
-      {loading && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-card rounded-3xl p-8 shadow-2xl max-w-sm w-full flex flex-col items-center">
-            <div className="relative mb-6">
-              <div className="h-16 w-16 rounded-full border-4 border-slate-100 dark:border-border border-t-blue-500 animate-spin" />
-              <Brain className="absolute inset-0 m-auto size-6 text-blue-500 animate-pulse" />
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="fixed inset-0 z-[100] bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-white dark:bg-card rounded-3xl p-8 shadow-2xl max-w-sm w-full flex flex-col items-center">
+                <div className="relative mb-6">
+                  <div className="h-16 w-16 rounded-full border-4 border-slate-100 dark:border-border border-t-blue-500 animate-spin" />
+                  <Brain className="absolute inset-0 m-auto size-6 text-blue-500 animate-pulse" />
+                </div>
+                <h3 className="text-base font-extrabold mb-2 text-slate-900 dark:text-white text-center">AI Sedang Bekerja...</h3>
+                <p className="text-xs text-slate-500 text-center leading-relaxed">
+                  {loadingStep || "Proses ini membutuhkan waktu sekitar 30 - 90 detik karena model AI menyusun konten komprehensif."}
+                </p>
+              </div>
             </div>
-            <h3 className="text-base font-extrabold mb-2 text-slate-900 dark:text-white text-center">AI Sedang Bekerja...</h3>
-            <p className="text-xs text-slate-500 text-center leading-relaxed">
-              {loadingStep || "Proses ini membutuhkan waktu sekitar 30 - 90 detik karena model AI menyusun konten komprehensif."}
-            </p>
-          </div>
-        </div>
-      )}
-    </main>
+          )}
+        </main>
       </div >
 
-    {/* Modals */ }
-    < Dialog open = { isSettingsOpen } onOpenChange = { setIsSettingsOpen } >
-      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto bg-card border-border">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2"><Settings className="size-5 text-blue-500" /> Konfigurasi AI & Proxy</DialogTitle>
-          <DialogDescription>Atur preferensi API, model reasoning, dan proxy di sini.</DialogDescription>
-        </DialogHeader>
-        <div className="space-y-6 py-4">
-          <div className="azure-card rounded-2xl p-6 ">
-            <div className="flex items-center gap-2 mb-1.5">
-              <Settings className="size-5 text-blue-500 drop-shadow-[0_0_8px_rgba(0,120,212,0.5)]" />
-              <h2 className="text-base font-bold text-foreground">Konfigurasi AI & Model</h2>
-            </div>
-            <p className="text-xs text-muted-foreground mb-4">
-              Pilih provider dan sesuaikan credentials Anda.
-            </p>
-            <div className="space-y-4">
-              {/* Provider Selection */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">AI Provider</label>
-                <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
-                    <SelectValue placeholder="Pilih Provider">
-                      {(() => {
-                        const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
-                        const p = providers.find((pr: any) => pr.id === provider);
-                        return p ? p.label : provider;
-                      })()}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[260px]">
-                    {((apiSettings?.ai_provider?.providers) || DEFAULT_PROVIDERS).map((p: any) => (
-                      <SelectItem key={p.id} value={p.id} className="py-2">
-                        {p.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {/* Provider Subtext */}
-                {(() => {
-                  const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
-                  const p = providers.find((pr: any) => pr.id === provider);
-                  return p ? (
-                    <p className="text-[10px] text-muted-foreground leading-normal mt-1 bg-muted/40 p-2 rounded-lg border border-border/40">
-                      {p.description || "Provider API."}
-                    </p>
-                  ) : null;
-                })()}
+      {/* Modals */}
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[85vh] flex flex-col bg-card border-border p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-4 border-b border-border/40 shrink-0">
+            <DialogTitle className="flex items-center gap-2 text-base font-bold"><Settings className="size-5 text-blue-500" /> Konfigurasi AI & Proxy</DialogTitle>
+            <DialogDescription className="text-xs">Atur preferensi API, model reasoning, dan proxy di sini.</DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="azure-card rounded-2xl p-6 ">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Settings className="size-5 text-blue-500 drop-shadow-[0_0_8px_rgba(0,120,212,0.5)]" />
+                <h2 className="text-base font-bold text-foreground">Konfigurasi AI & Model</h2>
               </div>
-
-              {/* Model Choice */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Model AI</label>
-                {provider === "custom" ? (
-                  <Input
-                    placeholder="Masukkan model ID custom..."
-                    value={model}
-                    onChange={e => setModel(e.target.value)}
-                    className="bg-background border-border text-xs h-9.5 focus:border-blue-500/60 transition-colors text-foreground"
-                  />
-                ) : (
-                  <Select value={model} onValueChange={(v) => v && setModel(v)}>
+              <p className="text-xs text-muted-foreground mb-4">
+                Pilih provider dan sesuaikan credentials Anda.
+              </p>
+              <div className="space-y-4">
+                {/* Provider Selection */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">AI Provider</label>
+                  <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
                     <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
-                      <SelectValue placeholder="Pilih Model">
+                      <SelectValue placeholder="Pilih Provider">
+                        {(() => {
+                          const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+                          const p = providers.find((pr: any) => pr.id === provider);
+                          return p ? p.label : provider;
+                        })()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[260px]">
+                      {((apiSettings?.ai_provider?.providers) || DEFAULT_PROVIDERS).map((p: any) => (
+                        <SelectItem key={p.id} value={p.id} className="py-2">
+                          {p.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {/* Provider Subtext */}
+                  {(() => {
+                    const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+                    const p = providers.find((pr: any) => pr.id === provider);
+                    return p ? (
+                      <p className="text-[10px] text-muted-foreground leading-normal mt-1 bg-muted/40 p-2 rounded-lg border border-border/40">
+                        {p.description || "Provider API."}
+                      </p>
+                    ) : null;
+                  })()}
+                </div>
+
+                {/* Model Choice */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Model AI</label>
+                  {provider === "custom" ? (
+                    <Input
+                      placeholder="Masukkan model ID custom..."
+                      value={model}
+                      onChange={e => setModel(e.target.value)}
+                      className="bg-background border-border text-xs h-9.5 focus:border-blue-500/60 transition-colors text-foreground"
+                    />
+                  ) : (
+                    <Select value={model} onValueChange={(v) => v && setModel(v)}>
+                      <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
+                        <SelectValue placeholder="Pilih Model">
+                          {(() => {
+                            const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+                            const pInfo = providers.find((p: any) => p.id === provider);
+                            const list = pInfo?.models || DEFAULT_MODELS[provider] || [];
+                            const m = list.find((x: any) => (typeof x === 'string' ? x : x.id) === model);
+                            return m ? (typeof m === 'string' ? m : m.label) : model;
+                          })()}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[240px]">
                         {(() => {
                           const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
                           const pInfo = providers.find((p: any) => p.id === provider);
                           const list = pInfo?.models || DEFAULT_MODELS[provider] || [];
-                          const m = list.find((x: any) => (typeof x === 'string' ? x : x.id) === model);
-                          return m ? (typeof m === 'string' ? m : m.label) : model;
+                          return list.map((m: any) => {
+                            const mId = typeof m === 'string' ? m : m.id;
+                            const mLabel = typeof m === 'string' ? m : m.label;
+                            return (
+                              <SelectItem key={mId} value={mId} className="py-2">
+                                {mLabel}
+                              </SelectItem>
+                            );
+                          });
                         })()}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[240px]">
-                      {(() => {
-                        const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
-                        const pInfo = providers.find((p: any) => p.id === provider);
-                        const list = pInfo?.models || DEFAULT_MODELS[provider] || [];
-                        return list.map((m: any) => {
-                          const mId = typeof m === 'string' ? m : m.id;
-                          const mLabel = typeof m === 'string' ? m : m.label;
-                          return (
-                            <SelectItem key={mId} value={mId} className="py-2">
-                              {mLabel}
-                            </SelectItem>
-                          );
-                        });
-                      })()}
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
-
-              {/* API Key */}
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
-                  <span>API Key</span>
-                  <span className="text-[10px] text-muted-foreground/80 uppercase flex items-center gap-1 font-normal lowercase">
-                    <Lock className="size-2.5" /> env fallback active
-                  </span>
-                </label>
-                <Input
-                  type="password"
-                  placeholder="Masukkan API Key..."
-                  value={apiKey}
-                  onChange={e => {
-                    setApiKey(e.target.value);
-                  }}
-                  onBlur={e => {
-                    if (e.target.value.trim().length > 10) {
-                      toast.success("✓ API Key disimpan di sesi ini.");
-                    }
-                  }}
-                  className="bg-background border-border text-foreground text-xs h-9 focus:border-blue-500/60 transition-colors"
-                />
-              </div>
-
-              {/* Base URL (only for providers that need it) */}
-              {(() => {
-                const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
-                const pInfo = providers.find((p: any) => p.id === provider);
-                const needsBaseUrl = pInfo?.requires_base_url || provider === "custom" || provider === "9router";
-                if (!needsBaseUrl) return null;
-                return (
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Base URL Endpoint</label>
-                    <Input
-                      placeholder="e.g. http://localhost:20128/v1"
-                      value={baseUrl}
-                      onChange={e => setBaseUrl(e.target.value)}
-                      className="bg-background border-border text-foreground text-xs h-9 focus:border-blue-500/60 transition-colors"
-                    />
-                  </div>
-                );
-              })()}
-
-              {/* Timeout API */}
-              <div className="space-y-2 pt-1">
-                <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Timeout API</label>
-                  <span className="text-xs text-blue-400 font-semibold">{timeout} detik</span>
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
-                <Slider
-                  min={30}
-                  max={600}
-                  step={10}
-                  value={[timeout]}
-                  onValueChange={(v) => setTimeoutVal(typeof v === "number" ? v : (v as readonly number[])[0])}
-                  className="py-1.5 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
-                />
-              </div>
 
-              {/* Test Connection Button */}
-              <div className="pt-2 flex flex-col gap-2">
-                <Button
-                  onClick={handleTestConnection}
-                  disabled={testLoading}
-                  variant="outline"
-                  className="border-border hover:bg-accent text-xs font-semibold h-9.5 text-foreground w-full transition-colors"
-                >
-                  {testLoading ? (
+                {/* API Key */}
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
+                    <span>API Key</span>
+                    <span className="text-[10px] text-muted-foreground/80 uppercase flex items-center gap-1 font-normal lowercase">
+                      <Lock className="size-2.5" /> env fallback active
+                    </span>
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="Masukkan API Key..."
+                    value={apiKey}
+                    onChange={e => {
+                      setApiKey(e.target.value);
+                    }}
+                    onBlur={e => {
+                      if (e.target.value.trim().length > 10) {
+                        toast.success("✓ API Key disimpan di sesi ini.");
+                      }
+                    }}
+                    className="bg-background border-border text-foreground text-xs h-9 focus:border-blue-500/60 transition-colors"
+                  />
+                </div>
+
+                {/* Base URL (only for providers that need it) */}
+                {(() => {
+                  const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+                  const pInfo = providers.find((p: any) => p.id === provider);
+                  const needsBaseUrl = pInfo?.requires_base_url || provider === "custom" || provider === "9router";
+                  if (!needsBaseUrl) return null;
+                  return (
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Base URL Endpoint</label>
+                      <Input
+                        placeholder="e.g. http://localhost:20128/v1"
+                        value={baseUrl}
+                        onChange={e => setBaseUrl(e.target.value)}
+                        className="bg-background border-border text-foreground text-xs h-9 focus:border-blue-500/60 transition-colors"
+                      />
+                    </div>
+                  );
+                })()}
+
+                {/* Timeout API */}
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-semibold text-foreground/90 uppercase tracking-wider">Timeout API</label>
+                    <span className="text-xs text-blue-400 font-semibold">{timeout} detik</span>
+                  </div>
+                  <Slider
+                    min={30}
+                    max={600}
+                    step={10}
+                    value={[timeout]}
+                    onValueChange={(v) => setTimeoutVal(typeof v === "number" ? v : (v as readonly number[])[0])}
+                    className="py-1.5 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-400"
+                  />
+                </div>
+
+                {/* Test Connection Button */}
+                <div className="pt-2 flex flex-col gap-2">
+                  <Button
+                    onClick={handleTestConnection}
+                    disabled={testLoading}
+                    variant="outline"
+                    className="border-border hover:bg-accent text-xs font-semibold h-9.5 text-foreground w-full transition-colors"
+                  >
+                    {testLoading ? (
+                      <>
+                        <Loader2 className="mr-2 size-3 animate-spin" />
+                        Menghubungi API...
+                      </>
+                    ) : (
+                      <>
+                        <Activity className="mr-1.5 size-3" />
+                        Test Koneksi API
+                      </>
+                    )}
+                  </Button>
+                  {testResult && (
+                    <div className={`text-[11px] p-2.5 rounded-lg border flex items-start gap-2 ${testResult.ok
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                      : "bg-rose-950/20 border-rose-900/40 text-rose-400"
+                      }`}>
+                      {testResult.ok ? (
+                        <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
+                      ) : (
+                        <ShieldAlert className="size-4 shrink-0 mt-0.5" />
+                      )}
+                      <div className="leading-relaxed">
+                        <strong>{testResult.ok ? "Koneksi OK" : "Koneksi Gagal"}:</strong> {testResult.message}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Claude Beta / Reasoning Skills Expander */}
+            {showSkillsCard && (
+              <div className="azure-card">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Brain className="size-4 text-teal-400" />
+                  <h2 className="text-sm font-semibold text-foreground">{provider === "anthropic" ? "Skill Claude Tambahan" : "Fitur Agentic / Reasoning"}</h2>
+                </div>
+                <p className="text-xs text-muted-foreground mb-4">
+                  {provider === "anthropic" ? "Aktifkan kemampuan asinkron ekstra." : "Konfigurasi kemampuan penalaran (reasoning) model."}
+                </p>
+                <div className="space-y-4">
+                  {/* Web Search - Only for Anthropic */}
+                  {provider === "anthropic" && (
                     <>
-                      <Loader2 className="mr-2 size-3 animate-spin" />
-                      Menghubungi API...
-                    </>
-                  ) : (
-                    <>
-                      <Activity className="mr-1.5 size-3" />
-                      Test Koneksi API
+                      <div className="flex items-start gap-2.5">
+                        <Checkbox
+                          id="webSearch"
+                          checked={enableWebSearch}
+                          onCheckedChange={(val: boolean) => setEnableWebSearch(val)}
+                          className="mt-0.5 border-border"
+                        />
+                        <div className="space-y-1">
+                          <label htmlFor="webSearch" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                            <Search className="size-3 text-muted-foreground" />
+                            <span>Web Search (Riset Online)</span>
+                          </label>
+                          <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                            Mencari tren judul terbaru, riset kata kunci kompetitor, dan data terkini.
+                          </p>
+                        </div>
+                      </div>
+
+                      {enableWebSearch && (
+                        <div className="space-y-2 pl-6 pb-2">
+                          <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
+                            <span>Maks. Jumlah Pencarian</span>
+                            <span className="text-teal-400">{webSearchMaxUses} Kali</span>
+                          </div>
+                          <Slider
+                            min={1}
+                            max={10}
+                            step={1}
+                            value={[webSearchMaxUses]}
+                            onValueChange={(v) => setWebSearchMaxUses(typeof v === "number" ? v : (v as readonly number[])[0])}
+                            className="[&_[role=slider]]:bg-teal-500 [&_[role=slider]]:border-teal-400"
+                          />
+                        </div>
+                      )}
+
+                      <Separator className="bg-card" />
                     </>
                   )}
-                </Button>
-                {testResult && (
-                  <div className={`text-[11px] p-2.5 rounded-lg border flex items-start gap-2 ${testResult.ok
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                    : "bg-rose-950/20 border-rose-900/40 text-rose-400"
-                    }`}>
-                    {testResult.ok ? (
-                      <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
-                    ) : (
-                      <ShieldAlert className="size-4 shrink-0 mt-0.5" />
-                    )}
-                    <div className="leading-relaxed">
-                      <strong>{testResult.ok ? "Koneksi OK" : "Koneksi Gagal"}:</strong> {testResult.message}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Claude Beta / Reasoning Skills Expander */}
-          {showSkillsCard && (
-            <div className="azure-card">
+                  {/* Extended Thinking - For Anthropic or OpenAI Reasoning models */}
+                  {(provider === "anthropic" || isReasoningModel) && (
+                    <>
+                      <div className="flex items-start gap-2.5">
+                        <Checkbox
+                          id="thinking"
+                          checked={enableThinking}
+                          onCheckedChange={(val: boolean) => setEnableThinking(val)}
+                          className="mt-0.5 border-border"
+                        />
+                        <div className="space-y-1">
+                          <label htmlFor="thinking" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                            <Brain className="size-3 text-muted-foreground" />
+                            <span>{provider === "anthropic" ? "Extended Thinking" : "Reasoning Effort (Penalaran)"}</span>
+                          </label>
+                          <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                            {provider === "anthropic"
+                              ? "Claude bernalar lebih lambat, mendalam, dan eksplisit (reasoning)."
+                              : "Model menggunakan waktu tambahan untuk menganalisis dan bernalar mendalam."}
+                          </p>
+                        </div>
+                      </div>
+
+                      {enableThinking && (
+                        <div className="space-y-2 pl-6 pb-2">
+                          <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
+                            <span>{provider === "anthropic" ? "Budget Token Berpikir" : "Reasoning Effort"}</span>
+                            <span className="text-teal-400 font-medium">
+                              {provider === "anthropic"
+                                ? `${thinkingBudget} Token`
+                                : thinkingBudget <= 2000
+                                  ? "Low (Rendah)"
+                                  : thinkingBudget <= 8000
+                                    ? "Medium (Sedang)"
+                                    : "High (Tinggi)"}
+                            </span>
+                          </div>
+                          <Slider
+                            min={provider === "anthropic" ? 1024 : 1000}
+                            max={provider === "anthropic" ? 16000 : 9000}
+                            step={provider === "anthropic" ? 1024 : 4000}
+                            value={[thinkingBudget]}
+                            onValueChange={(v) => setThinkingBudget(typeof v === "number" ? v : (v as readonly number[])[0])}
+                            className="[&_[role=slider]]:bg-teal-500 [&_[role=slider]]:border-teal-400"
+                          />
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Code Execution - Only for Anthropic */}
+                  {provider === "anthropic" && (
+                    <>
+                      <Separator className="bg-card" />
+                      <div className="flex items-start gap-2.5">
+                        <Checkbox
+                          id="codeExec"
+                          checked={enableCodeExecution}
+                          onCheckedChange={(val: boolean) => setEnableCodeExecution(val)}
+                          className="mt-0.5 border-border"
+                        />
+                        <div className="space-y-1">
+                          <label htmlFor="codeExec" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
+                            <FileCode2 className="size-3 text-muted-foreground" />
+                            <span>Code Execution (Python Sandbox)</span>
+                          </label>
+                          <p className="text-[10px] text-muted-foreground/80 leading-normal">
+                            Verifikasi hitungan durasi shot secara akurat lewat runtime Python sandbox.
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* YouTube Proxy Configuration */}
+            <div className="azure-card rounded-2xl p-6 ">
               <div className="flex items-center gap-2 mb-1.5">
-                <Brain className="size-4 text-teal-400" />
-                <h2 className="text-sm font-semibold text-foreground">{provider === "anthropic" ? "Skill Claude Tambahan" : "Fitur Agentic / Reasoning"}</h2>
+                <Compass className="size-4 text-emerald-400" />
+                <h2 className="text-sm font-semibold text-foreground">Proxy YouTube (Anti-Blocking)</h2>
               </div>
               <p className="text-xs text-muted-foreground mb-4">
-                {provider === "anthropic" ? "Aktifkan kemampuan asinkron ekstra." : "Konfigurasi kemampuan penalaran (reasoning) model."}
+                Mengurangi resiko rate-limit IP saat scraping transkrip.
               </p>
               <div className="space-y-4">
-                {/* Web Search - Only for Anthropic */}
-                {provider === "anthropic" && (
-                  <>
-                    <div className="flex items-start gap-2.5">
-                      <Checkbox
-                        id="webSearch"
-                        checked={enableWebSearch}
-                        onCheckedChange={(val: boolean) => setEnableWebSearch(val)}
-                        className="mt-0.5 border-border"
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-muted-foreground">Proxy Mode</label>
+                  <Select value={proxyMode} onValueChange={(v) => v && setProxyMode(v)}>
+                    <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
+                      <SelectValue placeholder="Pilih Proxy">
+                        {proxyMode === "none" ? "Tidak pakai proxy" : proxyMode === "webshare" ? "Webshare Proxy" : "HTTP/HTTPS Proxy"}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[200px]">
+                      <SelectItem value="none">Tidak pakai proxy</SelectItem>
+                      <SelectItem value="webshare">Webshare (rotating residential)</SelectItem>
+                      <SelectItem value="generic">Proxy HTTP/HTTPS biasa</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {proxyMode === "generic" && (
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-muted-foreground">HTTP Proxy URL</label>
+                      <Input
+                        placeholder="http://proxy-ip:port"
+                        value={proxyHttpUrl}
+                        onChange={e => setProxyHttpUrl(e.target.value)}
+                        className="bg-background border-border text-foreground text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
                       />
-                      <div className="space-y-1">
-                        <label htmlFor="webSearch" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                          <Search className="size-3 text-muted-foreground" />
-                          <span>Web Search (Riset Online)</span>
-                        </label>
-                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                          Mencari tren judul terbaru, riset kata kunci kompetitor, dan data terkini.
-                        </p>
-                      </div>
                     </div>
-
-                    {enableWebSearch && (
-                      <div className="space-y-2 pl-6 pb-2">
-                        <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                          <span>Maks. Jumlah Pencarian</span>
-                          <span className="text-teal-400">{webSearchMaxUses} Kali</span>
-                        </div>
-                        <Slider
-                          min={1}
-                          max={10}
-                          step={1}
-                          value={[webSearchMaxUses]}
-                          onValueChange={(v) => setWebSearchMaxUses(typeof v === "number" ? v : (v as readonly number[])[0])}
-                          className="[&_[role=slider]]:bg-teal-500 [&_[role=slider]]:border-teal-400"
-                        />
-                      </div>
-                    )}
-
-                    <Separator className="bg-card" />
-                  </>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-muted-foreground">HTTPS Proxy URL</label>
+                      <Input
+                        placeholder="https://proxy-ip:port"
+                        value={proxyHttpsUrl}
+                        onChange={e => setProxyHttpsUrl(e.target.value)}
+                        className="bg-background border-border text-foreground text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
+                      />
+                    </div>
+                  </div>
                 )}
 
-                {/* Extended Thinking - For Anthropic or OpenAI Reasoning models */}
-                {(provider === "anthropic" || isReasoningModel) && (
-                  <>
-                    <div className="flex items-start gap-2.5">
-                      <Checkbox
-                        id="thinking"
-                        checked={enableThinking}
-                        onCheckedChange={(val: boolean) => setEnableThinking(val)}
-                        className="mt-0.5 border-border"
+                {proxyMode === "webshare" && (
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-muted-foreground">Username Webshare</label>
+                      <Input
+                        placeholder="Webshare username"
+                        value={proxyWebshareUser}
+                        onChange={e => setProxyWebshareUser(e.target.value)}
+                        className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
                       />
-                      <div className="space-y-1">
-                        <label htmlFor="thinking" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                          <Brain className="size-3 text-muted-foreground" />
-                          <span>{provider === "anthropic" ? "Extended Thinking" : "Reasoning Effort (Penalaran)"}</span>
-                        </label>
-                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                          {provider === "anthropic"
-                            ? "Claude bernalar lebih lambat, mendalam, dan eksplisit (reasoning)."
-                            : "Model menggunakan waktu tambahan untuk menganalisis dan bernalar mendalam."}
-                        </p>
-                      </div>
                     </div>
-
-                    {enableThinking && (
-                      <div className="space-y-2 pl-6 pb-2">
-                        <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                          <span>{provider === "anthropic" ? "Budget Token Berpikir" : "Reasoning Effort"}</span>
-                          <span className="text-teal-400 font-medium">
-                            {provider === "anthropic"
-                              ? `${thinkingBudget} Token`
-                              : thinkingBudget <= 2000
-                                ? "Low (Rendah)"
-                                : thinkingBudget <= 8000
-                                  ? "Medium (Sedang)"
-                                  : "High (Tinggi)"}
-                          </span>
-                        </div>
-                        <Slider
-                          min={provider === "anthropic" ? 1024 : 1000}
-                          max={provider === "anthropic" ? 16000 : 9000}
-                          step={provider === "anthropic" ? 1024 : 4000}
-                          value={[thinkingBudget]}
-                          onValueChange={(v) => setThinkingBudget(typeof v === "number" ? v : (v as readonly number[])[0])}
-                          className="[&_[role=slider]]:bg-teal-500 [&_[role=slider]]:border-teal-400"
-                        />
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {/* Code Execution - Only for Anthropic */}
-                {provider === "anthropic" && (
-                  <>
-                    <Separator className="bg-card" />
-                    <div className="flex items-start gap-2.5">
-                      <Checkbox
-                        id="codeExec"
-                        checked={enableCodeExecution}
-                        onCheckedChange={(val: boolean) => setEnableCodeExecution(val)}
-                        className="mt-0.5 border-border"
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-muted-foreground">Password Webshare</label>
+                      <Input
+                        type="password"
+                        placeholder="Webshare password"
+                        value={proxyWebsharePass}
+                        onChange={e => setProxyWebsharePass(e.target.value)}
+                        className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
                       />
-                      <div className="space-y-1">
-                        <label htmlFor="codeExec" className="text-xs font-semibold text-foreground/90 cursor-pointer flex items-center gap-1.5">
-                          <FileCode2 className="size-3 text-muted-foreground" />
-                          <span>Code Execution (Python Sandbox)</span>
-                        </label>
-                        <p className="text-[10px] text-muted-foreground/80 leading-normal">
-                          Verifikasi hitungan durasi shot secara akurat lewat runtime Python sandbox.
-                        </p>
-                      </div>
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
-          )}
 
-          {/* YouTube Proxy Configuration */}
-          <div className="azure-card rounded-2xl p-6 ">
-            <div className="flex items-center gap-2 mb-1.5">
-              <Compass className="size-4 text-emerald-400" />
-              <h2 className="text-sm font-semibold text-foreground">Proxy YouTube (Anti-Blocking)</h2>
-            </div>
-            <p className="text-xs text-muted-foreground mb-4">
-              Mengurangi resiko rate-limit IP saat scraping transkrip.
-            </p>
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-muted-foreground">Proxy Mode</label>
-                <Select value={proxyMode} onValueChange={(v) => v && setProxyMode(v)}>
-                  <SelectTrigger className="w-full bg-background border-border text-foreground h-9 text-xs text-foreground font-semibold hover:bg-muted transition-colors">
-                    <SelectValue placeholder="Pilih Proxy">
-                      {proxyMode === "none" ? "Tidak pakai proxy" : proxyMode === "webshare" ? "Webshare Proxy" : "HTTP/HTTPS Proxy"}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border text-foreground font-semibold text-xs shadow-xl min-w-[200px]">
-                    <SelectItem value="none">Tidak pakai proxy</SelectItem>
-                    <SelectItem value="webshare">Webshare (rotating residential)</SelectItem>
-                    <SelectItem value="generic">Proxy HTTP/HTTPS biasa</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {proxyMode === "generic" && (
-                <div className="space-y-3">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-muted-foreground">HTTP Proxy URL</label>
-                    <Input
-                      placeholder="http://proxy-ip:port"
-                      value={proxyHttpUrl}
-                      onChange={e => setProxyHttpUrl(e.target.value)}
-                      className="bg-background border-border text-foreground text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-muted-foreground">HTTPS Proxy URL</label>
-                    <Input
-                      placeholder="https://proxy-ip:port"
-                      value={proxyHttpsUrl}
-                      onChange={e => setProxyHttpsUrl(e.target.value)}
-                      className="bg-background border-border text-foreground text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {proxyMode === "webshare" && (
-                <div className="space-y-3">
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-muted-foreground">Username Webshare</label>
-                    <Input
-                      placeholder="Webshare username"
-                      value={proxyWebshareUser}
-                      onChange={e => setProxyWebshareUser(e.target.value)}
-                      className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-muted-foreground">Password Webshare</label>
-                    <Input
-                      type="password"
-                      placeholder="Webshare password"
-                      value={proxyWebsharePass}
-                      onChange={e => setProxyWebsharePass(e.target.value)}
-                      className="bg-background border-border text-foreground font-semibold text-xs h-9.5 focus:border-blue-500/60 transition-colors"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleTestConnection}
-              disabled={testLoading}
-              className="text-xs h-9 px-4 border-blue-500/40 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
-            >
-              {testLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
-              Tes API Key
-            </Button>
-
-            <div className="flex items-center gap-2">
+            <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
               <Button
+                type="button"
                 variant="outline"
-                onClick={() => setIsSettingsOpen(false)}
-                className="text-xs h-9 px-4"
+                onClick={handleTestConnection}
+                disabled={testLoading}
+                className="text-xs h-9 px-4 border-blue-500/40 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
               >
-                Batal
+                {testLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
+                Tes API Key
               </Button>
-              <Button
-                onClick={() => {
-                  toast.success("Konfigurasi AI berhasil disimpan!");
-                  setIsSettingsOpen(false);
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-9 px-5 font-semibold shadow-md"
-              >
-                Simpan Konfigurasi
-              </Button>
-            </div>
-          </div>
 
-        </div>
-      </DialogContent>
-    </Dialog >
-    <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-      <SheetContent side="right" className="w-[400px] sm:w-[540px] bg-card border-l-border/40 p-0 flex flex-col">
-        <SheetHeader className="p-6 border-b border-border/40 bg-background/50">
-          <SheetTitle className="flex items-center gap-2 text-blue-400"><History className="size-5" /> Riwayat Analisis</SheetTitle>
-          <SheetDescription>Akses cepat ke analisis yang pernah dilakukan.</SheetDescription>
-        </SheetHeader>
-        <div className="flex-1 overflow-y-auto p-6">
-          {/* Riwayat Analisis Card */}
-          <div className="azure-card rounded-2xl p-6 ">
-            <div className="flex items-center justify-between mb-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-foreground">
-                  <History className="size-4 text-blue-400" />
-                  <h2 className="text-sm font-semibold font-sans tracking-tight">Riwayat Analisis</h2>
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  Akses cepat ke analisis sebelumnya.
-                </p>
-              </div>
-              {historyList.length > 0 && (
+              <div className="flex items-center gap-2">
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={clearHistory}
-                  title="Hapus Semua Riwayat"
-                  className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  variant="outline"
+                  onClick={() => setIsSettingsOpen(false)}
+                  className="text-xs h-9 px-4"
                 >
-                  <Trash2 className="size-3.5" />
+                  Batal
                 </Button>
-              )}
+                <Button
+                  onClick={() => {
+                    toast.success("Konfigurasi AI berhasil disimpan!");
+                    setIsSettingsOpen(false);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-9 px-5 font-semibold shadow-md"
+                >
+                  Simpan Konfigurasi
+                </Button>
+              </div>
             </div>
-            <div className="space-y-2">
-              {historyList.length === 0 ? (
-                <div className="text-center py-6 text-xs text-muted-foreground border border-dashed border-border/60 rounded-lg">
-                  Belum ada riwayat analisis.
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
-                  {historyList.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => loadHistoryItem(item)}
-                      className="group flex items-center justify-between p-2.5 rounded-lg border border-border/40 hover:border-blue-500/50 bg-background/50 hover:bg-blue-500/5 cursor-pointer transition-all duration-200"
-                    >
-                      <div className="space-y-1 pr-2 min-w-0 flex-1">
-                        <div className="text-xs font-semibold text-foreground/90 truncate group-hover:text-blue-400 transition-colors">
-                          {item.title}
-                        </div>
-                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                          <span className="bg-muted px-1.5 py-0.5 rounded text-zinc-400 font-medium">
-                            {item.channel_dna === "suara_filsuf" ? "Suara Filsuf" : item.channel_dna === "nalar_senyap" ? "Nalar Senyap" : "Tutur Kyai"}
-                          </span>
-                          <span>•</span>
-                          <span>{item.timestamp}</span>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => deleteHistoryItem(item.id, e)}
-                        className="h-6 w-6 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all rounded"
-                      >
-                        <Trash2 className="size-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
 
-        </div>
-      </SheetContent>
-    </Sheet>
+          </div>
+        </DialogContent>
+      </Dialog >
+      <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+        <SheetContent side="right" className="w-[400px] sm:w-[540px] bg-card border-l-border/40 p-0 flex flex-col">
+          <SheetHeader className="p-6 border-b border-border/40 bg-background/50">
+            <SheetTitle className="flex items-center gap-2 text-blue-400"><History className="size-5" /> Riwayat Analisis</SheetTitle>
+            <SheetDescription>Akses cepat ke analisis yang pernah dilakukan.</SheetDescription>
+          </SheetHeader>
+          <div className="flex-1 overflow-y-auto p-6">
+            {/* Riwayat Analisis Card */}
+            <div className="azure-card rounded-2xl p-6 ">
+              <div className="flex items-center justify-between mb-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-foreground">
+                    <History className="size-4 text-blue-400" />
+                    <h2 className="text-sm font-semibold font-sans tracking-tight">Riwayat Analisis</h2>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Akses cepat ke analisis sebelumnya.
+                  </p>
+                </div>
+                {historyList.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={clearHistory}
+                    title="Hapus Semua Riwayat"
+                    className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                )}
+              </div>
+              <div className="space-y-2">
+                {historyList.length === 0 ? (
+                  <div className="text-center py-6 text-xs text-muted-foreground border border-dashed border-border/60 rounded-lg">
+                    Belum ada riwayat analisis.
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                    {historyList.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => loadHistoryItem(item)}
+                        className="group flex items-center justify-between p-2.5 rounded-lg border border-border/40 hover:border-blue-500/50 bg-background/50 hover:bg-blue-500/5 cursor-pointer transition-all duration-200"
+                      >
+                        <div className="space-y-1 pr-2 min-w-0 flex-1">
+                          <div className="text-xs font-semibold text-foreground/90 truncate group-hover:text-blue-400 transition-colors">
+                            {item.title}
+                          </div>
+                          <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                            <span className="bg-muted px-1.5 py-0.5 rounded text-zinc-400 font-medium">
+                              {item.channel_dna === "suara_filsuf" ? "Suara Filsuf" : item.channel_dna === "nalar_senyap" ? "Nalar Senyap" : "Tutur Kyai"}
+                            </span>
+                            <span>•</span>
+                            <span>{item.timestamp}</span>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => deleteHistoryItem(item.id, e)}
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all rounded"
+                        >
+                          <Trash2 className="size-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </SheetContent>
+      </Sheet>
     </div >
   );
 
