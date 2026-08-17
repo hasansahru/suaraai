@@ -1,0 +1,126 @@
+{
+  "default_provider": "custom",
+  "providers": [
+    {
+      "id": "anthropic",
+      "label": "🟣 Anthropic (Claude langsung)",
+      "description": "Memanggil Claude langsung lewat Anthropic API. Butuh ANTHROPIC_API_KEY.",
+      "mode": "anthropic",
+      "requires_base_url": false,
+      "default_base_url": "",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "allow_custom_model": true,
+      "models": [
+        {
+          "id": "claude-sonnet-4-6",
+          "label": "Claude Sonnet 4.6 (Rekomendasi)"
+        },
+        {
+          "id": "claude-opus-4-7",
+          "label": "Claude Opus 4.7 (Paling Mendalam)"
+        },
+        {
+          "id": "claude-haiku-4-5-20251001",
+          "label": "Claude Haiku 4.5 (Paling Cepat)"
+        }
+      ]
+    },
+
+    {
+      "id": "openai",
+      "label": "🔵 OpenAI (GPT langsung)",
+      "description": "Memanggil model GPT langsung lewat OpenAI API. Butuh OPENAI_API_KEY.",
+      "mode": "openai_compatible",
+      "requires_base_url": false,
+      "default_base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "allow_custom_model": true,
+      "models": [
+        {
+          "id": "gpt-5.2",
+          "label": "GPT-5.2 (Rekomendasi)"
+        },
+        {
+          "id": "gpt-5.2-mini",
+          "label": "GPT-5.2 Mini (Lebih Cepat/Murah)"
+        },
+        {
+          "id": "gpt-5.2-pro",
+          "label": "GPT-5.2 Pro (Paling Mendalam)"
+        }
+      ]
+    },
+    {
+      "id": "gemini",
+      "label": "🟡 Google Gemini (langsung)",
+      "description": "Memanggil Gemini langsung lewat endpoint OpenAI-compatible Google. Butuh GEMINI_API_KEY.",
+      "mode": "openai_compatible",
+      "requires_base_url": false,
+      "default_base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "api_key_env": "GEMINI_API_KEY",
+      "allow_custom_model": true,
+      "models": [
+        {
+          "id": "gemini-3.5-flash",
+          "label": "Gemini 3.5 Flash (Rekomendasi — GA, paling seimbang)"
+        },
+        {
+          "id": "gemini-3.1-pro",
+          "label": "Gemini 3.1 Pro (Paling Mendalam)"
+        },
+        {
+          "id": "gemini-3.1-flash-lite",
+          "label": "Gemini 3.1 Flash-Lite (Paling Cepat/Murah)"
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "label": "⚪ 9Router AI Proxy (ai.sahru.my.id)",
+      "description": "Proxy AI self-hosted lewat 9Router. Mendukung multi-provider (Gemini, Claude, GPT) dengan satu API key.",
+      "mode": "openai_compatible",
+      "requires_base_url": true,
+      "default_base_url": "https://ai.sahru.my.id/v1",
+      "api_key_env": "CUSTOM_AI_API_KEY",
+      "allow_custom_model": true,
+      "models": [
+        {
+          "id": "Combo-maut",
+          "label": "🔥 Combo Maut (Auto-best, Rekomendasi)"
+        },
+        {
+          "id": "ag/gemini-3.5-flash-high",
+          "label": "Gemini 3.5 Flash High (AG)"
+        },
+        {
+          "id": "ag/gemini-3.6-flash-high",
+          "label": "Gemini 3.6 Flash High (AG, Terbaru)"
+        },
+        {
+          "id": "ag/claude-sonnet-4-6",
+          "label": "Claude Sonnet 4.6 (AG)"
+        },
+        {
+          "id": "ag/gemini-3.1-pro-low",
+          "label": "Gemini 3.1 Pro Low (AG)"
+        },
+        {
+          "id": "kr/claude-sonnet-5",
+          "label": "Claude Sonnet 5 (KR)"
+        },
+        {
+          "id": "kr/claude-opus-4.7",
+          "label": "Claude Opus 4.7 (KR, Premium)"
+        },
+        {
+          "id": "kr/gpt-5.6-sol",
+          "label": "GPT 5.6 Sol (KR)"
+        },
+        {
+          "id": "gemini/gemini-3.6-flash",
+          "label": "Gemini 3.6 Flash (Direct)"
+        }
+      ]
+    }
+  ]
+}

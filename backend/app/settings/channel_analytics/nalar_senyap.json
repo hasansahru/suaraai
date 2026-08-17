@@ -1,0 +1,117 @@
+{
+  "channel_id": "nalar_senyap",
+  "source_files": [
+    "Nalar Senyap - Data tabel.csv"
+  ],
+  "total_videos_analyzed": 230,
+  "avg_ctr_pct": 3.1375,
+  "avg_retention_pct": null,
+  "avg_view_duration_seconds": null,
+  "avg_views_per_video": 66.29629629629629,
+  "avg_impressions_per_video": 901.3652173913043,
+  "notes": [
+    "Video terbaik (\"Menikah Berarti Kehilangan Kebebasan…? #shorts\") punya views 29.3x di atas rata-rata — analisis pola hook, topik, dan thumbnail video ini untuk direplikasi.",
+    "CTR tertinggi dicapai oleh \"Ndak Penting Nasabmu Turunan Siapa, Kalau Kamu Sen\" (50.0%) — jauh di atas rata-rata; replikasi pola judul/thumbnail video ini."
+  ],
+  "top_videos_by_views": [
+    {
+      "title": "Menikah Berarti Kehilangan Kebebasan…? #shorts",
+      "views": 1943.0,
+      "watch_time_hours": 3.1856,
+      "impressions": 43.0,
+      "ctr_pct": 0.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Alasan Hubungan Jadi Hambar #shorts",
+      "views": 1289.0,
+      "watch_time_hours": 4.0594,
+      "impressions": 32.0,
+      "ctr_pct": 0.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 2.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Kamu Bisa Berbuat Baik… Tapi Tetap Tidak Bermoral",
+      "views": 1063.0,
+      "watch_time_hours": 143.8085,
+      "impressions": 25643.0,
+      "ctr_pct": 3.31,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 4.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Berhenti Mencari Orang yang Tepat #shorts",
+      "views": 992.0,
+      "watch_time_hours": 3.9903,
+      "impressions": 49.0,
+      "ctr_pct": 2.04,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Musuh Terberat Itu Bukan Orang Lain, Tapi Dirimu Sendiri",
+      "views": 867.0,
+      "watch_time_hours": 205.59,
+      "impressions": 45299.0,
+      "ctr_pct": 3.4,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 4.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_ctr": [
+    {
+      "title": "Ndak Penting Nasabmu Turunan Siapa, Kalau Kamu Sendiri Gak Bisa Apa-apa - Gus Kautsar #santrikyai",
+      "views": 7.0,
+      "watch_time_hours": 0.0192,
+      "impressions": 2.0,
+      "ctr_pct": 50.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Kalau Doa Hati-Hati - Gus Baha #santrikyai #gusbaha",
+      "views": 3.0,
+      "watch_time_hours": 0.008,
+      "impressions": 3.0,
+      "ctr_pct": 33.33,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Gus Baha | Pentingnya Qiyamullail #santrikyai #gusbaha #gusbahaterbaru",
+      "views": 2.0,
+      "watch_time_hours": 0.0178,
+      "impressions": 3.0,
+      "ctr_pct": 33.33,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_retention": []
+}

@@ -1,0 +1,117 @@
+{
+  "channel_id": "suara_filsuf",
+  "source_files": [
+    "Suara Filsuf -  28 Hari.csv"
+  ],
+  "total_videos_analyzed": 352,
+  "avg_ctr_pct": 4.61198275862069,
+  "avg_retention_pct": null,
+  "avg_view_duration_seconds": null,
+  "avg_views_per_video": 144.8858858858859,
+  "avg_impressions_per_video": 988.4801136363636,
+  "notes": [
+    "Video terbaik (\"Matikan Egomu Sebelum Hidupmu Dipenuhi Penyesalan\") punya views 25.6x di atas rata-rata — analisis pola hook, topik, dan thumbnail video ini untuk direplikasi.",
+    "CTR tertinggi dicapai oleh \"Nasihat Move On Paling Logis dari Filsuf – Dr. Fah\" (25.0%) — jauh di atas rata-rata; replikasi pola judul/thumbnail video ini."
+  ],
+  "top_videos_by_views": [
+    {
+      "title": "Matikan Egomu Sebelum Hidupmu Dipenuhi Penyesalan",
+      "views": 3711.0,
+      "watch_time_hours": 2048.7141,
+      "impressions": 48439.0,
+      "ctr_pct": 7.25,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 12.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Imam Ghazali: Musuh Terbesar Hidupmu Ternyata Dirimu Sendiri – Dr. Fahruddin Faiz",
+      "views": 2880.0,
+      "watch_time_hours": 2007.6571,
+      "impressions": 31060.0,
+      "ctr_pct": 8.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 11.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Kamu Bukan Gak Laku #shorts",
+      "views": 2262.0,
+      "watch_time_hours": 12.2664,
+      "impressions": 554.0,
+      "ctr_pct": 6.68,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 1.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Jangan Terlanjur Rusak #shorts",
+      "views": 1823.0,
+      "watch_time_hours": 8.241,
+      "impressions": 379.0,
+      "ctr_pct": 4.49,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 2.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Setiap Orang Punya Perangnya #shorts",
+      "views": 1738.0,
+      "watch_time_hours": 10.7994,
+      "impressions": 240.0,
+      "ctr_pct": 2.5,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 4.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_ctr": [
+    {
+      "title": "Nasihat Move On Paling Logis dari Filsuf – Dr. Fahruddin Faiz | Suara Filsuf",
+      "views": 4.0,
+      "watch_time_hours": 0.0324,
+      "impressions": 4.0,
+      "ctr_pct": 25.0,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Menua Bahagia: Rahasia Hidup Tenang di Usia Senja – Dr. Fahruddin Faiz",
+      "views": 23.0,
+      "watch_time_hours": 17.6039,
+      "impressions": 139.0,
+      "ctr_pct": 16.55,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    },
+    {
+      "title": "Rahasia Paradoks Hedonisme: Kenapa Bahagia Malah Sulit Diraih? – Dr. Fahruddin Faiz",
+      "views": 26.0,
+      "watch_time_hours": 16.6738,
+      "impressions": 119.0,
+      "ctr_pct": 15.13,
+      "avg_duration_seconds": null,
+      "avg_pct_viewed": null,
+      "subscribers_gained": 0.0,
+      "likes": null,
+      "comments": null
+    }
+  ],
+  "top_videos_by_retention": []
+}
