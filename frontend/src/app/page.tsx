@@ -2801,23 +2801,36 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-border flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
             <Button
+              type="button"
               variant="outline"
-              onClick={() => setIsSettingsOpen(false)}
-              className="text-xs h-9 px-4"
+              onClick={handleTestConnection}
+              disabled={testLoading}
+              className="text-xs h-9 px-4 border-blue-500/40 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
             >
-              Batal
+              {testLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
+              Tes API Key
             </Button>
-            <Button
-              onClick={() => {
-                toast.success("Konfigurasi AI berhasil disimpan!");
-                setIsSettingsOpen(false);
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-9 px-5 font-semibold shadow-md"
-            >
-              Simpan Konfigurasi
-            </Button>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsSettingsOpen(false)}
+                className="text-xs h-9 px-4"
+              >
+                Batal
+              </Button>
+              <Button
+                onClick={() => {
+                  toast.success("Konfigurasi AI berhasil disimpan!");
+                  setIsSettingsOpen(false);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-9 px-5 font-semibold shadow-md"
+              >
+                Simpan Konfigurasi
+              </Button>
+            </div>
           </div>
 
         </div>

@@ -231,10 +231,20 @@ export function AnalysisResultPanel({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Target Audience */}
                         <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                <Target className="w-4 h-4 text-indigo-500" />
-                                Target Audiens & Psikologi
-                            </h3>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                    <Target className="w-4 h-4 text-indigo-500" />
+                                    Target Audiens & Psikologi
+                                </h3>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleCopy(String(isShorts ? activeShot.target_audiens : videoPanjang.target_audiens || "Semua audiens"), "audience")}
+                                >
+                                    {copiedKey === "audience" ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
+                                </Button>
+                            </div>
                             <div className="space-y-3 text-xs">
                                 <div className="bg-muted/20 p-3 rounded-xl border border-border/30">
                                     <span className="font-semibold text-foreground block mb-1">Demografi & Niche:</span>
@@ -245,298 +255,401 @@ export function AnalysisResultPanel({
 
                         {/* Content Strategy Overview */}
                         <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                <TrendingUp className="w-4 h-4 text-emerald-500" />
-                                Strategi Retensi & Engagement
-                            </h3>
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4 text-emerald-500" />
+                                    Strategi Retensi & Engagement
+                                </h3>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleCopy(String(isShorts ? activeShot.strategi_konten?.pemicu_emosi : videoPanjang.strategi_konten?.pemicu_emosi || "Rasa ingin tahu"), "strategy")}
+                                >
+                                    {copiedKey === "strategy" ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
+                                </Button>
+                            </div>
                             <div className="space-y-3 text-xs">
                                 <div className="bg-muted/20 p-3 rounded-xl border border-border/30">
-                                    <span className="font-semibold text-foreground block mb-1">Pemicu Emosi:</span>
-                                    <p className="text-muted-foreground">{isShorts ? activeShot.strategi_konten?.pemicu_emosi : videoPanjang.strategi_konten?.pemicu_emosi || "Rasa ingin tahu"}</p>
+                                    <span className="font-semibold text-foreground block mb-1">Pemicu Emosi Utama:</span>
+                                    <p className="text-muted-foreground">{isShorts ? activeShot.strategi_konten?.pemicu_emosi : videoPanjang.strategi_konten?.pemicu_emosi || "Rasa ingin tahu & eksistensial"}</p>
                                 </div>
                             </div>
                         </Card>
                     </div>
-                </TabsContent>
 
-                {/* TAB 3: SEGMEN */}
-                <TabsContent value="segmen" className="space-y-6">
-                    {isShorts ? (
-                        /* SHORTS SEGMENTS (Shots Picker) */
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                                {shots.map((shot: any, idx: number) => (
+                    {/* Jadwal Publikasi Optimasi Growth */}
+                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                <Clock className="w-4 h-4 text-amber-500" />
+                                Rekomendasi Jadwal Publikasi (Prime Time WIB)
+                            </h3>
+                            <Button
+                                variant="ghost"
+                                size"icon"
+                            className="h-8 w-8"
+                            onClick={() => handleCopy("Selasa - Kamis: 17:00 - 19:30 WIB | Sabtu - Minggu: 11:00 - 14:00 WIB", "jadwal")}
+                            >
+                            {copiedKey === "jadwal" ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
+                        </Button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div className="p-3.5 bg-muted/20 border border-border/30 rounded-xl space-y-1">
+                            <span className="font-bold text-foreground block">Hari Kerja (Senin - Jumat):</span>
+                            <p className="text-primary font-semibold">17:00 - 19:30 WIB</p>
+                            <p className="text-muted-foreground text-[11px]">Saat audiens selesai beraktivitas / pulang kerja & sekolah.</p>
+                        </div>
+                        <div className="p-3.5 bg-muted/20 border border-border/30 rounded-xl space-y-1">
+                            <span className="font-bold text-foreground block">Akhir Pekan (Sabtu - Minggu):</span>
+                            <p className="text-emerald-500 font-semibold">11:00 - 14:00 WIB & 18:30 WIB</p>
+                            <p className="text-muted-foreground text-[11px]">Jam istirahat siang dan waktu luang malam hari.</p>
+                        </div>
+                    </div>
+                </Card>
+            </TabsContent>
+
+            {/* TAB 3: SEGMEN */}
+            <TabsContent value="segmen" className="space-y-6">
+                {isShorts ? (
+                    /* SHORTS SEGMENTS (Shots Picker) */
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                            {shots.map((shot: any, idx: number) => (
+                                <Button
+                                    key={idx}
+                                    variant={selectedShotIndex === idx ? "default" : "outline"}
+                                    size="sm"
+                                    className="rounded-xl text-xs whitespace-nowrap"
+                                    onClick={() => setSelectedShotIndex(idx)}
+                                >
+                                    Shot #{idx + 1} ({shot.durasi_detik || 60}s)
+                                </Button>
+                            ))}
+                        </div>
+
+                        <Card className="p-6 space-y-6 bg-card/60 border-border/40">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                    <Film className="w-4 h-4 text-primary" />
+                                    Naskah Shot #{selectedShotIndex + 1}
+                                </h3>
+                                {onGenerateTTS && (
                                     <Button
-                                        key={idx}
-                                        variant={selectedShotIndex === idx ? "default" : "outline"}
                                         size="sm"
-                                        className="rounded-xl text-xs whitespace-nowrap"
-                                        onClick={() => setSelectedShotIndex(idx)}
+                                        variant="outline"
+                                        className="gap-2 text-xs rounded-xl"
+                                        onClick={() => onGenerateTTS(activeShot.naskah?.visual_audio?.map((va: any) => va.audio).join(" ") || "")}
                                     >
-                                        Shot #{idx + 1} ({shot.durasi_detik || 60}s)
+                                        <Volume2 className="w-3.5 h-3.5 text-primary" />
+                                        Generate TTS Voice
                                     </Button>
-                                ))}
+                                )}
                             </div>
 
-                            <Card className="p-6 space-y-6 bg-card/60 border-border/40">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                        <Film className="w-4 h-4 text-primary" />
-                                        Naskah Shot #{selectedShotIndex + 1}
-                                    </h3>
-                                    {onGenerateTTS && (
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            className="gap-2 text-xs rounded-xl"
-                                            onClick={() => onGenerateTTS(activeShot.naskah?.visual_audio?.map((va: any) => va.audio).join(" ") || "")}
-                                        >
-                                            <Volume2 className="w-3.5 h-3.5 text-primary" />
-                                            Generate TTS Voice
-                                        </Button>
-                                    )}
-                                </div>
-
-                                {/* Visual Audio Table / Blocks */}
-                                <div className="space-y-3">
-                                    {(activeShot.naskah?.visual_audio || []).map((va: any, i: number) => (
-                                        <div key={i} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
-                                            <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
-                                                <span className="text-primary">Klip #{i + 1} ({va.durasi_detik || 5}s)</span>
-                                                <span>{va.tipe_shot || "Medium Shot"}</span>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                                                <div className="bg-background/50 p-2.5 rounded-lg border border-border/20">
-                                                    <span className="font-semibold text-foreground block text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Visual Prompt</span>
-                                                    <p className="text-foreground/90">{va.visual}</p>
-                                                    {onGenerateImage && (
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            className="mt-2 h-7 text-[11px] px-2 text-primary hover:text-primary gap-1"
-                                                            onClick={() => onGenerateImage(va.visual)}
-                                                        >
-                                                            <Wand2 className="w-3 h-3" /> Gen Image
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                                <div className="bg-background/50 p-2.5 rounded-lg border border-border/20">
-                                                    <span className="font-semibold text-foreground block text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Voiceover / Audio</span>
-                                                    <p className="text-foreground/90">{va.audio}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </Card>
-                        </div>
-                    ) : (
-                        /* VIDEO PANJANG OUTLINE / SEGMEN */
-                        <Card className="p-6 space-y-6 bg-card/60 border-border/40">
-                            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                <Layers className="w-4 h-4 text-primary" />
-                                Struktur Segmen Video Panjang
-                            </h3>
+                            {/* Visual Audio Table / Blocks */}
                             <div className="space-y-3">
-                                {(videoPanjang.strategi_konten?.outline || []).map((chapter: any, idx: number) => (
-                                    <div key={idx} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
-                                        <div className="flex items-center justify-between text-xs font-bold text-foreground">
-                                            <span>Bab {idx + 1}: {chapter.judul_bab}</span>
-                                            <Badge variant="secondary" className="text-[10px]">{chapter.estimasi_durasi || "2m"}</Badge>
+                                {(activeShot.naskah?.visual_audio || []).map((va: any, i: number) => (
+                                    <div key={i} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
+                                        <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
+                                            <span className="text-primary">Klip #{i + 1} ({va.durasi_detik || 5}s)</span>
+                                            <span>{va.tipe_shot || "Medium Shot"}</span>
                                         </div>
-                                        <p className="text-xs text-muted-foreground">{chapter.deskripsi_singkat}</p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                            <div className="bg-background/50 p-2.5 rounded-lg border border-border/20">
+                                                <span className="font-semibold text-foreground block text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Visual Prompt</span>
+                                                <p className="text-foreground/90">{va.visual}</p>
+                                                {onGenerateImage && (
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        className="mt-2 h-7 text-[11px] px-2 text-primary hover:text-primary gap-1"
+                                                        onClick={() => onGenerateImage(va.visual)}
+                                                    >
+                                                        <Wand2 className="w-3 h-3" /> Gen Image
+                                                    </Button>
+                                                )}
+                                            </div>
+                                            <div className="bg-background/50 p-2.5 rounded-lg border border-border/20">
+                                                <span className="font-semibold text-foreground block text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Voiceover / Audio</span>
+                                                <p className="text-foreground/90">{va.audio}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </Card>
-                    )}
-                </TabsContent>
-
-                {/* TAB 4: JUDUL */}
-                <TabsContent value="judul" className="space-y-6">
-                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    </div>
+                ) : (
+                    /* VIDEO PANJANG OUTLINE / SEGMEN */
+                    <Card className="p-6 space-y-6 bg-card/60 border-border/40">
                         <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                            <Heading className="w-4 h-4 text-emerald-500" />
-                            Opsi Judul Video Rekomendasi
+                            <Layers className="w-4 h-4 text-primary" />
+                            Struktur Segmen Video Panjang
                         </h3>
-                        <div className="space-y-2.5">
-                            {((isShorts ? activeShot.judul?.opsi : videoPanjang.judul?.opsi) || []).map((op: string, idx: number) => (
-                                <div key={idx} className="p-3.5 bg-muted/20 border border-border/30 rounded-xl flex items-center justify-between gap-3 text-xs hover:border-primary/40 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[11px] font-bold flex items-center justify-center shrink-0">
-                                            {idx + 1}
-                                        </span>
-                                        <span className="font-medium text-foreground">{op}</span>
+                        <div className="space-y-3">
+                            {(videoPanjang.strategi_konten?.outline || []).map((chapter: any, idx: number) => (
+                                <div key={idx} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
+                                    <div className="flex items-center justify-between text-xs font-bold text-foreground">
+                                        <span>Bab {idx + 1}: {chapter.judul_bab}</span>
+                                        <Badge variant="secondary" className="text-[10px]">{chapter.estimasi_durasi || "2m"}</Badge>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-7 w-7 shrink-0"
-                                        onClick={() => handleCopy(op, `title_${idx}`)}
-                                    >
-                                        {copiedKey === `title_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                    </Button>
+                                    <p className="text-xs text-muted-foreground">{chapter.deskripsi_singkat}</p>
                                 </div>
                             ))}
                         </div>
                     </Card>
-                </TabsContent>
+                )}
+            </TabsContent>
 
-                {/* TAB 5: THUMBNAIL */}
-                <TabsContent value="thumbnail" className="space-y-6">
-                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                        <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                            <ImageIcon className="w-4 h-4 text-purple-500" />
-                            Konsep & Prompt Visual Thumbnail
-                        </h3>
-
-                        {(() => {
-                            const thumb = isShorts ? activeShot.thumbnail : videoPanjang.thumbnail;
-                            if (!thumb) return <p className="text-xs text-muted-foreground">Tidak ada data thumbnail.</p>;
-
-                            return (
-                                <div className="space-y-4 text-xs">
-                                    <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                        <span className="font-bold text-foreground block">Teks Pada Thumbnail:</span>
-                                        <p className="text-primary font-semibold text-sm bg-background/60 p-2.5 rounded-lg border border-border/20">{thumb.teks_thumbnail || "-"}</p>
-                                    </div>
-
-                                    <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                        <span className="font-bold text-foreground block">Deskripsi Visual:</span>
-                                        <p className="text-muted-foreground leading-relaxed">{thumb.deskripsi_visual || "-"}</p>
-                                    </div>
-
-                                    {thumb.prompt_ai && (
-                                        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-bold text-foreground">Prompt AI (Midjourney / Flux / DALL-E):</span>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-7 text-[11px] gap-1"
-                                                    onClick={() => handleCopy(thumb.prompt_ai, "thumb_prompt")}
-                                                >
-                                                    {copiedKey === "thumb_prompt" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Prompt
-                                                </Button>
-                                            </div>
-                                            <p className="text-xs font-mono bg-background/80 p-3 rounded-lg border border-border/30 text-foreground/90 break-words">{thumb.prompt_ai}</p>
-                                        </div>
-                                    )}
+            {/* TAB 4: JUDUL */}
+            <TabsContent value="judul" className="space-y-6">
+                <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <Heading className="w-4 h-4 text-emerald-500" />
+                        Opsi Judul Video Rekomendasi
+                    </h3>
+                    <div className="space-y-2.5">
+                        {((isShorts ? activeShot.judul?.opsi : videoPanjang.judul?.opsi) || []).map((op: string, idx: number) => (
+                            <div key={idx} className="p-3.5 bg-muted/20 border border-border/30 rounded-xl flex items-center justify-between gap-3 text-xs hover:border-primary/40 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[11px] font-bold flex items-center justify-center shrink-0">
+                                        {idx + 1}
+                                    </span>
+                                    <span className="font-medium text-foreground">{op}</span>
                                 </div>
-                            );
-                        })()}
-                    </Card>
-                </TabsContent>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7 shrink-0"
+                                    onClick={() => handleCopy(op, `title_${idx}`)}
+                                >
+                                    {copiedKey === `title_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </TabsContent>
 
-                {/* TAB 6: SEO */}
-                <TabsContent value="seo" className="space-y-6">
-                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                        <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                            <Search className="w-4 h-4 text-blue-500" />
-                            Optimasi SEO & Metadata
-                        </h3>
+            {/* TAB 5: THUMBNAIL */}
+            <TabsContent value="thumbnail" className="space-y-6">
+                <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <ImageIcon className="w-4 h-4 text-purple-500" />
+                        Konsep & Prompt Visual Thumbnail
+                    </h3>
 
-                        {(() => {
-                            const seoData = isShorts ? activeShot.seo : videoPanjang.seo;
-                            if (!seoData) return <p className="text-xs text-muted-foreground">Tidak ada data SEO.</p>;
+                    {(() => {
+                        const thumb = isShorts ? activeShot.thumbnail : videoPanjang.thumbnail;
+                        if (!thumb) return <p className="text-xs text-muted-foreground">Tidak ada data thumbnail.</p>;
 
-                            return (
-                                <div className="space-y-4 text-xs">
+                        return (
+                            <div className="space-y-4 text-xs">
+                                <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                    <span className="font-bold text-foreground block">Teks Pada Thumbnail:</span>
+                                    <p className="text-primary font-semibold text-sm bg-background/60 p-2.5 rounded-lg border border-border/20">{thumb.teks_thumbnail || "-"}</p>
+                                </div>
+
+                                <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                    <span className="font-bold text-foreground block">Deskripsi Visual:</span>
+                                    <p className="text-muted-foreground leading-relaxed">{thumb.deskripsi_visual || "-"}</p>
+                                </div>
+
+                                <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-bold text-foreground">Teks Pada Thumbnail:</span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-7 text-[11px] gap-1"
+                                            onClick={() => handleCopy(thumb.teks_thumbnail || "", "thumb_text")}
+                                        >
+                                            {copiedKey === "thumb_text" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Teks
+                                        </Button>
+                                    </div>
+                                    <p className="text-primary font-semibold text-sm bg-background/60 p-2.5 rounded-lg border border-border/20">{thumb.teks_thumbnail || "-"}</p>
+                                </div>
+
+                                {thumb.prompt_ai && (
                                     <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
                                         <div className="flex items-center justify-between">
-                                            <span className="font-bold text-foreground">Deskripsi Video:</span>
+                                            <span className="font-bold text-foreground">Prompt AI (Midjourney / Flux / DALL-E):</span>
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
                                                 className="h-7 text-[11px] gap-1"
-                                                onClick={() => handleCopy(seoData.deskripsi || "", "seo_desc")}
+                                                onClick={() => handleCopy(thumb.prompt_ai, "thumb_prompt")}
                                             >
-                                                {copiedKey === "seo_desc" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Deskripsi
+                                                {copiedKey === "thumb_prompt" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Prompt
                                             </Button>
                                         </div>
-                                        <p className="text-muted-foreground whitespace-pre-line bg-background/50 p-3 rounded-lg border border-border/20 leading-relaxed">{seoData.deskripsi || "-"}</p>
+                                        <p className="text-xs font-mono bg-background/80 p-3 rounded-lg border border-border/30 text-foreground/90 break-words">{thumb.prompt_ai}</p>
                                     </div>
+                                )}
+                            </div>
+                        );
+                    })()}
+                </Card>
+            </TabsContent>
 
-                                    {/* Keywords */}
-                                    {seoData.kata_kunci_utama && (
-                                        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                            <span className="font-bold text-foreground block">Kata Kunci Utama:</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {(seoData.kata_kunci_utama || []).map((kw: string, i: number) => (
-                                                    <Badge key={i} variant="secondary" className="text-[11px]">{kw}</Badge>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+            {/* TAB 6: SEO */}
+            <TabsContent value="seo" className="space-y-6">
+                <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <Search className="w-4 h-4 text-blue-500" />
+                        Optimasi SEO & Metadata
+                    </h3>
 
-                                    {/* Tags */}
-                                    {seoData.tags && (
-                                        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                            <span className="font-bold text-foreground block">Tags YouTube:</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {(seoData.tags || []).map((t: string, i: number) => (
-                                                    <Badge key={i} variant="outline" className="text-[10px]">{t}</Badge>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                    {(() => {
+                        const seoData = isShorts ? activeShot.seo : videoPanjang.seo;
+                        if (!seoData) return <p className="text-xs text-muted-foreground">Tidak ada data SEO.</p>;
+
+                        return (
+                            <div className="space-y-4 text-xs">
+                                <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-bold text-foreground">Deskripsi Video:</span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-7 text-[11px] gap-1"
+                                            onClick={() => handleCopy(seoData.deskripsi || "", "seo_desc")}
+                                        >
+                                            {copiedKey === "seo_desc" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Deskripsi
+                                        </Button>
+                                    </div>
+                                    <p className="text-muted-foreground whitespace-pre-line bg-background/50 p-3 rounded-lg border border-border/20 leading-relaxed">{seoData.deskripsi || "-"}</p>
                                 </div>
-                            );
-                        })()}
-                    </Card>
-                </TabsContent>
 
-                {/* TAB 7: EDITING */}
-                <TabsContent value="editing" className="space-y-6">
-                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                        <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                            <Video className="w-4 h-4 text-rose-500" />
-                            Instruksi & Panduan Editing
-                        </h3>
-
-                        {(() => {
-                            const editData = isShorts ? activeShot.editing : videoPanjang.editing;
-                            if (!editData) return <p className="text-xs text-muted-foreground">Tidak ada instruksi editing.</p>;
-
-                            return (
-                                <div className="space-y-3 text-xs">
+                                {/* Keywords Utama */}
+                                {seoData.kata_kunci_utama && (
                                     <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                        <span className="font-bold text-foreground block">Rekomendasi Visual & Sound Design:</span>
-                                        <ul className="list-disc list-inside space-y-1.5 text-muted-foreground leading-relaxed">
-                                            {(editData.rekomendasi || editData.gaya_visual || []).map((rec: string, i: number) => (
-                                                <li key={i}>{rec}</li>
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-foreground">Kata Kunci Utama:</span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 text-[11px] gap-1"
+                                                onClick={() => handleCopy(Array.isArray(seoData.kata_kunci_utama) ? seoData.kata_kunci_utama.join(", ") : String(seoData.kata_kunci_utama), "kw_utama")}
+                                            >
+                                                {copiedKey === "kw_utama" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Keywords
+                                            </Button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {(Array.isArray(seoData.kata_kunci_utama) ? seoData.kata_kunci_utama : String(seoData.kata_kunci_utama).split(",")).map((kw: string, i: number) => (
+                                                <Badge key={i} variant="secondary" className="text-[11px]">{kw.trim()}</Badge>
                                             ))}
-                                        </ul>
+                                        </div>
                                     </div>
+                                )}
+
+                                {/* Keywords Turunan */}
+                                {(seoData.kata_kunci_turunan || seoData.keywords_turunan) && (
+                                    <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-foreground">Kata Kunci Turunan:</span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 text-[11px] gap-1"
+                                                onClick={() => {
+                                                    const kwt = seoData.kata_kunci_turunan || seoData.keywords_turunan;
+                                                    handleCopy(Array.isArray(kwt) ? kwt.join(", ") : String(kwt), "kw_turunan");
+                                                }}
+                                            >
+                                                {copiedKey === "kw_turunan" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Turunan
+                                            </Button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {(Array.isArray(seoData.kata_kunci_turunan || seoData.keywords_turunan)
+                                                ? (seoData.kata_kunci_turunan || seoData.keywords_turunan)
+                                                : String(seoData.kata_kunci_turunan || seoData.keywords_turunan).split(",")
+                                            ).map((kw: string, i: number) => (
+                                                <Badge key={i} variant="outline" className="text-[11px] bg-background/50">{kw.trim()}</Badge>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Tags */}
+                                {seoData.tags && (
+                                    <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-foreground">Tags YouTube:</span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 text-[11px] gap-1"
+                                                onClick={() => handleCopy(Array.isArray(seoData.tags) ? seoData.tags.join(", ") : String(seoData.tags), "seo_tags")}
+                                            >
+                                                {copiedKey === "seo_tags" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />} Copy Tags
+                                            </Button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {(Array.isArray(seoData.tags) ? seoData.tags : String(seoData.tags).split(",")).map((t: string, i: number) => (
+                                                <Badge key={i} variant="outline" className="text-[10px]">{t.trim()}</Badge>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
+                </Card>
+            </TabsContent>
+
+            {/* TAB 7: EDITING */}
+            <TabsContent value="editing" className="space-y-6">
+                <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <Video className="w-4 h-4 text-rose-500" />
+                        Instruksi & Panduan Editing
+                    </h3>
+
+                    {(() => {
+                        const editData = isShorts ? activeShot.editing : videoPanjang.editing;
+                        if (!editData) return <p className="text-xs text-muted-foreground">Tidak ada instruksi editing.</p>;
+
+                        return (
+                            <div className="space-y-3 text-xs">
+                                <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                                    <span className="font-bold text-foreground block">Rekomendasi Visual & Sound Design:</span>
+                                    <ul className="list-disc list-inside space-y-1.5 text-muted-foreground leading-relaxed">
+                                        {(editData.rekomendasi || editData.gaya_visual || []).map((rec: string, i: number) => (
+                                            <li key={i}>{rec}</li>
+                                        ))}
+                                    </ul>
                                 </div>
-                            );
-                        })()}
-                    </Card>
-                </TabsContent>
-
-                {/* TAB 8: PERFORMA */}
-                <TabsContent value="performa" className="space-y-6">
-                    <Card className="p-6 space-y-4 bg-card/60 border-border/40">
-                        <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                            <BarChart3 className="w-4 h-4 text-amber-500" />
-                            Prediksi Performa & Rekomendasi
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                            <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                <span className="font-semibold text-foreground block">Estimasi Click-Through Rate (CTR):</span>
-                                <p className="text-lg font-bold text-emerald-500">8.5% - 12.0%</p>
-                                <p className="text-[11px] text-muted-foreground">Berdasarkan keselarasan hook dan thumbnail visual.</p>
                             </div>
+                        );
+                    })()}
+                </Card>
+            </TabsContent>
 
-                            <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
-                                <span className="font-semibold text-foreground block">Estimasi Audiense Retention:</span>
-                                <p className="text-lg font-bold text-primary">65% - 75%</p>
-                                <p className="text-[11px] text-muted-foreground">Didukung oleh struktur pacing visual yang cepat.</p>
-                            </div>
+            {/* TAB 8: PERFORMA */}
+            <TabsContent value="performa" className="space-y-6">
+                <Card className="p-6 space-y-4 bg-card/60 border-border/40">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                        <BarChart3 className="w-4 h-4 text-amber-500" />
+                        Prediksi Performa & Rekomendasi
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                            <span className="font-semibold text-foreground block">Estimasi Click-Through Rate (CTR):</span>
+                            <p className="text-lg font-bold text-emerald-500">8.5% - 12.0%</p>
+                            <p className="text-[11px] text-muted-foreground">Berdasarkan keselarasan hook dan thumbnail visual.</p>
                         </div>
-                    </Card>
-                </TabsContent>
-            </Tabs>
-        </div>
+
+                        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2">
+                            <span className="font-semibold text-foreground block">Estimasi Audiense Retention:</span>
+                            <p className="text-lg font-bold text-primary">65% - 75%</p>
+                            <p className="text-[11px] text-muted-foreground">Didukung oleh struktur pacing visual yang cepat.</p>
+                        </div>
+                    </div>
+                </Card>
+            </TabsContent>
+        </Tabs>
+        </div >
     );
 }
