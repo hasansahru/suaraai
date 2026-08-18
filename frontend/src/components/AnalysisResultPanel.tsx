@@ -641,48 +641,123 @@ export function AnalysisResultPanel({
                             </Card>
                         </div>
                     ) : (
-                        /* VIDEO PANJANG OUTLINE / SEGMEN */
-                        <Card className="p-6 space-y-6 bg-card/60 border-border/40">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                    <Layers className="w-4 h-4 text-primary" />
-                                    Struktur Segmen & Babak Video Panjang
-                                </h3>
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-8 text-xs gap-1.5"
-                                    onClick={() => {
-                                        const outlineText = outlineList.map((c: any, i: number) => `Bab ${i + 1}: ${c.judul_bab || c.babak}\n${c.deskripsi_singkat || c.isi}`).join("\n\n");
-                                        handleCopy(outlineText, "full_outline");
-                                    }}
-                                >
-                                    {copiedKey === "full_outline" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                    <span>Salin Semua Babak</span>
-                                </Button>
-                            </div>
-                            <div className="space-y-3">
-                                {outlineList.map((chapter: any, idx: number) => (
-                                    <div key={idx} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
-                                        <div className="flex items-center justify-between text-xs font-bold text-foreground">
-                                            <span>Bab {idx + 1}: {chapter.judul_bab || chapter.babak}</span>
-                                            <div className="flex items-center gap-2">
-                                                <Badge variant="secondary" className="text-[10px]">{chapter.estimasi_durasi || chapter.start_estimate || "Segmen"}</Badge>
-                                                <Button
-                                                    size="icon"
-                                                    variant="ghost"
-                                                    className="h-6 w-6"
-                                                    onClick={() => handleCopy(`${chapter.judul_bab || chapter.babak}: ${chapter.deskripsi_singkat || chapter.isi}`, `ch_${idx}`)}
-                                                >
-                                                    {copiedKey === `ch_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                                </Button>
-                                            </div>
+                        /* VIDEO PANJANG OUTLINE / SEGMEN & OPENING 60 DETIK */
+                        <div className="space-y-6">
+                            {/* Opening 60 Detik Card */}
+                            {videoPanjang.strategi_konten?.opening_60_detik && (
+                                <Card className="p-6 space-y-4 bg-amber-500/5 border-amber-500/30">
+                                    <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
+                                        <div>
+                                            <h3 className="text-sm font-bold text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                                                <Zap className="w-4 h-4 text-amber-500" />
+                                                🔥 Opening 60 Detik (Anti-Drop Retention Hook)
+                                            </h3>
+                                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                                                {videoPanjang.strategi_konten.opening_60_detik.alasan || "Struktur klip presisi 00:00 - 01:00 diambil langsung dari audio sumber."}
+                                            </p>
                                         </div>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">{chapter.deskripsi_singkat || chapter.isi}</p>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            className="h-8 text-xs gap-1.5 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
+                                            onClick={() => handleCopy(JSON.stringify(videoPanjang.strategi_konten.opening_60_detik, null, 2), "copy_opening_60")}
+                                        >
+                                            {copiedKey === "copy_opening_60" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                                            <span>Salin Opening</span>
+                                        </Button>
                                     </div>
-                                ))}
-                            </div>
-                        </Card>
+
+                                    {Array.isArray(videoPanjang.strategi_konten.opening_60_detik.klip) && videoPanjang.strategi_konten.opening_60_detik.klip.length > 0 && (
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                            {videoPanjang.strategi_konten.opening_60_detik.klip.map((klip: any, kIdx: number) => (
+                                                <div key={kIdx} className="p-3.5 bg-background/80 border border-amber-500/20 rounded-xl space-y-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <Badge variant="outline" className="text-[10px] font-bold border-amber-500/40 text-amber-600 dark:text-amber-400">
+                                                            Klip #{kIdx + 1} ({klip.video_baru_start || "00:00"} - {klip.video_baru_end || "00:20"})
+                                                        </Badge>
+                                                        {klip.sumber_start && klip.sumber_end && (
+                                                            <span className="text-[10px] text-muted-foreground font-semibold">
+                                                                Sumber: {klip.sumber_start} - {klip.sumber_end}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {klip.narasi_sumber && (
+                                                        <p className="text-xs text-foreground font-medium italic border-l-2 border-amber-500/40 pl-2">
+                                                            "{klip.narasi_sumber}"
+                                                        </p>
+                                                    )}
+                                                    {klip.catatan_editing && (
+                                                        <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                                            🎬 {klip.catatan_editing}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </Card>
+                            )}
+
+                            {/* Outline Babak Utama Card */}
+                            <Card className="p-6 space-y-6 bg-card/60 border-border/40">
+                                <div className="flex justify-between items-center">
+                                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                        <Layers className="w-4 h-4 text-primary" />
+                                        Struktur Segmen & Babak Video Panjang
+                                    </h3>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="h-8 text-xs gap-1.5"
+                                        onClick={() => {
+                                            const outlineText = outlineList.map((c: any, i: number) => {
+                                                const segs = Array.isArray(c.sumber_segmen) ? c.sumber_segmen.map((s: any) => `[Sumber: ${s.start}-${s.end} (${s.catatan || ""})]`).join(" ") : "";
+                                                return `Bab ${i + 1}: ${c.judul_bab || c.babak} (${c.start_estimate || ""}-${c.end_estimate || ""})\n${c.deskripsi_singkat || c.isi} ${segs}`;
+                                            }).join("\n\n");
+                                            handleCopy(outlineText, "full_outline");
+                                        }}
+                                    >
+                                        {copiedKey === "full_outline" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                        <span>Salin Semua Babak</span>
+                                    </Button>
+                                </div>
+                                <div className="space-y-3">
+                                    {outlineList.map((chapter: any, idx: number) => (
+                                        <div key={idx} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
+                                            <div className="flex items-center justify-between text-xs font-bold text-foreground">
+                                                <span>Bab {idx + 1}: {chapter.judul_bab || chapter.babak}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="secondary" className="text-[10px]">
+                                                        {chapter.start_estimate && chapter.end_estimate ? `${chapter.start_estimate} - ${chapter.end_estimate}` : (chapter.estimasi_durasi || chapter.start_estimate || "Segmen")}
+                                                    </Badge>
+                                                    <Button
+                                                        size="icon"
+                                                        variant="ghost"
+                                                        className="h-6 w-6"
+                                                        onClick={() => handleCopy(`${chapter.judul_bab || chapter.babak}: ${chapter.deskripsi_singkat || chapter.isi}`, `ch_${idx}`)}
+                                                    >
+                                                        {copiedKey === `ch_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-muted-foreground leading-relaxed">{chapter.deskripsi_singkat || chapter.isi}</p>
+
+                                            {/* Rentang Sumber Segmen Audio Original */}
+                                            {Array.isArray(chapter.sumber_segmen) && chapter.sumber_segmen.length > 0 && (
+                                                <div className="pt-2 border-t border-border/20 flex flex-wrap items-center gap-2">
+                                                    <span className="text-[10px] font-semibold text-primary">Sumber Audio Original:</span>
+                                                    {chapter.sumber_segmen.map((seg: any, sIdx: number) => (
+                                                        <Badge key={sIdx} variant="outline" className="text-[10px] bg-background/50 border-primary/20 text-muted-foreground">
+                                                            ⏱️ {seg.start || "00:00:00"} - {seg.end || "00:00:00"} {seg.catatan ? `(${seg.catatan})` : ""}
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </Card>
+                        </div>
                     )}
                 </TabsContent>
 
