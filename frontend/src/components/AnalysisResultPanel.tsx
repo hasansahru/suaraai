@@ -68,15 +68,28 @@ export function AnalysisResultPanel({
         if (!val) return [];
         if (Array.isArray(val)) {
             return val
-                .flatMap(v => (typeof v === "string" && v.includes(",") ? v.split(",") : v))
+                .flatMap(v => {
+                    if (typeof v === "object" && v !== null) {
+                        return v.item || v.name || v.title || v.keyword || v.tag || v.text || JSON.stringify(v);
+                    }
+                    if (typeof v === "string" && v.includes(",")) {
+                        return v.split(",");
+                    }
+                    return v;
+                })
                 .map(v => String(v).trim())
-                .filter(Boolean);
+                .filter(v => Boolean(v) && v !== "[object Object]");
         }
         if (typeof val === "string" && val.trim()) {
             return val
                 .split(/[,;\n]/)
                 .map(s => s.trim())
                 .filter(Boolean);
+        }
+        if (typeof val === "object" && val !== null) {
+            return Object.values(val)
+                .map(v => String(v).trim())
+                .filter(v => Boolean(v) && v !== "[object Object]");
         }
         return [];
     };
