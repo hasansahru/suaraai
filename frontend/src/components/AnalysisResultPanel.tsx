@@ -123,10 +123,10 @@ export function AnalysisResultPanel({
     ].join("\n");
 
     // Extract hashtags from description text
-    const descHashtags = (deskripsi.match(/#[a-zA-Z0-9_\u00C0-\u024F]+/g) || []).map(h => h.trim());
+    const descHashtags: string[] = ((deskripsi.match(/#[a-zA-Z0-9_\u00C0-\u024F]+/g) || []) as string[]).map((h: string) => h.trim());
 
     // 2. Hashtags YouTube (Format #tag)
-    const rawHashtags = parseList(
+    const rawHashtags: string[] = parseList(
         rawSeo.hashtags ||
         rawSeo.hashtag ||
         rawSeo.youtube_hashtags ||
@@ -134,11 +134,11 @@ export function AnalysisResultPanel({
         data.hashtags ||
         (isShorts ? activeShot.hashtags : videoPanjang.hashtags)
     );
-    let finalHashtags = rawHashtags.length > 0 ? rawHashtags : descHashtags;
+    let finalHashtags: string[] = rawHashtags.length > 0 ? rawHashtags : descHashtags;
     if (finalHashtags.length === 0) {
         finalHashtags = ["#NalarSenyap", "#Filsafat", "#Psikologi", "#SelfAwareness", "#Healing", "#KetenanganBatin", "#Stoikisme"];
     }
-    const hashtagsList = finalHashtags.map(h => (h.startsWith("#") ? h : `#${h}`));
+    const hashtagsList: string[] = finalHashtags.map((h: string) => (h.startsWith("#") ? h : `#${h}`));
 
     // 3. Keywords Utama (Primary Keywords)
     let kwUtama = parseList(
