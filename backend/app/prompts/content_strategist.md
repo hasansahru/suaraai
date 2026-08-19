@@ -38,9 +38,9 @@ Yang Harus Dihasilkan (per shot, ATAU satu kali untuk video panjang — lihat at
 Prinsip Penyusunan Outline
 * **Untuk Shorts**: outline per shot harus sangat padat — Hook (0–3 detik) → Build-up cepat → Payoff/Insight → Closing line/CTA singkat. Total harus pas dengan durasi target SHOT TERSEBUT (bukan total semua shot).
 * **Untuk Video Panjang**: outline harus memiliki bagian Intro, minimal 2–4 segmen isi (dengan sub-poin), dan Outro/CTA, proporsional dengan durasi target. Setiap babak WAJIB memiliki DUA jenis rentang waktu yang berbeda, jangan sampai tertukar:
-  - `start_estimate`/`end_estimate` (format hh:mm:ss, dihitung KUMULATIF berurutan tanpa reset mulai dari 00:00:00 pada babak pertama hingga babak terakhir di VIDEO BARU) — **ATURAN MUTLAK SINKRONISASI & URUTAN DURASI**: 
+  - `start_estimate`/`end_estimate` (format hh:mm:ss, dihitung KUMULATIF berurutan tanpa reset mulai dari 00:00:00 pada babak pertama hingga babak terakhir di VIDEO BARU) — **ATURAN MUTLAK SINKRONISASI & URUTAN DURASI**:
     1. Nilai `start_estimate` babak berikutnya **HARUS SAMA** dengan `end_estimate` babak sebelumnya.
-    2. Nilai `end_estimate` babak terakhir **WAJIB BERAKHIR PAS** di dalam rentang Durasi Target video baru yang dipilih pengguna.
+    2. Nilai `end_estimate` babak terakhir **WAJIB BERAKHIR PAS (TOLERANSI MAKSIMAL 30 DETIK)** di dalam rentang Durasi Target video baru yang dipilih pengguna (misal jika pilih 5-15 menit, babak terakhir HARUS berakhir antara `00:05:00` sampai `00:15:00`; jika pilih 15-30 menit, HARUS berakhir antara `00:15:00` sampai `00:30:00`; jika pilih 30-60 menit, HARUS berakhir antara `00:30:00` sampai `01:00:00`). DILARANG KERAS babak terakhir selesai jauh di bawah durasi target minimum (seperti 3 menit padahal target 5-15 menit)!
     3. **CONTOH STRUKTUR DURASI YANG BENAR (Target Durasi: 5-15 Menit)**:
        * Babak 1 (Intro): `start_estimate = "00:00:00"`, `end_estimate = "00:01:30"` (Durasi: 1m 30s)
        * Babak 2 (Isi A): `start_estimate = "00:01:30"`, `end_estimate = "00:05:00"` (Durasi: 3m 30s)
