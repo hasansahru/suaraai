@@ -19,7 +19,7 @@ Rancang paket SEO YouTube untuk konten baru berdasarkan Big Idea, Unique Angle, 
 3. **Keyword Turunan** — 15–20 keyword/related search terms (long-tail keywords) yang melengkapi keyword utama secara semantik untuk menangkap lalu lintas pencarian yang lebih luas.
 4. **Tag** — 10–20 tag video (campuran kata kunci spesifik dan broad, gaya tag klasik YouTube, dipisah koma).
 5. **10–15 Hashtag** — tulis dengan format `#hashtag`, kombinasi hashtag niche-spesifik dan broad/umum.
-6. **Playlist Recommendation** — 1–3 nama playlist yang relevan dimana video ini sebaiknya dimasukkan (boleh playlist baru atau existing yang umum untuk niche channel ini).
+6. **Playlist Recommendation** — 1–3 nama playlist yang relevan dimana video ini sebaiknya dimasukkan (wajib mengikuti daftar playlist resmi yang telah didefinisikan pada prompt masing-masing channel DNA jika ada, seperti Nalar Senyap yang restricted hanya ke 7 playlist resminya).
 
 ## ⚠️ ATURAN MUTLAK TRANSKRIP & SEO (Haram Mengarang / Zero Hallucination)
 
