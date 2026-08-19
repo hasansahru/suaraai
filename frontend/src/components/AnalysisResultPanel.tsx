@@ -29,7 +29,8 @@ import {
     Calendar,
     Zap,
     Tag,
-    KeyRound
+    KeyRound,
+    ListVideo
 } from "lucide-react";
 
 interface AnalysisResultPanelProps {
@@ -809,8 +810,8 @@ export function AnalysisResultPanel({
                                     <div
                                         key={idx}
                                         className={`p-3.5 rounded-xl flex items-center justify-between gap-3 text-xs transition-colors border ${isSelectedBest
-                                                ? "bg-emerald-500/10 border-emerald-500/40 font-semibold"
-                                                : "bg-muted/20 border-border/30 hover:border-primary/40"
+                                            ? "bg-emerald-500/10 border-emerald-500/40 font-semibold"
+                                            : "bg-muted/20 border-border/30 hover:border-primary/40"
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -1082,7 +1083,46 @@ export function AnalysisResultPanel({
                                 </div>
                             </div>
 
-                            {/* 6. Rekomendasi Jadwal Upload (WIB) */}
+                            {/* 6. Rekomendasi Playlist YouTube */}
+                            {(() => {
+                                const playlistList = parseList(
+                                    rawSeo.playlist_recommendation ||
+                                    rawSeo.playlist_rekomendasi ||
+                                    rawSeo.playlists ||
+                                    rawSeo.playlist ||
+                                    data.playlist_recommendation ||
+                                    (isShorts ? activeShot.playlist_recommendation : videoPanjang.playlist_recommendation)
+                                );
+                                if (playlistList.length === 0) return null;
+                                return (
+                                    <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-2.5">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-foreground flex items-center gap-1.5">
+                                                <ListVideo className="w-3.5 h-3.5 text-indigo-500" />
+                                                Rekomendasi Playlist YouTube:
+                                            </span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 text-[11px] gap-1"
+                                                onClick={() => handleCopy(playlistList.join(", "), "seo_playlist")}
+                                            >
+                                                {copiedKey === "seo_playlist" ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3 text-muted-foreground" />}
+                                                <span>{copiedKey === "seo_playlist" ? "Tersalin!" : "Salin Playlist"}</span>
+                                            </Button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {playlistList.map((pl: string, i: number) => (
+                                                <Badge key={i} className="text-[11px] font-medium bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors">
+                                                    {pl}
+                                                </Badge>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })()}
+
+                            {/* 7. Rekomendasi Jadwal Upload (WIB) */}
                             <div className="p-4 bg-muted/20 rounded-xl border border-border/30 space-y-3">
                                 <div className="flex items-center justify-between">
                                     <span className="font-bold text-foreground flex items-center gap-1.5">
