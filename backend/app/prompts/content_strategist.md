@@ -53,15 +53,20 @@ Prinsip Penyusunan Outline
     5. Jika target durasi baru panjang (misal 30-60 menit) sementara video sumber pendek, kembangkan sub-topik baru, studi kasus, atau analogi di outline agar durasi kumulatifnya pas mencapai rentang target tersebut. Sebaliknya, ringkas jika durasi target baru lebih pendek dari video sumber.
   - `sumber_segmen` (satu atau lebih rentang hh:mm:ss di VIDEO SUMBER) — menunjukkan dengan jelas materi/insight babak ini diambil dari menit berapa sampai berapa di video sumber. WAJIB diisi untuk SETIAP babak, dihitung dari posisi teks terkait di transkrip (posisi_relatif × durasi_video), bukan ditinggalkan kosong atau ditebak kasar. Kalau satu babak menggabungkan materi dari beberapa bagian sumber yang tidak berurutan (mis. gabungan 2 paradoks berbeda), isi beberapa entri `sumber_segmen`, masing-masing dengan catatan singkat apa yang diambil dari rentang itu.
 
-**ATURAN MUTLAK OPENING**: Pada `video_panjang.strategi_konten.opening_60_detik.klip`, akumulasi segmen klip **HARUS tepat 60 detik**. Klip pertama dimulai dari `00:00` dan klip terakhir harus diakhiri tepat pada `01:00` (atau 60 detik). Dilarang keras membuat klip baru yang melebihi batas waktu 1 menit tersebut!
+**ATURAN MUTLAK OPENING & AKURASI TRANSKRIP (ZERO HALLUCINATION)**:
+1. Pada `video_panjang.strategi_konten.opening_60_detik.klip`, akumulasi segmen klip **HARUS tepat 60 detik**. Klip pertama dimulai dari `00:00` dan klip terakhir harus diakhiri tepat pada `01:00` (atau 60 detik). Dilarang keras membuat klip baru yang melebihi batas waktu 1 menit tersebut!
+2. **KUTIPAN REAL TRANSKRIP & TIMESTAMP AKURAT**: Field `narasi_sumber` HARUS berupa kutipan teks asli 100% PERSIS dari transkrip sumber manual tanpa dikarang/diubah AI!
+3. Field `sumber_start` dan `sumber_end` WAJIB mencantumkan timestamp asli (hh:mm:ss) dari posisi audio/transkrip sumber tempat narasi tersebut benar-benar diucapkan.
+4. Kepadatan kata dalam `narasi_sumber` HARUS seimbang dengan durasi klip (rata-rata 2-3 kata per detik). DILARANG menaruh teks 5 kata untuk durasi 20 detik!
 
 **⛔ PELANGGARAN PALING UMUM — HINDARI:**
 - `end_time: "01:30"` → SALAH, harus `"01:00"`
 - `end_time: "02:00"` → SALAH, harus `"01:00"`
 - Klip terakhir `video_baru_end: "01:30"` → SALAH, harus `"01:00"`
-- Menambah klip ke-4 yang berakhir di `01:20` → SALAH
+- Teks `narasi_sumber` hasil karangan AI yang tidak ada di transkrip asli → FUSI SALAH & DILARANG!
+- Timestamp `sumber_start`/`sumber_end` mengarang bebas tanpa acuan transkrip → DILARANG!
 
-**✅ YANG BENAR:** `end_time: "01:00"`, klip terakhir `video_baru_end: "01:00"`. Jika konten terlalu panjang, POTONG — ambil hanya bagian terkuatnya.
+**✅ YANG BENAR:** `end_time: "01:00"`, klip terakhir `video_baru_end: "01:00"`, teks `narasi_sumber` 100% tepat sesuai kutipan transkrip manual.
 
 
 Jika Segment Mode = Manual, prioritaskan insight dari rentang waktu yang dipilih pengguna sebagai bahan utama Big Idea, namun angle akhir tetap harus baru.
