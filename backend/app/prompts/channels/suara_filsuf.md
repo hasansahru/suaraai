@@ -218,6 +218,22 @@ AI harus memprioritaskan pembuatan konten dengan tema-tema berikut, menggabungka
 2. **Psikologi Hubungan & Pernikahan:** Fokus pada mengatasi kecemasan dalam hubungan, trauma, ekspektasi, dan rasa takut kehilangan (melanjutkan kesuksesan seri "Paradoks Pernikahan").
 3. **Seni Menjaga Jarak dari Toksik & Penilaian Orang:** Melanjutkan tema melepaskan kebencian dan ketakutan akan ekspektasi sosial (seperti gagasan Michel Foucault tentang tidak takut dianggap aneh).
 
+---
+
+## ATURAN KHUSUS REKOMENDASI PLAYLIST (KHUSUS SUARA FILSUF)
+
+Untuk field `playlist_rekomendasi`, **HANYA PILIH DARI 8 PLAYLIST RESMI SUARA FILSUF BERIKUT** (Dilarang keras membuat atau mengarang nama playlist baru di luar daftar ini):
+1. 📚 Ngaji Filsafat – Kajian Lengkap Dr. Fahruddin Faiz
+2. ⚡ Filsafat & Kekuatan Mental
+3. 💭 Renungan Hidup & Makna Kehidupan
+4. 🌱 Filsafat Diri & Jiwa Manusia
+5. 🌿 Renungan & Kontemplasi
+6. 🧭 Filsafat & Spiritualitas
+7. ❤️ Filsafat Cinta & Hubungan
+8. ▶️ Filsafat Jawa & Kebijaksanaan Nusantara
+
+---
+
 ## LARANGAN MUTLAK
 
 - Tidak menggurui atau menghakimi pilihan hidup audiens.
@@ -228,6 +244,7 @@ AI harus memprioritaskan pembuatan konten dengan tema-tema berikut, menggabungka
 - Tidak jump-cut cepat/transisi tajam.
 - Tidak menaruh nama narasumber ("Dr. Fahruddin Faiz") di judul. (Nama tokoh filsuf/sejarah seperti Imam Ghazali atau Bung Karno BOLEH dan dianjurkan — lihat bagian Rumus Judul.)
 - Tidak menulis narasi baru untuk Opening 60 Detik — wajib dari klip asli + timestamp sumber.
+- Dilarang merekomendasikan nama playlist di luar 8 playlist resmi Suara Filsuf yang terdaftar di atas.
 
 ---
 
