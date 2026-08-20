@@ -323,45 +323,45 @@ export function AnalysisResultPanel({
 
             {/* 8 Tabs Header */}
             <Tabs defaultValue="ringkasan" className="space-y-6">
-                <div className="border-b border-border/40 pb-3 overflow-x-auto">
-                    <TabsList className="bg-muted/40 p-1 flex items-center gap-1.5 rounded-xl w-max min-w-full md:min-w-0">
-                        <TabsTrigger value="ringkasan" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
+                <div className="border-b border-border/40 pb-3 overflow-x-auto no-scrollbar scroll-smooth">
+                    <TabsList className="bg-muted/40 p-1 flex items-center gap-1 sm:gap-1.5 rounded-xl w-max min-w-full">
+                        <TabsTrigger value="ringkasan" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
                             <FileText className="w-4 h-4" />
                             <span>Ringkasan</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="strategi" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <TrendingUp className="w-4 h-4" />
+                        <TabsTrigger value="strategi" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Strategi & Growth</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="segmen" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <Layers className="w-4 h-4" />
+                        <TabsTrigger value="segmen" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Segmen</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="judul" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <Heading className="w-4 h-4" />
+                        <TabsTrigger value="judul" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <Heading className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Judul</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="thumbnail" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <ImageIcon className="w-4 h-4" />
+                        <TabsTrigger value="thumbnail" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Thumbnail</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="seo" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <Search className="w-4 h-4" />
+                        <TabsTrigger value="seo" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span># SEO</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="editing" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <Video className="w-4 h-4" />
+                        <TabsTrigger value="editing" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <Video className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Editing</span>
                         </TabsTrigger>
 
-                        <TabsTrigger value="performa" className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">
-                            <BarChart3 className="w-4 h-4" />
+                        <TabsTrigger value="performa" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
+                            <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span>Performa</span>
                         </TabsTrigger>
                     </TabsList>

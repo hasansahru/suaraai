@@ -651,8 +651,8 @@ export default function Dashboard() {
     <div className="flex min-h-screen bg-slate-50/50 text-slate-900 font-sans antialiased overflow-hidden dark:bg-background dark:text-foreground">
       <Toaster position="top-center" theme={theme} richColors />
 
-      {/* === SIDEBAR (LEFT) === */}
-      <aside className="w-[280px] bg-white dark:bg-card border-r border-slate-200 dark:border-border flex flex-col shrink-0 h-screen sticky top-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-40">
+      {/* === SIDEBAR (LEFT - DESKTOP ONLY) === */}
+      <aside className="hidden lg:flex w-[280px] bg-white dark:bg-card border-r border-slate-200 dark:border-border flex-col shrink-0 h-screen sticky top-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-40">
         {/* Sidebar Header / Logo */}
         <div className="h-20 flex items-center px-6 border-b border-slate-100 dark:border-border/50">
           <div className="flex items-center gap-3">
@@ -767,46 +767,97 @@ export default function Dashboard() {
       </aside>
 
       {/* === MAIN CONTENT AREA (RIGHT) === */}
-      <div className="flex-1 flex flex-col h-screen overflow-y-auto relative z-10">
+      <div className="flex-1 flex flex-col min-h-screen lg:h-screen overflow-y-auto relative z-10 pb-20 lg:pb-0">
         {/* Header Controls */}
-        <header className="h-20 flex items-center justify-end px-8 sticky top-0 z-30 bg-slate-50/80 dark:bg-background/80 backdrop-blur-md">
-          <div className="flex items-center gap-4">
+        <header className="h-16 lg:h-20 flex items-center justify-between lg:justify-end px-4 lg:px-8 sticky top-0 z-30 bg-slate-50/90 dark:bg-background/90 backdrop-blur-md border-b border-slate-200/50 dark:border-border/50">
+          <div className="flex lg:hidden items-center gap-2.5">
+            <div className="p-1.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 rounded-lg text-blue-600 dark:text-blue-400">
+              <Clapperboard className="size-4" />
+            </div>
+            <h1 className="text-xs font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+              Suara<span className="text-blue-600 dark:text-blue-400">AI PRO</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-2 lg:gap-4">
             <Button
               onClick={toggleTheme}
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-slate-500 hover:text-blue-600 shadow-sm"
+              className="h-8 w-8 lg:h-9 lg:w-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-slate-500 hover:text-blue-600 shadow-sm"
             >
               {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
             </Button>
             <Button
               onClick={() => useRouter().push('/prompts')}
               variant="outline"
-              className="h-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-blue-600 shadow-sm gap-1.5 px-3"
+              className="h-8 lg:h-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-[11px] lg:text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-blue-600 shadow-sm gap-1 lg:gap-1.5 px-2.5 lg:px-3"
             >
               <Sparkles className="size-3.5" />
-              Master Prompt Studio
+              <span className="hidden sm:inline">Master Prompt Studio</span>
+              <span className="sm:hidden">Prompts</span>
             </Button>
             <Button
               onClick={() => setIsHistoryOpen(true)}
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-slate-500 hover:text-blue-600 shadow-sm"
+              className="h-8 w-8 lg:h-9 lg:w-9 rounded-full border-slate-200 dark:border-border bg-white dark:bg-card text-slate-500 hover:text-blue-600 shadow-sm"
             >
               <History className="size-4" />
             </Button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-card border border-slate-200 dark:border-border rounded-full shadow-sm">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-card border border-slate-200 dark:border-border rounded-full shadow-sm">
               <span className="flex h-2 w-2 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">FastAPI Local Server Active</span>
+              <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">FastAPI Local Active</span>
             </div>
           </div>
         </header>
 
+        {/* Bottom Navigation Bar for Mobile (HP) */}
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-card/95 backdrop-blur-lg border-t border-slate-200 dark:border-border px-3 py-2 flex items-center justify-around lg:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+          <button
+            onClick={() => { setActiveMenu("dashboard"); setUseManual(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-all ${activeMenu === "dashboard" && !useManual ? "text-blue-600 dark:text-blue-400 font-bold" : "text-slate-500 dark:text-slate-400"}`}
+          >
+            <LayoutDashboard className="size-5" />
+            Dashboard
+          </button>
+
+          <button
+            onClick={() => { setActiveMenu("channel"); channelSectionRef.current?.scrollIntoView({ behavior: "smooth" }); }}
+            className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-all ${activeMenu === "channel" ? "text-blue-600 dark:text-blue-400 font-bold" : "text-slate-500 dark:text-slate-400"}`}
+          >
+            <Users className="size-5" />
+            Channel
+          </button>
+
+          <button
+            onClick={() => { setActiveMenu("dashboard"); setUseManual(false); inputSectionRef.current?.scrollIntoView({ behavior: "smooth" }); }}
+            className="flex flex-col items-center justify-center size-11 -mt-5 bg-gradient-to-tr from-blue-600 to-sky-500 text-white rounded-full shadow-lg shadow-blue-500/30 active:scale-95 transition-all"
+          >
+            <Plus className="size-6" />
+          </button>
+
+          <button
+            onClick={() => { setActiveMenu("history"); setIsHistoryOpen(true); }}
+            className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-all ${activeMenu === "history" ? "text-blue-600 dark:text-blue-400 font-bold" : "text-slate-500 dark:text-slate-400"}`}
+          >
+            <History className="size-5" />
+            Riwayat
+          </button>
+
+          <button
+            onClick={() => { setActiveMenu("settings"); setIsSettingsOpen(true); }}
+            className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-all ${activeMenu === "settings" ? "text-blue-600 dark:text-blue-400 font-bold" : "text-slate-500 dark:text-slate-400"}`}
+          >
+            <Settings className="size-5" />
+            Pengaturan
+          </button>
+        </nav>
+
         {/* Dashboard Body */}
-        <main className="flex-1 p-8 max-w-[1200px] w-full mx-auto flex flex-col gap-6">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1200px] w-full mx-auto flex flex-col gap-5 sm:gap-6">
 
           {/* 1. Welcome Banner */}
           <div className="bg-white dark:bg-card rounded-3xl p-8 border border-slate-200/60 dark:border-border shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
