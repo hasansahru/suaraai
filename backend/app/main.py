@@ -195,16 +195,18 @@ async def api_test_connection(req: TestConnectionRequest):
 
     try:
         resolved_mode = active_prov.get("mode", req.mode)
-        if resolved_mode == "nine_router" or req.mode == "nine_router":
+        if resolved_mode in ["nine_router", "custom"] or req.mode in ["nine_router", "custom"]:
             resolved_mode = "openai_compatible"
             
         resolved_base_url = req.base_url or active_prov.get("default_base_url", "https://ai.sahru.my.id/v1")
-        if not resolved_base_url:
-            resolved_base_url = "https://ai.sahru.my.id/v1"
+        if not resolved_base_url or resolved_base_url == "https://api.openai.com/v1":
+            # Jika user memilih mode 9Router tapi base_url terisi default OpenAI, paksa ke endpoint 9Router
+            if req.mode in ["nine_router", "custom"]:
+                resolved_base_url = "https://ai.sahru.my.id/v1"
 
         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
         effective_api_key = req.api_key
-        if not effective_api_key and ("sahru.my.id" in resolved_base_url or req.mode == "nine_router" or req.mode == "custom"):
+        if not effective_api_key or not effective_api_key.strip():
             effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
 
         msg = ai_client.test_connection(
