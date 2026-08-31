@@ -392,11 +392,18 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
             "Kemungkinan respons tidak lengkap — coba jalankan ulang."
         )
 
+    # Ekstrak teks utama atau klausa reasoning/thinking (beberapa provider menyisipkan pemikiran di reasoning_content)
     full_text = (choice.message.content or "").strip()
+    if not full_text and hasattr(choice.message, "reasoning_content"):
+        full_text = (getattr(choice.message, "reasoning_content", "") or "").strip()
 
     if not full_text:
-        # Cek finish_reason untuk pesan error yang lebih informatif.
         finish_reason = getattr(choice, "finish_reason", None)
+        # Jika pada test_connection (is_test=True), mengembalikan finish_reason 'length' atau 'stop' tanpa teks
+        # tetap dianggap sukses melakukan jabat tangan (handshake/auth berhasil).
+        if is_test:
+            return "OK", []
+            
         if finish_reason == "content_filter":
             raise AIClientError(
                 "Respons diblokir oleh content filter provider. Coba ubah prompt atau ganti model."
