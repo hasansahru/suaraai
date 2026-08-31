@@ -181,18 +181,28 @@ class TestConnectionRequest(BaseModel):
 @app.post("/api/test-connection")
 async def api_test_connection(req: TestConnectionRequest):
     active_prov = {}
-    api_key_env = "ANTHROPIC_API_KEY"
+    api_key_env = "CUSTOM_AI_API_KEY"
     try:
         ai_provider_setting = load_json_setting("ai_provider_setting.json")
         provider_options = ai_provider_setting.get("providers", [])
-        active_prov = next((p for p in provider_options if p["id"] == req.mode or p.get("mode") == req.mode), {})
-        api_key_env = active_prov.get("api_key_env", "ANTHROPIC_API_KEY")
+        # Cari berdasarkan id provider langsung atau match mode
+        active_prov = next(
+            (p for p in provider_options if p["id"] == req.mode or p["id"] == "nine_router" or p["id"] == "custom" or p.get("mode") == req.mode),
+            {}
+        )
+        api_key_env = active_prov.get("api_key_env", "CUSTOM_AI_API_KEY")
     except Exception:
         pass
 
     try:
         resolved_mode = active_prov.get("mode", req.mode)
-        resolved_base_url = req.base_url or active_prov.get("default_base_url", "")
+        if resolved_mode == "nine_router" or req.mode == "nine_router":
+            resolved_mode = "openai_compatible"
+            
+        resolved_base_url = req.base_url or active_prov.get("default_base_url", "https://ai.sahru.my.id/v1")
+        if not resolved_base_url:
+            resolved_base_url = "https://ai.sahru.my.id/v1"
+
         msg = ai_client.test_connection(
             mode=resolved_mode,
             model=req.model.strip(),
