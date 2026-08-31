@@ -652,17 +652,17 @@ export default function Dashboard() {
       <Toaster position="top-center" theme={theme} richColors />
 
       {/* === SIDEBAR (LEFT - DESKTOP ONLY) === */}
-      <aside className="hidden lg:flex w-[280px] bg-white dark:bg-card border-r border-slate-200 dark:border-border flex-col shrink-0 h-screen sticky top-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-40">
+      <aside className="hidden lg:flex w-[260px] bg-card border-r border-border flex-col shrink-0 h-screen sticky top-0 z-40">
         {/* Sidebar Header / Logo */}
-        <div className="h-20 flex items-center px-6 border-b border-slate-100 dark:border-border/50">
+        <div className="h-16 flex items-center px-5 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 rounded-lg text-blue-600 dark:text-blue-400 shrink-0">
-              <Clapperboard className="size-5" />
+            <div className="p-2 bg-primary/10 border border-primary/20 rounded-lg text-primary shrink-0">
+              <Clapperboard className="size-4" />
             </div>
             <div>
-              <div className="text-[9px] uppercase tracking-[0.2em] text-blue-500 font-bold mb-0.5">AI Content Engine</div>
-              <h1 className="text-sm font-extrabold tracking-tight leading-none text-slate-900 dark:text-slate-100">
-                YouTube <span className="text-blue-600 dark:text-blue-400">Content PRO</span>
+              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-0.5">Creator Studio</div>
+              <h1 className="text-sm font-extrabold tracking-tight leading-none text-foreground">
+                SuaraAI <span className="text-primary">Studio</span>
               </h1>
             </div>
           </div>

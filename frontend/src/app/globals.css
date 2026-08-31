@@ -98,20 +98,32 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
   html {
     @apply font-sans;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     letter-spacing: -0.02em;
     font-weight: 600;
   }
-  code, pre, kbd, samp {
+
+  code,
+  pre,
+  kbd,
+  samp {
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.875em;
   }
@@ -119,43 +131,77 @@
 
 /* ─── Loading bar animation ─────────────────────────────── */
 @keyframes infinite-loading {
-  0%   { transform: translateX(-100%); }
-  50%  { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
+
 .animate-infinite-loading {
   animation: infinite-loading 3s infinite linear;
 }
 
 /* ─── Fade-in for dynamic content ────────────────────────── */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .animate-fade-in {
   animation: fade-in 0.22s ease-out both;
 }
 
 /* ─── Slide-down for dropdown/popover menus ─────────────── */
 @keyframes slide-down {
-  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)    scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
+
 @keyframes slide-up {
-  from { opacity: 1; transform: translateY(0)    scale(1); }
-  to   { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
 }
 
 /* Apply to Shadcn SelectContent / Popover / DropdownMenu */
-[data-radix-popper-content-wrapper] > *,
+[data-radix-popper-content-wrapper]>*,
 [data-radix-select-content],
 [data-radix-dropdown-menu-content],
 [data-radix-popover-content] {
   transform-origin: top center;
 }
+
 [data-state="open"] {
   animation: slide-down 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
 [data-state="closed"] {
   animation: slide-up 0.14s ease-in both;
 }
@@ -164,9 +210,10 @@
 .card-lift {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .card-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.25);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.25);
 }
 
 /* ─── Input / Select focus glow (Azure blue) ─────────────── */
@@ -181,66 +228,130 @@ textarea:focus-visible {
 
 /* ─── Checkbox / toggle pulse on check ──────────────────── */
 @keyframes check-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.18); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
+
 [data-state="checked"] {
   animation: check-pop 0.2s ease-out both;
 }
 
 /* ─── Soft floating gradient animation ───────────────────── */
 @keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
+
 @keyframes gradient-y {
-  0%, 100% { background-position: 50% 0%; }
-  50%      { background-position: 50% 100%; }
+
+  0%,
+  100% {
+    background-position: 50% 0%;
+  }
+
+  50% {
+    background-position: 50% 100%;
+  }
 }
+
 @keyframes gradient-xy {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
+
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-20px) scale(1.03); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.03);
+  }
 }
 
 .animate-gradient-x {
   animation: gradient-x 15s ease infinite;
   background-size: 200% 200%;
 }
+
 .animate-gradient-y {
   animation: gradient-y 15s ease infinite;
   background-size: 200% 200%;
 }
+
 .animate-gradient-xy {
   animation: gradient-xy 15s ease infinite;
   background-size: 400% 400%;
 }
+
 .animate-float-slow {
   animation: float-slow 8s ease-in-out infinite;
 }
 
-/* ─── Azure Modern Card ────────────────────────────────── */
-.azure-card {
-  @apply bg-card border border-border rounded-2xl p-6 shadow-sm;
-  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s ease;
+/* ─── Studio Modern Design System ───────────────────────── */
+.studio-glass {
+  @apply bg-background/80 backdrop-blur-xl border border-border/60 shadow-sm;
 }
-.azure-card:hover {
-  border-color: rgba(0, 120, 212, 0.3);
-  box-shadow: 0 8px 30px -6px rgba(0, 120, 212, 0.12), 0 2px 8px -2px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+
+.studio-card {
+  @apply bg-card border border-border/70 rounded-2xl p-6 shadow-sm transition-all duration-200;
+}
+
+.studio-card:hover {
+  @apply border-primary/40 shadow-md shadow-primary/5 -translate-y-[1px];
+}
+
+.nav-item {
+  @apply transition-all duration-150 relative;
+}
+
+.nav-item-active {
+  @apply bg-primary/10 text-primary font-bold border-l-2 border-primary;
+}
+
+.status-dot {
+  @apply relative flex h-2 w-2;
+}
+
+.status-dot::before {
+  content: '';
+  @apply absolute -inset-0.5 rounded-full bg-current opacity-75 animate-ping;
 }
 
 /* ─── Azure Accent Text Gradients ──────────────────────── */
 .text-gradient-azure {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-sky-500 to-cyan-500;
 }
+
 .text-gradient-primary {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500;
 }
+
 .text-gradient-glow {
   @apply bg-clip-text text-transparent bg-gradient-to-br from-sky-400 via-blue-400 to-teal-400;
 }
@@ -249,13 +360,16 @@ textarea:focus-visible {
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(0, 120, 212, 0.2);
   border-radius: 99px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 120, 212, 0.4);
 }
