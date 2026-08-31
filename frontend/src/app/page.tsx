@@ -944,7 +944,7 @@ export default function Dashboard() {
 
               {/* Input Row */}
               <div className="space-y-2" ref={inputSectionRef}>
-                <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   {!useManual ? "URL Video YouTube" : "Transkrip Video"}
                 </label>
                 {!useManual ? (
@@ -991,7 +991,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-border/50">
                 {/* Notes */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Catatan Khusus Ke AI (Opsional)</label>
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Catatan Khusus Ke AI (Opsional)</label>
                   <Textarea
                     placeholder="e.g. Fokuskan pada aspek stoikisme praktis, Gunakan pembawaan santai namun mendalam, dll."
                     value={extraNotes}
@@ -1002,7 +1002,7 @@ export default function Dashboard() {
 
                 {/* Keywords */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Riset Kata Kunci YouTube (Opsional)</label>
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Riset Kata Kunci YouTube (Opsional)</label>
                   <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-border rounded-2xl p-3 flex items-center gap-2 h-12 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all">
                     <SearchIcon className="size-4 text-slate-400 ml-1 shrink-0" />
                     <input
@@ -1169,7 +1169,7 @@ export default function Dashboard() {
               <div className="space-y-6 flex-1">
                 {/* Format Output */}
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Format Output</label>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Format Output</label>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     <button
                       onClick={() => setOutputType("shorts")}
@@ -1205,7 +1205,7 @@ export default function Dashboard() {
 
                 {/* Duration Targets */}
                 <div className="space-y-3" ref={formatSectionRef}>
-                  <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Durasi Target</label>
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Durasi Target</label>
                   <div className="flex flex-wrap gap-2">
                     {DEFAULT_DURATIONS.filter(d => d.type === (outputType === "shorts" ? "shorts" : "long")).map(d => {
                       const isSelected = duration === d.id;
@@ -1252,7 +1252,7 @@ export default function Dashboard() {
                 {/* Shot Count — only for Shorts */}
                 {outputType === "shorts" && (
                   <div className="space-y-3">
-                    <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Jumlah Shot Scene</label>
+                    <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Jumlah Shot Scene</label>
                     <div className="flex flex-wrap gap-2">
                       {[3, 5, 7, 10, 12, 15].map(n => (
                         <button
