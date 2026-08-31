@@ -869,34 +869,39 @@ export default function Dashboard() {
             <div className="flex-1 min-w-0 flex flex-col gap-4 w-full">
 
               {/* Execution Header Banner */}
-              <div className="surface p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-l-2 border-l-primary">
-                <div>
-                  <h2 className="text-base font-bold tracking-tight text-foreground">
-                    Execution Workspace
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-primary/15 via-background to-card border border-primary/20 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-mono font-bold uppercase tracking-wider">
+                      Studio Deck v3
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-extrabold tracking-tight text-foreground">
+                    YouTube Content Intelligence
                   </h2>
-                  <p className="text-xs text-muted-foreground">
-                    Masukkan URL YouTube atau transkrip untuk menghasilkan naskah dan SEO.
+                  <p className="text-xs text-muted-foreground max-w-xl">
+                    Generate naskah video, hook 60 detik, visual prompt shot-by-shot, dan paket SEO YouTube berorientasi CTR tinggi.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 bg-card/80 p-1.5 rounded-2xl border border-border shrink-0 shadow-inner">
                   <button
                     onClick={() => setUseManual(false)}
-                    className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${!useManual
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground surface"
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!useManual
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                       }`}
                   >
-                    YouTube Link
+                    YouTube URL
                   </button>
                   <button
                     onClick={() => setUseManual(true)}
-                    className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${useManual
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "text-muted-foreground hover:text-foreground surface"
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${useManual
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                       }`}
                   >
-                    Transcript
+                    Transkrip
                   </button>
                 </div>
               </div>
