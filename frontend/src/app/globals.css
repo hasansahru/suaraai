@@ -332,7 +332,20 @@ textarea:focus-visible {
 }
 
 .surface {
-  @apply apple-glass rounded-3xl transition-all duration-300;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  @apply rounded-3xl transition-all duration-300;
+}
+
+.dark .surface {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 .surface:hover {
@@ -353,11 +366,33 @@ textarea:focus-visible {
 }
 
 .glass-panel {
-  @apply apple-glass shadow-2xl;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  @apply shadow-2xl;
+}
+
+.dark .glass-panel {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .glass-card-interactive {
-  @apply apple-glass rounded-2xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  @apply rounded-2xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200;
+}
+
+.dark .glass-card-interactive {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .nav-item {
