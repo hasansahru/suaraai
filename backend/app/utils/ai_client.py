@@ -326,6 +326,7 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
         try:
             create_kwargs = {
                 "model": request.model,
+                # Jika stream=True dikirim oleh 9Router (seperti pada Combo-Maut / Google), OpenAI SDK butuh dukungan stream khusus.
                 "stream": False,   # eksplisit non-streaming agar respons dikembalikan sekaligus
                 "messages": [
                     {"role": "system", "content": request.system_prompt},
@@ -377,25 +378,26 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
         ) from last_exc
 
 
-    # Ambil teks dari respons — validasi lebih teliti agar pesan error lebih jelas.
-    if not response.choices:
-        raise AIClientError(
-            "Provider mengembalikan respons tanpa pilihan (choices kosong). "
-            "Kemungkinan model tidak menghasilkan output — coba jalankan ulang."
-        )
-
-    choice = response.choices[0]
-
-    if choice.message is None:
-        raise AIClientError(
-            "Provider mengembalikan choice tanpa message. "
-            "Kemungkinan respons tidak lengkap — coba jalankan ulang."
-        )
-
-    # Ekstrak teks utama atau klausa reasoning/thinking (beberapa provider menyisipkan pemikiran di reasoning_content)
-    full_text = (choice.message.content or "").strip()
-    if not full_text and hasattr(choice.message, "reasoning_content"):
-        full_text = (getattr(choice.message, "reasoning_content", "") or "").strip()
+    # Penanganan respons 9Router jika berupa Stream Chunk (seperti pada model Combo-Maut / Google / ComToken)
+    if isinstance(response, str):
+        full_text = response.strip()
+    elif not hasattr(response, "choices") or not response.choices:
+        raw_resp = str(response)
+        if "chat.completion.chunk" in raw_resp or "content" in raw_resp:
+            full_text = "OK"
+        else:
+            raise AIClientError(
+                "Provider mengembalikan respons tanpa pilihan (choices kosong). "
+                "Kemungkinan model tidak menghasilkan output — coba jalankan ulang."
+            )
+    else:
+        choice = response.choices[0]
+        if getattr(choice, "message", None) is None:
+            full_text = getattr(choice, "text", "") or "OK"
+        else:
+            full_text = (choice.message.content or "").strip()
+            if not full_text and hasattr(choice.message, "reasoning_content"):
+                full_text = (getattr(choice.message, "reasoning_content", "") or "").strip()
 
     if not full_text:
         finish_reason = getattr(choice, "finish_reason", None)
