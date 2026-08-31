@@ -64,16 +64,9 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   gemini: ["gemini-3.5-flash", "gemini-3.1-pro", "gemini-3.1-flash-lite"],
   custom: [],
   nine_router: [
-    "Combo-maut",
-    "ag/gemini-3.5-flash-high",
-    "ag/gemini-3.6-flash-high",
-    "ag/claude-sonnet-4-6",
-    "kr/claude-sonnet-5",
-    "kr/gpt-5.6-sol",
-    "inferx/Qwen3.8-27B-FP8",
-    "inferx/deepseek-v4-flash",
-    "gemini/gemini-3.7-flash",
-    "gc/gemini-3.1-pro-preview"
+    "Combo-Maut",
+    "Google",
+    "ComToken"
   ]
 };
 
@@ -1086,18 +1079,15 @@ export default function Dashboard() {
                 <SelectContent className="surface border-border">
                   {provider === "nine_router" && (
                     <>
-                      <div className="px-2 py-1 text-xs font-bold text-muted-foreground text-amber-600">Rekomendasi Khusus</div>
-                      <SelectItem value="Combo-maut" className="text-xs font-bold text-amber-600">
-                        Combo-Maut (Utama)
+                      <SelectItem value="Combo-Maut" className="text-xs font-bold text-amber-500">
+                        Combo-Maut (Rekomendasi Utama)
                       </SelectItem>
-                      <SelectItem value="ag/gemini-3.5-flash-high">Gemini 3.5 Flash High (AG)</SelectItem>
-                      <SelectItem value="ag/gemini-3.6-flash-high">Gemini 3.6 Flash High (AG)</SelectItem>
-                      <SelectItem value="ag/claude-sonnet-4-6">Claude Sonnet 4.6 (AG)</SelectItem>
-                      <SelectItem value="kr/claude-sonnet-5">Claude Sonnet 5 (KR)</SelectItem>
-                      <SelectItem value="kr/gpt-5.6-sol">GPT 5.6 Sol (KR)</SelectItem>
-                      <SelectItem value="inferx/Qwen3.8-27B-FP8">Qwen 3.8 27B (Inferx)</SelectItem>
-                      <SelectItem value="inferx/deepseek-v4-flash">DeepSeek v4 Flash (Inferx)</SelectItem>
-                      <SelectItem value="gemini/gemini-3.7-flash">Gemini 3.7 Flash</SelectItem>
+                      <SelectItem value="Google" className="text-xs font-semibold">
+                        Google
+                      </SelectItem>
+                      <SelectItem value="ComToken" className="text-xs font-semibold">
+                        ComToken
+                      </SelectItem>
                     </>
                   )}
                   {provider !== "nine_router" && DEFAULT_MODELS[provider] && (
