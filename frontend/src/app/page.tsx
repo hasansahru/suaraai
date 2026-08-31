@@ -127,6 +127,18 @@ export default function Dashboard() {
 
   const [historyList, setHistoryList] = useState<any[]>([]);
 
+  // Auto-load 9Router config from localStorage
+  useEffect(() => {
+    const savedApikey = localStorage.getItem("suara_ai_api_key");
+    if (savedApikey) {
+      setApiKey(savedApikey);
+    }
+    const savedModel = localStorage.getItem("suara_ai_model");
+    if (savedModel) {
+      setModel(savedModel);
+    }
+  }, []);
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem("suara_ai_history");
