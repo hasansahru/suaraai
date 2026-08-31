@@ -263,9 +263,9 @@ export function AnalysisResultPanel({
     const teksThumbnail = thumbData.teks_thumbnail || thumbData.teks || "KEMERDEKAAN PALSU";
     const konsepVisual = thumbData.konsep || thumbData.deskripsi_visual || thumbData.komposisi || "Subjek tampak termenung di sisi kiri frame dengan tatapan tajam. Di sisi kanan ruang kosong untuk teks tipografi kontras tebal.";
 
-    // Outline / Visual-Audio Segments
-    const visualAudioList = activeShot.naskah?.visual_audio || activeShot.visual_audio || [];
-    const outlineList = videoPanjang.strategi_konten?.outline || videoPanjang.outline || [];
+    // Outline / Visual-Audio Segments with schema fallbacks
+    const visualAudioList = activeShot.naskah?.visual_audio || activeShot.visual_audio || activeShot.naskah?.segmen || activeShot.naskah?.klip || activeShot.segmen || data.segmen || data.klip || [];
+    const outlineList = videoPanjang.strategi_konten?.outline || videoPanjang.outline || videoPanjang.babak || videoPanjang.chapters || videoPanjang.segmen || data.outline || data.babak || [];
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -540,105 +540,98 @@ export function AnalysisResultPanel({
                     {isShorts ? (
                         /* SHORTS SEGMENTS (Shots Picker) */
                         <div className="space-y-4">
-                            <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                                {shots.map((shot: any, idx: number) => (
-                                    <Button
-                                        key={idx}
-                                        variant={selectedShotIndex === idx ? "default" : "outline"}
-                                        size="sm"
-                                        className="rounded-xl text-xs whitespace-nowrap"
-                                        onClick={() => setSelectedShotIndex(idx)}
-                                    >
-                                        Shot #{idx + 1} ({shot.durasi_detik || 60}s)
-                                    </Button>
-                                ))}
-                            </div>
-
-                            <Card className="p-6 space-y-6 bg-card/60 border-border/40">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                        <Film className="w-4 h-4 text-primary" />
-                                        Naskah Visual & Voiceover (Shot #{selectedShotIndex + 1})
-                                    </h3>
-                                    <div className="flex items-center gap-2">
+                            {shots.length > 0 && (
+                                <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                                    {shots.map((shot: any, idx: number) => (
                                         <Button
+                                            key={idx}
+                                            variant={selectedShotIndex === idx ? "default" : "outline"}
                                             size="sm"
-                                            variant="ghost"
-                                            className="h-8 text-xs gap-1.5"
-                                            onClick={() => {
-                                                const fullScript = visualAudioList.map((va: any) => `[Visual]: ${va.visual}\n[Audio]: ${va.audio}`).join("\n\n");
-                                                handleCopy(fullScript, `full_script_${selectedShotIndex}`);
-                                            }}
+                                            className="rounded-xl text-xs whitespace-nowrap"
+                                            onClick={() => setSelectedShotIndex(idx)}
                                         >
-                                            {copiedKey === `full_script_${selectedShotIndex}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                            <span>Salin Semua Naskah</span>
+                                            Shot #{idx + 1} ({shot.durasi_detik || 60}s)
                                         </Button>
-                                        {onGenerateTTS && (
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                className="gap-2 text-xs rounded-xl h-8"
-                                                onClick={() => onGenerateTTS(visualAudioList.map((va: any) => va.audio).join(" "))}
-                                            >
-                                                <Volume2 className="w-3.5 h-3.5 text-primary" />
-                                                TTS Voice
-                                            </Button>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Visual Audio Table / Blocks */}
-                                <div className="space-y-3">
-                                    {visualAudioList.map((va: any, i: number) => (
-                                        <div key={i} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-3">
-                                            <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
-                                                <span className="text-primary font-bold">Klip #{i + 1} ({va.durasi_detik || 5}s)</span>
-                                                <Badge variant="secondary" className="text-[10px]">{va.tipe_shot || "Medium Shot"}</Badge>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                                                <div className="bg-background/50 p-3 rounded-lg border border-border/20 space-y-1.5">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="font-semibold text-foreground text-[10px] uppercase tracking-wider text-muted-foreground">Visual Prompt</span>
-                                                        <Button
-                                                            size="icon"
-                                                            variant="ghost"
-                                                            className="h-6 w-6"
-                                                            onClick={() => handleCopy(va.visual || "", `vis_${selectedShotIndex}_${i}`)}
-                                                        >
-                                                            {copiedKey === `vis_${selectedShotIndex}_${i}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                                        </Button>
-                                                    </div>
-                                                    <p className="text-foreground/90 leading-relaxed">{va.visual}</p>
-                                                    {onGenerateImage && (
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            className="mt-1 h-7 text-[11px] px-2 text-primary hover:text-primary gap-1"
-                                                            onClick={() => onGenerateImage(va.visual)}
-                                                        >
-                                                            <Wand2 className="w-3 h-3" /> Gen Image
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                                <div className="bg-background/50 p-3 rounded-lg border border-border/20 space-y-1.5">
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="font-semibold text-foreground text-[10px] uppercase tracking-wider text-muted-foreground">Voiceover / Audio</span>
-                                                        <Button
-                                                            size="icon"
-                                                            variant="ghost"
-                                                            className="h-6 w-6"
-                                                            onClick={() => handleCopy(va.audio || "", `aud_${selectedShotIndex}_${i}`)}
-                                                        >
-                                                            {copiedKey === `aud_${selectedShotIndex}_${i}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                                        </Button>
-                                                    </div>
-                                                    <p className="text-foreground/90 leading-relaxed">{va.audio}</p>
-                                                </div>
-                                            </div>
-                                        </div>
                                     ))}
                                 </div>
-                            </Card>
+                            )}
+
+                            <div className="surface p-6 space-y-6">
+                                <div className="flex justify-between items-center border-b border-border pb-3">
+                                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                                        <Film className="w-4 h-4 text-primary" />
+                                        Naskah Visual & Voiceover {shots.length > 0 ? `(Shot #${selectedShotIndex + 1})` : ""}
+                                    </h3>
+                                    {visualAudioList.length > 0 && (
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                className="h-8 text-xs gap-1.5 font-mono"
+                                                onClick={() => {
+                                                    const fullScript = visualAudioList.map((va: any) => `[Visual]: ${va.visual || va.deskripsi_visual || va.gambar}\n[Audio]: ${va.audio || va.narasi || va.voiceover}`).join("\n\n");
+                                                    handleCopy(fullScript, `full_script_${selectedShotIndex}`);
+                                                }}
+                                            >
+                                                {copiedKey === `full_script_${selectedShotIndex}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                                <span>Salin Semua Naskah</span>
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Visual Audio Blocks */}
+                                {visualAudioList.length > 0 ? (
+                                    <div className="space-y-3">
+                                        {visualAudioList.map((va: any, i: number) => {
+                                            const visText = va.visual || va.deskripsi_visual || va.gambar || va.konsep || (typeof va === 'string' ? va : "Deskripsi visual tidak tersedia.");
+                                            const audText = va.audio || va.narasi || va.voiceover || va.teks || (typeof va === 'string' ? va : "Voiceover tidak tersedia.");
+                                            return (
+                                                <div key={i} className="field p-4 space-y-3">
+                                                    <div className="flex items-center justify-between text-[11px] font-semibold text-muted-foreground border-b border-border/50 pb-2">
+                                                        <span className="text-primary font-bold">Klip #{i + 1} ({va.durasi_detik || va.durasi || 5}s)</span>
+                                                        <Badge variant="secondary" className="text-[10px]">{va.tipe_shot || va.shot_type || "Medium Shot"}</Badge>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                                        <div className="p-3 rounded-xl bg-background/50 border border-border/40 space-y-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="font-bold text-foreground text-[10px] uppercase tracking-wider text-muted-foreground">Visual Prompt</span>
+                                                                <Button
+                                                                    size="icon"
+                                                                    variant="ghost"
+                                                                    className="h-6 w-6"
+                                                                    onClick={() => handleCopy(visText, `vis_${selectedShotIndex}_${i}`)}
+                                                                >
+                                                                    {copiedKey === `vis_${selectedShotIndex}_${i}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                                                </Button>
+                                                            </div>
+                                                            <p className="text-foreground/90 leading-relaxed">{visText}</p>
+                                                        </div>
+                                                        <div className="p-3 rounded-xl bg-background/50 border border-border/40 space-y-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="font-bold text-foreground text-[10px] uppercase tracking-wider text-muted-foreground">Voiceover / Audio</span>
+                                                                <Button
+                                                                    size="icon"
+                                                                    variant="ghost"
+                                                                    className="h-6 w-6"
+                                                                    onClick={() => handleCopy(audText, `aud_${selectedShotIndex}_${i}`)}
+                                                                >
+                                                                    {copiedKey === `aud_${selectedShotIndex}_${i}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                                                </Button>
+                                                            </div>
+                                                            <p className="text-foreground/90 leading-relaxed">{audText}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 text-xs text-muted-foreground field p-6">
+                                        Data klip visual & audio untuk segmen ini tidak ditemukan.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         /* VIDEO PANJANG OUTLINE / SEGMEN & OPENING 60 DETIK */
@@ -699,64 +692,77 @@ export function AnalysisResultPanel({
                             )}
 
                             {/* Outline Babak Utama Card */}
-                            <Card className="p-6 space-y-6 bg-card/60 border-border/40">
-                                <div className="flex justify-between items-center">
+                            <div className="surface p-6 space-y-6">
+                                <div className="flex justify-between items-center border-b border-border pb-3">
                                     <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                                         <Layers className="w-4 h-4 text-primary" />
                                         Struktur Segmen & Babak Video Panjang
                                     </h3>
-                                    <Button
-                                        size="sm"
-                                        variant="ghost"
-                                        className="h-8 text-xs gap-1.5"
-                                        onClick={() => {
-                                            const outlineText = outlineList.map((c: any, i: number) => {
-                                                const segs = Array.isArray(c.sumber_segmen) ? c.sumber_segmen.map((s: any) => `[Sumber: ${s.start}-${s.end} (${s.catatan || ""})]`).join(" ") : "";
-                                                return `Bab ${i + 1}: ${c.judul_bab || c.babak} (${c.start_estimate || ""}-${c.end_estimate || ""})\n${c.deskripsi_singkat || c.isi} ${segs}`;
-                                            }).join("\n\n");
-                                            handleCopy(outlineText, "full_outline");
-                                        }}
-                                    >
-                                        {copiedKey === "full_outline" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                        <span>Salin Semua Babak</span>
-                                    </Button>
+                                    {outlineList.length > 0 && (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            className="h-8 text-xs gap-1.5 font-mono"
+                                            onClick={() => {
+                                                const outlineText = outlineList.map((c: any, i: number) => {
+                                                    const segs = Array.isArray(c.sumber_segmen) ? c.sumber_segmen.map((s: any) => `[Sumber: ${s.start}-${s.end} (${s.catatan || ""})]`).join(" ") : "";
+                                                    return `Bab ${i + 1}: ${c.judul_bab || c.babak || c.judul} (${c.start_estimate || ""}-${c.end_estimate || ""})\n${c.deskripsi_singkat || c.isi || c.deskripsi || ""} ${segs}`;
+                                                }).join("\n\n");
+                                                handleCopy(outlineText, "full_outline");
+                                            }}
+                                        >
+                                            {copiedKey === "full_outline" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                            <span>Salin Semua Babak</span>
+                                        </Button>
+                                    )}
                                 </div>
-                                <div className="space-y-3">
-                                    {outlineList.map((chapter: any, idx: number) => (
-                                        <div key={idx} className="p-4 bg-muted/20 border border-border/30 rounded-xl space-y-2">
-                                            <div className="flex items-center justify-between text-xs font-bold text-foreground">
-                                                <span>Bab {idx + 1}: {chapter.judul_bab || chapter.babak}</span>
-                                                <div className="flex items-center gap-2">
-                                                    <Badge variant="secondary" className="text-[10px]">
-                                                        {chapter.start_estimate && chapter.end_estimate ? `${chapter.start_estimate} - ${chapter.end_estimate}` : (chapter.estimasi_durasi || chapter.start_estimate || "Segmen")}
-                                                    </Badge>
-                                                    <Button
-                                                        size="icon"
-                                                        variant="ghost"
-                                                        className="h-6 w-6"
-                                                        onClick={() => handleCopy(`${chapter.judul_bab || chapter.babak}: ${chapter.deskripsi_singkat || chapter.isi}`, `ch_${idx}`)}
-                                                    >
-                                                        {copiedKey === `ch_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                            <p className="text-xs text-muted-foreground leading-relaxed">{chapter.deskripsi_singkat || chapter.isi}</p>
 
-                                            {/* Rentang Sumber Segmen Audio Original */}
-                                            {Array.isArray(chapter.sumber_segmen) && chapter.sumber_segmen.length > 0 && (
-                                                <div className="pt-2 border-t border-border/20 flex flex-wrap items-center gap-2">
-                                                    <span className="text-[10px] font-semibold text-primary">Sumber Audio Original:</span>
-                                                    {chapter.sumber_segmen.map((seg: any, sIdx: number) => (
-                                                        <Badge key={sIdx} variant="outline" className="text-[10px] bg-background/50 border-primary/20 text-muted-foreground">
-                                                            ⏱️ {seg.start || "00:00:00"} - {seg.end || "00:00:00"} {seg.catatan ? `(${seg.catatan})` : ""}
-                                                        </Badge>
-                                                    ))}
+                                {outlineList.length > 0 ? (
+                                    <div className="space-y-3">
+                                        {outlineList.map((chapter: any, idx: number) => {
+                                            const titleBab = chapter.judul_bab || chapter.babak || chapter.judul || chapter.title || `Babak ${idx + 1}`;
+                                            const descBab = chapter.deskripsi_singkat || chapter.isi || chapter.deskripsi || chapter.summary || (typeof chapter === 'string' ? chapter : "Detail babak tidak tersedia.");
+                                            return (
+                                                <div key={idx} className="field p-4 space-y-2">
+                                                    <div className="flex items-center justify-between text-xs font-bold text-foreground border-b border-border/50 pb-2">
+                                                        <span>Bab {idx + 1}: {titleBab}</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <Badge variant="secondary" className="text-[10px] font-mono">
+                                                                {chapter.start_estimate && chapter.end_estimate ? `${chapter.start_estimate} - ${chapter.end_estimate}` : (chapter.estimasi_durasi || chapter.start_estimate || "Segmen")}
+                                                            </Badge>
+                                                            <Button
+                                                                size="icon"
+                                                                variant="ghost"
+                                                                className="h-6 w-6"
+                                                                onClick={() => handleCopy(`${titleBab}: ${descBab}`, `ch_${idx}`)}
+                                                            >
+                                                                {copiedKey === `ch_${idx}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground leading-relaxed">{descBab}</p>
+
+                                                    {/* Rentang Sumber Segmen Audio Original */}
+                                                    {Array.isArray(chapter.sumber_segmen) && chapter.sumber_segmen.length > 0 && (
+                                                        <div className="pt-2 border-t border-border/20 flex flex-wrap items-center gap-2">
+                                                            <span className="text-[10px] font-semibold text-primary">Sumber Audio Original:</span>
+                                                            {chapter.sumber_segmen.map((seg: any, sIdx: number) => (
+                                                                <Badge key={sIdx} variant="outline" className="text-[10px] bg-background/50 border-primary/20 text-muted-foreground">
+                                                                    ⏱️ {seg.start || "00:00:00"} - {seg.end || "00:00:00"} {seg.catatan ? `(${seg.catatan})` : ""}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </Card>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 text-xs text-muted-foreground field p-6">
+                                        Data struktur segmen babak untuk video panjang tidak ditemukan.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </TabsContent>
