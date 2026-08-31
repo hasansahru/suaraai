@@ -270,42 +270,41 @@ export function AnalysisResultPanel({
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
             {/* Header Info Banner */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card/60 backdrop-blur-md p-5 rounded-2xl border border-border/40 shadow-xs">
-                <div className="flex items-center gap-3">
-                    <div className="p-3 bg-primary/10 text-primary rounded-xl">
+            <div className="surface p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 border border-primary/20 shadow-md">
+                <div className="flex items-center gap-4">
+                    <div className="size-12 rounded-2xl bg-gradient-to-tr from-primary to-sky-400 text-white grid place-items-center shrink-0 shadow-lg shadow-primary/20">
                         <Sparkles className="w-6 h-6" />
                     </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <h2 className="text-lg font-bold text-foreground tracking-tight">
-                                Hasil Analisis Konten AI
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className="text-xl font-extrabold text-foreground tracking-tight">
+                                Telemetri & Strategi Konten AI
                             </h2>
-                            <Badge variant="outline" className="text-[11px] uppercase tracking-wider font-semibold border-primary/30 text-primary bg-primary/5">
-                                {isShorts ? "Video Shorts" : "Video Panjang"}
+                            <Badge className="bg-primary/15 text-primary border-primary/20 font-mono text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5">
+                                {isShorts ? "Shorts Scene" : "Long-Form Video"}
                             </Badge>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                            Semua rekomendasi metadata, naskah visual, SEO, dan jadwal tayang telah siap dipakai.
+                        <p className="text-xs text-muted-foreground">
+                            Paket naskah visual, sudut pandang psikologi audiens, optimasi kata kunci SEO, dan estimasi performa.
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 shrink-0 flex-wrap">
                     <Button
                         variant="outline"
                         size="sm"
-                        className="h-9 px-4 text-xs gap-2 rounded-xl border-border/60 hover:bg-muted font-medium"
+                        className="h-10 px-5 text-xs gap-2 rounded-2xl border-border hover:bg-accent font-bold shadow-sm active:scale-95"
                         onClick={handleCopyAllSEO}
                     >
                         {copiedKey === "all_seo_package" ? (
                             <>
-                                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                                <span className="text-emerald-600 dark:text-emerald-400">Tersalin!</span>
+                                <Check className="w-4 h-4 text-emerald-500" />
+                                <span className="text-emerald-600 dark:text-emerald-400 font-bold">Metadata Tersalin!</span>
                             </>
                         ) : (
                             <>
-                                <Copy className="w-3.5 h-3.5 text-primary" />
+                                <Copy className="w-4 h-4 text-primary" />
                                 <span>Salin Semua Metadata</span>
                             </>
                         )}
@@ -313,7 +312,7 @@ export function AnalysisResultPanel({
 
                     {/* Duration Warning / Info */}
                     {result.duration_warnings && result.duration_warnings.length > 0 && (
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs rounded-xl">
+                        <div className="flex items-center gap-2 px-3.5 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs rounded-2xl font-mono">
                             <AlertTriangle className="w-4 h-4 shrink-0" />
                             <span>{result.duration_warnings[0]}</span>
                         </div>
