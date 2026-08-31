@@ -314,24 +314,32 @@ textarea:focus-visible {
 }
 
 /* ─── Studio Modern Design System ───────────────────────── */
-.studio-glass {
-  @apply bg-background/80 backdrop-blur-xl border border-border/60 shadow-sm;
+.surface {
+  @apply bg-card/90 dark:bg-card/70 backdrop-blur-md border border-border/60 rounded-2xl shadow-sm transition-all duration-200;
 }
 
-.studio-card {
-  @apply bg-card border border-border/70 rounded-2xl p-6 shadow-sm transition-all duration-200;
+.surface:hover {
+  @apply border-border;
 }
 
-.studio-card:hover {
-  @apply border-primary/40 shadow-md shadow-primary/5 -translate-y-[1px];
+.field {
+  @apply bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 text-foreground transition-all duration-150 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20;
+}
+
+.glass-panel {
+  @apply bg-background/80 backdrop-blur-xl border border-border/80 shadow-2xl;
+}
+
+.glass-card-interactive {
+  @apply bg-card/60 hover:bg-card/90 border border-border/50 hover:border-primary/40 transition-all duration-200;
 }
 
 .nav-item {
-  @apply transition-all duration-150 relative;
+  @apply transition-all duration-150 relative text-muted-foreground hover:text-foreground hover:bg-accent/50;
 }
 
 .nav-item-active {
-  @apply bg-primary/10 text-primary font-bold border-l-2 border-primary;
+  @apply bg-primary/10 text-primary font-semibold border-r-2 border-primary;
 }
 
 .status-dot {
