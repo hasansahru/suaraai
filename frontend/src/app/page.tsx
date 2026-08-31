@@ -35,10 +35,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const DEFAULT_PROVIDERS = [
-  { id: "anthropic", label: "Anthropic Claude", mode: "anthropic" },
-  { id: "openai", label: "OpenAI GPT", mode: "openai_compatible", default_base_url: "https://api.openai.com/v1" },
   { id: "gemini", label: "Google Gemini", mode: "openai_compatible", default_base_url: "https://generativelanguage.googleapis.com/v1beta/openai" },
-  { id: "custom", label: "Custom OpenAI-Compatible Endpoint", mode: "openai_compatible", default_base_url: "https://ai.sahru.my.id/v1" },
   { id: "nine_router", label: "9Router (Free)", mode: "openai_compatible", default_base_url: "https://ai.sahru.my.id/v1" }
 ];
 
