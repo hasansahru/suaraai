@@ -1016,50 +1016,74 @@ export default function Dashboard() {
 
       {/* Settings Modal */}
       <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <DialogContent className="sm:max-w-[620px] surface border-border p-6 space-y-5">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm font-bold text-foreground">
-              <Settings className="size-4 text-primary" /> Konfigurasi AI Provider & Proxy
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              Atur provider AI, model target, API Key, dan koneksi server backend.
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="sm:max-w-[500px] surface border-border p-0 rounded-2xl overflow-hidden">
+          <div className="bg-gradient-to-br from-primary/5 via-background to-slate-50 dark:from-primary/10 dark:via-background dark:to-slate-900/20 p-6">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+                <Settings className="size-5 text-primary" /> AI Provider & Proxy
+              </DialogTitle>
+              <DialogDescription className="text-xs text-muted-foreground">
+                Pilih provider, model, dan koneksi API untuk analisis konten.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
-          <div className="space-y-4 text-xs">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground">AI Provider</label>
-              <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
-                <SelectTrigger className="field h-10 text-xs rounded-md">
-                  <SelectValue placeholder="Pilih Provider" />
-                </SelectTrigger>
-                <SelectContent className="surface border-border">
-                  {DEFAULT_PROVIDERS.map((p) => (
-                    <SelectItem key={p.id} value={p.id} className="text-xs">{p.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="p-6 pt-0 space-y-4">
+            {/* Provider Overview Card */}
+            <div className="surface p-4 rounded-xl border-border">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Brain className="size-4 text-primary" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-foreground">Active Provider</div>
+                  <div className="text-xs text-muted-foreground font-mono">{provider.toUpperCase()}</div>
+                </div>
+              </div>
             </div>
 
+            {/* Provider Selection */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground">Pilih Model</label>
+              <label className="text-[11px] font-semibold text-foreground">AI Provider</label>
+              <div className="grid grid-cols-2 gap-2">
+                {DEFAULT_PROVIDERS.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => setProvider(p.id)}
+                    className={`p-3 rounded-lg border text-left transition-all ${provider === p.id
+                      ? "border-primary bg-primary/10 shadow-sm"
+                      : "border-border bg-card hover:bg-accent/50"
+                      }`}
+                  >
+                    <div className="text-sm font-bold text-foreground">{p.label}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">{p.mode}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Model Selection */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-foreground">Model AI</label>
               <Select value={model || ""} onValueChange={(v) => v && setModel(v)}>
-                <SelectTrigger className="field h-10 text-xs rounded-md">
-                  <SelectValue placeholder="Pilih Model" />
+                <SelectTrigger className="h-11 rounded-xl border-border bg-card">
+                  <SelectValue placeholder="Pilih model..." />
                 </SelectTrigger>
                 <SelectContent className="surface border-border">
                   {provider === "nine_router" && (
                     <>
-                      <SelectItem value="Combo-maut" className="text-xs font-bold text-amber-400">Combo-Maut (Rekomendasi Utama)</SelectItem>
-                      <SelectItem value="ag/gemini-3.5-flash-high" className="text-xs">Gemini 3.5 Flash High (AG)</SelectItem>
-                      <SelectItem value="ag/gemini-3.6-flash-high" className="text-xs">Gemini 3.6 Flash High (AG)</SelectItem>
-                      <SelectItem value="ag/claude-sonnet-4-6" className="text-xs">Claude Sonnet 4.6 (AG)</SelectItem>
-                      <SelectItem value="kr/claude-sonnet-5" className="text-xs">Claude Sonnet 5 (KR)</SelectItem>
-                      <SelectItem value="kr/gpt-5.6-sol" className="text-xs">GPT 5.6 Sol (KR)</SelectItem>
-                      <SelectItem value="inferx/Qwen3.8-27B-FP8" className="text-xs">Qwen 3.8 27B FP8 (Inferx)</SelectItem>
-                      <SelectItem value="inferx/deepseek-v4-flash" className="text-xs">DeepSeek v4 Flash (Inferx)</SelectItem>
-                      <SelectItem value="gemini/gemini-3.7-flash" className="text-xs">Gemini 3.7 Flash</SelectItem>
-                      <SelectItem value="gc/gemini-3.1-pro-preview" className="text-xs">Gemini 3.1 Pro Preview (GC)</SelectItem>
+                      <div className="px-2 py-1 text-xs font-bold text-muted-foreground text-amber-600">Rekomendasi Khusus</div>
+                      <SelectItem value="Combo-maut" className="text-xs font-bold text-amber-600">
+                        Combo-Maut (Utama)
+                      </SelectItem>
+                      <SelectItem value="ag/gemini-3.5-flash-high">Gemini 3.5 Flash High (AG)</SelectItem>
+                      <SelectItem value="ag/gemini-3.6-flash-high">Gemini 3.6 Flash High (AG)</SelectItem>
+                      <SelectItem value="ag/claude-sonnet-4-6">Claude Sonnet 4.6 (AG)</SelectItem>
+                      <SelectItem value="kr/claude-sonnet-5">Claude Sonnet 5 (KR)</SelectItem>
+                      <SelectItem value="kr/gpt-5.6-sol">GPT 5.6 Sol (KR)</SelectItem>
+                      <SelectItem value="inferx/Qwen3.8-27B-FP8">Qwen 3.8 27B (Inferx)</SelectItem>
+                      <SelectItem value="inferx/deepseek-v4-flash">DeepSeek v4 Flash (Inferx)</SelectItem>
+                      <SelectItem value="gemini/gemini-3.7-flash">Gemini 3.7 Flash</SelectItem>
                     </>
                   )}
                   {provider !== "nine_router" && DEFAULT_MODELS[provider] && (
@@ -1071,43 +1095,59 @@ export default function Dashboard() {
               </Select>
             </div>
 
+            {/* Endpoint & API Key */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground">API Key 9Router</label>
-              <div className="space-y-1">
+              <label className="text-[11px] font-semibold text-foreground">Endpoint API</label>
+              <div className="flex gap-2">
                 <Input
-                  type="password"
-                  placeholder="Masukkan API Key (Opsional untuk 9Router)"
-                  value={apiKey}
-                  onChange={e => setApiKey(e.target.value)}
-                  className="field h-10 text-xs rounded-md"
+                  type="text"
+                  placeholder="https://..."
+                  value={baseUrl}
+                  onChange={e => setBaseUrl(e.target.value)}
+                  className="h-11 text-xs rounded-xl border-border"
                 />
-                <p className="text-[10px] text-muted-foreground font-mono">
-                  Endpoint: {baseUrl || "https://ai.sahru.my.id/v1"}
-                </p>
               </div>
             </div>
-          </div>
 
-          <div className="space-y-2 pt-1 border-t border-border">
-            {testResult && (
-              <div className={`p-2.5 rounded-md text-xs font-mono border ${testResult.ok ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-destructive/30 bg-destructive/10 text-destructive'}`}>
-                <span className="font-bold">{testResult.ok ? '✓ ONLINE' : '✗ FAILED'}:</span>
-                <span className="ml-2">{testResult.message}</span>
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-foreground">API Key</label>
+              <div className="relative">
+                <Input
+                  type="password"
+                  placeholder="Masukkan API Key"
+                  value={apiKey}
+                  onChange={e => setApiKey(e.target.value)}
+                  className="h-11 text-xs rounded-xl border-border pr-10"
+                />
               </div>
-            )}
-            <Button onClick={handleTestConnection} disabled={testLoading} variant="outline" className="w-full h-9 rounded-md text-xs font-mono">
-              {testLoading ? <Loader2 className="size-3.5 animate-spin mr-1.5" /> : null}
-              Tes Koneksi API
-            </Button>
-          </div>
+            </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-border">
-            <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="h-9 px-4 rounded-md text-xs">
-              Batal
-            </Button>
-            <Button onClick={() => { setIsSettingsOpen(false); toast.success("Pengaturan disimpan!"); }} className="h-9 px-4 rounded-md text-xs font-bold bg-primary text-primary-foreground">
-              Simpan Settings
-            </Button>
+            {/* Test Connection */}
+            <div className="pt-2 border-t border-border">
+              {testResult && (
+                <div className={`p-3 rounded-xl text-xs font-mono border mb-3 ${testResult.ok
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
+                  : "border-destructive/30 bg-destructive/10 text-destructive"
+                  }`}>
+                  <span className="font-bold">{testResult.ok ? '✓ Koneksi Online' : '✗ Koneksi Gagal'}:</span>
+                  <span className="ml-2">{testResult.message}</span>
+                </div>
+              )}
+              <Button onClick={handleTestConnection} disabled={testLoading} className="w-full h-11 rounded-xl font-semibold">
+                {testLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : null}
+                Tes Koneksi
+              </Button>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="flex gap-2 pt-2 border-t border-border">
+              <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="h-9 rounded-xl px-4">
+                Batal
+              </Button>
+              <Button onClick={() => { setIsSettingsOpen(false); toast.success("Pengaturan disimpan!"); }} className="h-9 rounded-xl px-6 font-bold bg-primary text-primary-foreground">
+                Simpan
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
