@@ -313,42 +313,81 @@ textarea:focus-visible {
   animation: float-slow 8s ease-in-out infinite;
 }
 
-/* ─── Studio Modern Design System ───────────────────────── */
+/* ─── Apple Liquid Glass Design System ───────────────────── */
+/* Frosted Glass Layers with Layered Highlight Borders */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.dark .apple-glass {
+  background: rgba(18, 24, 38, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
 .surface {
-  @apply bg-card/90 dark:bg-card/70 backdrop-blur-md border border-border/60 rounded-2xl shadow-sm transition-all duration-200;
+  @apply apple-glass rounded-3xl transition-all duration-300;
 }
 
 .surface:hover {
-  @apply border-border;
+  box-shadow: 0 12px 40px 0 rgba(0, 120, 212, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
 }
 
 .field {
-  @apply bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 text-foreground transition-all duration-150 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  @apply text-foreground rounded-2xl transition-all duration-200 focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10;
+}
+
+.dark .field {
+  background: rgba(10, 15, 26, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glass-panel {
-  @apply bg-background/80 backdrop-blur-xl border border-border/80 shadow-2xl;
+  @apply apple-glass shadow-2xl;
 }
 
 .glass-card-interactive {
-  @apply bg-card/60 hover:bg-card/90 border border-border/50 hover:border-primary/40 transition-all duration-200;
+  @apply apple-glass rounded-2xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200;
 }
 
 .nav-item {
-  @apply transition-all duration-150 relative text-muted-foreground hover:text-foreground hover:bg-accent/50;
+  @apply rounded-2xl transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-white/5;
 }
 
 .nav-item-active {
-  @apply bg-primary/10 text-primary font-semibold border-r-2 border-primary;
+  background: rgba(0, 120, 212, 0.12) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 120, 212, 0.25) !important;
+  @apply text-primary font-bold shadow-sm;
 }
 
 .status-dot {
-  @apply relative flex h-2 w-2;
+  @apply relative flex h-2.5 w-2.5;
 }
 
 .status-dot::before {
   content: '';
-  @apply absolute -inset-0.5 rounded-full bg-current opacity-75 animate-ping;
+  @apply absolute -inset-1 rounded-full bg-current opacity-60 animate-ping;
+}
+
+/* Ambient Liquid Gradient background */
+.apple-liquid-bg {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(at 10% 10%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+    radial-gradient(at 90% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 90%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
 }
 
 /* ─── Azure Accent Text Gradients ──────────────────────── */

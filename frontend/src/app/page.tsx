@@ -509,11 +509,11 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="studio-shell flex min-h-[100dvh] text-foreground font-sans antialiased overflow-x-hidden selection:bg-blue-500/25">
+    <div className="apple-liquid-bg flex min-h-[100dvh] text-foreground font-sans antialiased overflow-x-hidden selection:bg-blue-500/25">
       <Toaster position="top-center" theme={theme} richColors />
 
-      {/* === SIDEBAR (DESKTOP) WITH LIQUID GLASS MATERIAL === */}
-      <aside className="hidden lg:flex w-[252px] border-r border-border bg-background/85 flex-col shrink-0 min-h-[100dvh] sticky top-0 z-40">
+      {/* === SIDEBAR (DESKTOP) WITH APPLE FROSTED GLASS === */}
+      <aside className="hidden lg:flex w-[256px] border-r border-white/20 dark:border-white/10 apple-glass flex-col shrink-0 min-h-[100dvh] sticky top-0 z-40">
         {/* Logo Header */}
         <div className="h-[72px] flex items-center px-5 border-b border-border">
           <div className="flex items-center gap-3">
