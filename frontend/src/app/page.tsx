@@ -326,7 +326,9 @@ export default function Dashboard() {
     } else {
       setModel(null);
     }
-    setBaseUrl(pInfo?.default_base_url || "");
+    // Utamakan default_base_url dari provider local/fallback jika backend/pInfo kosong
+    const defaultUrl = pInfo?.default_base_url || DEFAULT_PROVIDERS.find(p => p.id === provider)?.default_base_url || "https://ai.sahru.my.id/v1";
+    setBaseUrl(defaultUrl);
   }, [provider, apiSettings]);
 
   useEffect(() => {
