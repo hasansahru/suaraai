@@ -185,7 +185,6 @@ async def api_test_connection(req: TestConnectionRequest):
     try:
         ai_provider_setting = load_json_setting("ai_provider_setting.json")
         provider_options = ai_provider_setting.get("providers", [])
-        # Cari berdasarkan id provider langsung atau match mode
         active_prov = next(
             (p for p in provider_options if p["id"] == req.mode or p["id"] == "nine_router" or p["id"] == "custom" or p.get("mode") == req.mode),
             {}
@@ -203,10 +202,15 @@ async def api_test_connection(req: TestConnectionRequest):
         if not resolved_base_url:
             resolved_base_url = "https://ai.sahru.my.id/v1"
 
+        # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
+        effective_api_key = req.api_key
+        if not effective_api_key and ("sahru.my.id" in resolved_base_url or req.mode == "nine_router" or req.mode == "custom"):
+            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
+
         msg = ai_client.test_connection(
             mode=resolved_mode,
             model=req.model.strip(),
-            api_key=req.api_key,
+            api_key=effective_api_key,
             api_key_env=api_key_env,
             base_url=resolved_base_url,
             timeout=req.timeout,
@@ -408,9 +412,14 @@ async def api_analyze(req: AnalyzeRequest):
             enable_code_execution=req.enable_code_execution,
         )
 
+        # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
+        effective_api_key = req.api_key
+        if not effective_api_key and (req.provider_id == "custom" or req.provider_id == "nine_router" or (req.base_url and "sahru.my.id" in req.base_url)):
+            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
+
         raw_text, web_sources = ai_client.run_analysis(
             ai_req,
-            api_key=req.api_key,
+            api_key=effective_api_key,
             api_key_env=provider_api_key_env
         )
 
