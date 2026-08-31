@@ -1062,7 +1062,7 @@ export default function Dashboard() {
                   </div>
                 ) : null;
               })()}
-              <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block mb-3">Pilih Channel</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 block mb-3">Pilih Channel</label>
 
               <div className="flex flex-col gap-3 flex-1">
                 {DEFAULT_CHANNELS.map((ch) => {
@@ -1104,7 +1104,7 @@ export default function Dashboard() {
               {/* Analytics Panel */}
               <div className="mt-4 pt-4 border-t border-slate-100 dark:border-border/50">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Data Analytics CSV</label>
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">Data Analytics CSV</label>
                   {analyticsExists && (
                     <button
                       onClick={handleDeleteAnalytics}
