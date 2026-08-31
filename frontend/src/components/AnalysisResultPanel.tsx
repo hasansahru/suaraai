@@ -370,8 +370,8 @@ export function AnalysisResultPanel({
                 <TabsContent value="ringkasan" className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Core Message Card */}
-                        <Card className="p-6 space-y-4 bg-card/60 backdrop-blur-xs border-border/40">
-                            <div className="flex items-center justify-between">
+                        <div className="surface p-6 space-y-3">
+                            <div className="flex items-center justify-between border-b border-border pb-3">
                                 <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                                     <Lightbulb className="w-4 h-4 text-amber-500" />
                                     Pesan Utama (Core Message)
@@ -379,21 +379,21 @@ export function AnalysisResultPanel({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-8 text-xs gap-1.5"
+                                    className="h-8 text-xs gap-1.5 font-mono"
                                     onClick={() => handleCopy(data.pesan_utama || data.ringkasan?.ide_utama || "", "core_msg")}
                                 >
                                     {copiedKey === "core_msg" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
                                     <span>Salin</span>
                                 </Button>
                             </div>
-                            <p className="text-sm leading-relaxed text-foreground/90 bg-muted/30 p-4 rounded-xl border border-border/30">
+                            <div className="field p-4 text-sm leading-relaxed min-h-[90px]">
                                 {data.pesan_utama || data.ringkasan?.ide_utama || "Pesan utama tidak tersedia."}
-                            </p>
-                        </Card>
+                            </div>
+                        </div>
 
                         {/* Unique Angle Card */}
-                        <Card className="p-6 space-y-4 bg-card/60 backdrop-blur-xs border-border/40">
-                            <div className="flex items-center justify-between">
+                        <div className="surface p-6 space-y-3">
+                            <div className="flex items-center justify-between border-b border-border pb-3">
                                 <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                                     <Target className="w-4 h-4 text-primary" />
                                     Sudut Pandang Unik (Unique Angle)
@@ -401,17 +401,17 @@ export function AnalysisResultPanel({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-8 text-xs gap-1.5"
+                                    className="h-8 text-xs gap-1.5 font-mono"
                                     onClick={() => handleCopy(data.sudut_pandang_unik || data.video_panjang?.strategi_konten?.unique_angle || activeShot.strategi_konten?.unique_angle || "", "angle")}
                                 >
                                     {copiedKey === "angle" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-muted-foreground" />}
                                     <span>Salin</span>
                                 </Button>
                             </div>
-                            <p className="text-sm leading-relaxed text-foreground/90 bg-muted/30 p-4 rounded-xl border border-border/30">
+                            <div className="field p-4 text-sm leading-relaxed min-h-[90px]">
                                 {data.sudut_pandang_unik || data.video_panjang?.strategi_konten?.unique_angle || activeShot.strategi_konten?.unique_angle || "Sudut pandang unik tidak tersedia."}
-                            </p>
-                        </Card>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Web Sources Reference */}
