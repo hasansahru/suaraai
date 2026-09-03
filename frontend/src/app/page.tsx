@@ -75,7 +75,7 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   ]
 };
 
-const FALLBACK_API_BASE = "https://suarafilsuf-suaraai-backend.hf.space";
+const FALLBACK_API_BASE = "https://api.filsuf.my.id";
 
 function resolveApiBase(): string {
   if (typeof window === "undefined") return FALLBACK_API_BASE;
@@ -84,10 +84,8 @@ function resolveApiBase(): string {
     return process.env.NEXT_PUBLIC_API_URL;
   }
   if (hostname === "localhost" || hostname === "127.0.0.1") {
-    // Jika ada backend lokal di port 7860/8000 gunakan env, fallback ke cloud HF Space
     return FALLBACK_API_BASE;
   }
-  // Di domain production Vercel / custom domain, direct ke HF Space backend
   return FALLBACK_API_BASE;
 }
 

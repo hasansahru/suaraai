@@ -4,13 +4,16 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, LogIn, UserPlus, Eye, EyeOff, Sparkles, Brain } from "lucide-react";
 
-const FALLBACK_API_BASE = "https://suarafilsuf-suaraai-backend.hf.space";
+const FALLBACK_API_BASE = "https://api.filsuf.my.id";
 
 function resolveApiBase(): string {
   if (typeof window === "undefined") return FALLBACK_API_BASE;
   const hostname = window.location.hostname;
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
   if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return process.env.NEXT_PUBLIC_API_URL || FALLBACK_API_BASE;
+    return FALLBACK_API_BASE;
   }
   return FALLBACK_API_BASE;
 }
