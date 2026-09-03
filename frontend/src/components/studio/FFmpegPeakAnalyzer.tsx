@@ -61,15 +61,15 @@ export function FFmpegPeakAnalyzer({ apiBase, onApplySegment }: FFmpegPeakAnalyz
         })
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({ detail: `HTTP ${res.status} ${res.statusText}` }));
       if (res.ok && data.status === "success") {
         setAnalysisResult(data.data);
         toast.success(`Berhasil! Ditemukan ${data.data.peak_segments?.length || 0} segmen puncak viral.`, { id: toastId });
       } else {
         toast.error(data.detail || "Gagal memproses analisis FFmpeg peak time.", { id: toastId });
       }
-    } catch (err) {
-      toast.error("Gagal terhubung ke backend audio analyzer.", { id: toastId });
+    } catch (err: any) {
+      toast.error(`Gagal terhubung ke backend audio analyzer: ${err?.message || err}`, { id: toastId });
     } finally {
       setLoading(false);
     }
