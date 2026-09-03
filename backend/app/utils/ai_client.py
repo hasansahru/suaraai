@@ -322,10 +322,19 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
     _MAX_RETRIES = 3
 
     last_exc: Exception | None = None
+    # Normalisasi nama model khusus 9Router agar toleran terhadap variasi huruf besar/kecil
+    _9ROUTER_CANONICAL_MODELS = {
+        "combo-maut": "Combo-Maut",
+        "google": "Google",
+        "comtoken": "ComToken",
+    }
+    normalized_model = _9ROUTER_CANONICAL_MODELS.get(request.model.strip().lower(), request.model.strip())
+
+
     for attempt in range(1, _MAX_RETRIES + 1):
         try:
             create_kwargs = {
-                "model": request.model,
+                "model": normalized_model,
                 # Jika stream=True dikirim oleh 9Router (seperti pada Combo-Maut / Google), OpenAI SDK butuh dukungan stream khusus.
                 "stream": False,   # eksplisit non-streaming agar respons dikembalikan sekaligus
                 "messages": [
