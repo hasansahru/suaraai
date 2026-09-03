@@ -876,7 +876,7 @@ export default function Dashboard() {
                     placeholder="Tempel transkrip naskah sumber atau artikel di sini..."
                     value={manualTranscript}
                     onChange={e => setManualTranscript(e.target.value)}
-                    className="field min-h-[110px] text-xs rounded-xl p-3 resize-none border-border/70"
+                    className="field h-40 max-h-48 text-xs rounded-xl p-3 resize-y overflow-y-auto custom-scrollbar border-border/70"
                   />
                 )}
 
