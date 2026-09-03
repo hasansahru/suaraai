@@ -24,8 +24,12 @@ import {
   Smartphone,
   MonitorPlay,
   Link2,
-  Plus
+  Plus,
+  Activity,
+  Zap,
+  BarChart2
 } from "lucide-react";
+import { FFmpegPeakAnalyzer } from "@/components/studio/FFmpegPeakAnalyzer";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -545,6 +549,14 @@ export default function Dashboard() {
 
           <Button
             variant="ghost"
+            onClick={() => { setActiveMenu("ffmpeg"); }}
+            className={`nav-item w-full justify-start h-10 rounded-r-lg rounded-l-sm font-medium ${activeMenu === "ffmpeg" ? "nav-item-active" : ""}`}
+          >
+            <Activity className="size-4 mr-3 text-amber-500" /> FFmpeg Peak Time
+          </Button>
+
+          <Button
+            variant="ghost"
             onClick={() => { setActiveMenu("history"); setIsHistoryOpen(true); }}
             className={`nav-item w-full justify-start h-10 rounded-r-lg rounded-l-sm font-medium ${activeMenu === "history" ? "nav-item-active" : ""}`}
           >
@@ -676,7 +688,41 @@ export default function Dashboard() {
 
         {/* Workspace Main Container: Asymmetric 2-Column Studio Workspace */}
         <main className="flex-1 p-4 sm:p-6 max-w-[1400px] w-full mx-auto">
-          <div className="flex flex-col lg:flex-row gap-5 items-start">
+          {activeMenu === "ffmpeg" ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-2">
+                <div>
+                  <h2 className="text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+                    <Activity className="size-5 text-amber-500" />
+                    FFmpeg Peak Time Studio
+                  </h2>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Deteksi momen audio berenergi tinggi untuk ekstraksi hook video pendek viral.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setActiveMenu("dashboard")}
+                  className="text-xs"
+                >
+                  Kembali ke Dashboard
+                </Button>
+              </div>
+
+              <FFmpegPeakAnalyzer
+                apiBase={API_BASE}
+                onApplySegment={(startTime, endTime, hook) => {
+                  setExtraNotes((prev) =>
+                    `[FFMPEG PEAK SEGMENT]: ${startTime} - ${endTime} (Hook: ${hook})\n${prev}`.trim()
+                  );
+                  setActiveMenu("dashboard");
+                  toast.success(`Segmen ${startTime} - ${endTime} diterapkan ke instruksi analisis!`);
+                }}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col lg:flex-row gap-5 items-start">
 
             {/* Left Column: Control Deck (Fixed width on desktop) */}
             <div className="w-full lg:w-[320px] xl:w-[350px] shrink-0 flex flex-col gap-4">
@@ -1006,6 +1052,7 @@ export default function Dashboard() {
             </div>
 
           </div>
+          )}
 
           {/* Studio Loading Overlay */}
           {loading && (

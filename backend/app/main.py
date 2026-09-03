@@ -399,12 +399,23 @@ async def api_analyze(req: AnalyzeRequest):
             computed_max_tokens = max(computed_max_tokens, 24000)
         computed_max_tokens = min(computed_max_tokens, 32000)
 
+        # Fallback & normalisasi Base URL
+        effective_base_url = req.base_url or ""
+        if not effective_base_url or effective_base_url == "https://api.openai.com/v1" or "sahru.my.id" in effective_base_url:
+            if req.provider_id in ["nine_router", "custom"] or (req.base_url and "sahru.my.id" in req.base_url):
+                effective_base_url = "https://ai.sahru.my.id/v1"
+
+        # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
+        effective_api_key = req.api_key
+        if not effective_api_key and (req.provider_id == "custom" or req.provider_id == "nine_router" or (req.base_url and "sahru.my.id" in req.base_url)):
+            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
+
         ai_req = ai_client.AnalysisRequest(
             system_prompt=system_prompt,
             user_content=user_content,
             model=req.model.strip(),
             mode=provider_mode,
-            base_url=req.base_url,
+            base_url=effective_base_url,
             max_tokens=computed_max_tokens,
             timeout=float(req.request_timeout),
             enable_web_search=req.enable_web_search,
@@ -413,11 +424,6 @@ async def api_analyze(req: AnalyzeRequest):
             thinking_budget_tokens=req.thinking_budget_tokens,
             enable_code_execution=req.enable_code_execution,
         )
-
-        # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
-        effective_api_key = req.api_key
-        if not effective_api_key and (req.provider_id == "custom" or req.provider_id == "nine_router" or (req.base_url and "sahru.my.id" in req.base_url)):
-            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
 
         raw_text, web_sources = ai_client.run_analysis(
             ai_req,
@@ -635,3 +641,24 @@ async def api_image(req: ImageRequest):
                 raise HTTPException(status_code=500, detail="Respons API tidak berisi URL gambar.")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Gagal generate gambar: {str(e)}")
+
+
+class PeakTimeRequest(BaseModel):
+    youtube_url: str
+    clip_duration: int = 60
+    top_k: int = 5
+
+@app.post("/api/ffmpeg/peak-time")
+async def api_ffmpeg_peak_time(req: PeakTimeRequest):
+    """Menganalisis audio YouTube menggunakan FFmpeg untuk mendeteksi Peak Time / Momen Puncak."""
+    try:
+        from app.utils import ffmpeg_analyzer
+        result = ffmpeg_analyzer.analyze_youtube_peak_time(
+            youtube_url=req.youtube_url,
+            clip_duration=req.clip_duration,
+            top_k=req.top_k
+        )
+        return {"status": "success", "data": result}
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Gagal analisis FFmpeg Peak Time: {str(exc)}")
+
