@@ -69,9 +69,14 @@ const DEFAULT_MODELS: Record<string, string[]> = {
   gemini: ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-pro"],
   custom: [],
   nine_router: [
+    "ag/gemini-3.7-flash-high",
+    "gemini/gemini-3.6-flash",
     "Combo-Maut",
     "Google",
-    "ComToken"
+    "ComToken",
+    "ag/gemini-3.6-flash-high",
+    "ag/claude-sonnet-4-6",
+    "kr/claude-sonnet-5"
   ]
 };
 

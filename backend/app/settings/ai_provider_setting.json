@@ -85,8 +85,16 @@
       "allow_custom_model": true,
       "models": [
         {
+          "id": "ag/gemini-3.7-flash-high",
+          "label": "⚡ Gemini 3.7 Flash High (Rekomendasi — Cepat & Akurat)"
+        },
+        {
+          "id": "gemini/gemini-3.6-flash",
+          "label": "⚡ Gemini 3.6 Flash (Direct — Cepat)"
+        },
+        {
           "id": "Combo-Maut",
-          "label": "🔥 Combo Maut (Auto-best, Rekomendasi)"
+          "label": "🔥 Combo Maut (Multi-Provider Auto-fallback)"
         },
         {
           "id": "Google",
@@ -95,10 +103,6 @@
         {
           "id": "ComToken",
           "label": "ComToken (9Router)"
-        },
-        {
-          "id": "ag/gemini-3.7-flash-high",
-          "label": "Gemini 3.7 Flash High (AG)"
         },
         {
           "id": "ag/gemini-3.6-flash-high",
@@ -123,10 +127,6 @@
         {
           "id": "kr/gpt-5.6-sol",
           "label": "GPT 5.6 Sol (KR)"
-        },
-        {
-          "id": "gemini/gemini-3.6-flash",
-          "label": "Gemini 3.6 Flash (Direct)"
         }
       ]
     }
