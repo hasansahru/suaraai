@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y curl gcc g++ && rm -rf /var/lib/apt/lists/*
+# Install system dependencies (including ffmpeg for Peak Time Analyzer)
+RUN apt-get update && apt-get install -y curl gcc g++ ffmpeg && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user (Hugging Face Requirement)
 RUN useradd -m -u 1000 user
