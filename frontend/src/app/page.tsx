@@ -80,9 +80,10 @@ function resolveApiBase(): string {
   if (typeof window === "undefined") return FALLBACK_API_BASE;
   const hostname = window.location.hostname;
   if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return process.env.NEXT_PUBLIC_API_URL || FALLBACK_API_BASE;
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:7860";
   }
-  return FALLBACK_API_BASE;
+  // In production domain, use relative path so reverse proxy (Nginx) routes /api to FastAPI backend
+  return "";
 }
 
 const API_BASE = resolveApiBase();
