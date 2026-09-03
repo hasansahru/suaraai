@@ -252,12 +252,15 @@ async def api_analyze(req: AnalyzeRequest):
     try:
         ai_provider_setting = load_json_setting("ai_provider_setting.json")
         provider_options = ai_provider_setting.get("providers", [])
-        selected_provider = next((p for p in provider_options if p["id"] == req.provider_id), None)
+        # Izinkan alias 'nine_router' memetakan ke 'custom'
+        target_provider_id = "custom" if req.provider_id == "nine_router" else req.provider_id
+        selected_provider = next((p for p in provider_options if p["id"] == target_provider_id), None)
         if not selected_provider:
-            raise HTTPException(status_code=400, detail=f"Provider ID '{req.provider_id}' tidak dikenal.")
+            # Fallback default ke custom jika tidak cocok
+            selected_provider = next((p for p in provider_options if p["id"] == "custom"), provider_options[0] if provider_options else {})
         
-        provider_mode = selected_provider.get("mode", "anthropic")
-        provider_api_key_env = selected_provider.get("api_key_env", "ANTHROPIC_API_KEY")
+        provider_mode = selected_provider.get("mode", "openai_compatible")
+        provider_api_key_env = selected_provider.get("api_key_env", "CUSTOM_AI_API_KEY")
 
         video_title = "Video Kustom / Transkrip Manual"
         transcript_text = ""
