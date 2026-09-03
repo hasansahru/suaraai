@@ -80,11 +80,15 @@ const FALLBACK_API_BASE = "https://suarafilsuf-suaraai-backend.hf.space";
 function resolveApiBase(): string {
   if (typeof window === "undefined") return FALLBACK_API_BASE;
   const hostname = window.location.hostname;
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:7860";
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
   }
-  // In production domain, use relative path so reverse proxy (Nginx) routes /api to FastAPI backend
-  return "";
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    // Jika ada backend lokal di port 7860/8000 gunakan env, fallback ke cloud HF Space
+    return FALLBACK_API_BASE;
+  }
+  // Di domain production Vercel / custom domain, direct ke HF Space backend
+  return FALLBACK_API_BASE;
 }
 
 const API_BASE = resolveApiBase();
