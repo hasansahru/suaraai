@@ -85,16 +85,24 @@
       "allow_custom_model": true,
       "models": [
         {
-          "id": "Combo-maut",
+          "id": "Combo-Maut",
           "label": "🔥 Combo Maut (Auto-best, Rekomendasi)"
         },
         {
-          "id": "ag/gemini-3.5-flash-high",
-          "label": "Gemini 3.5 Flash High (AG)"
+          "id": "Google",
+          "label": "Google (9Router)"
+        },
+        {
+          "id": "ComToken",
+          "label": "ComToken (9Router)"
+        },
+        {
+          "id": "ag/gemini-3.7-flash-high",
+          "label": "Gemini 3.7 Flash High (AG)"
         },
         {
           "id": "ag/gemini-3.6-flash-high",
-          "label": "Gemini 3.6 Flash High (AG, Terbaru)"
+          "label": "Gemini 3.6 Flash High (AG)"
         },
         {
           "id": "ag/claude-sonnet-4-6",
