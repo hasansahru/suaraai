@@ -1,83 +1,10 @@
 {
-  "default_provider": "custom",
+  "default_provider": "nine_router",
   "providers": [
     {
-      "id": "anthropic",
-      "label": "🟣 Anthropic (Claude langsung)",
-      "description": "Memanggil Claude langsung lewat Anthropic API. Butuh ANTHROPIC_API_KEY.",
-      "mode": "anthropic",
-      "requires_base_url": false,
-      "default_base_url": "",
-      "api_key_env": "ANTHROPIC_API_KEY",
-      "allow_custom_model": true,
-      "models": [
-        {
-          "id": "claude-sonnet-4-6",
-          "label": "Claude Sonnet 4.6 (Rekomendasi)"
-        },
-        {
-          "id": "claude-opus-4-7",
-          "label": "Claude Opus 4.7 (Paling Mendalam)"
-        },
-        {
-          "id": "claude-haiku-4-5-20251001",
-          "label": "Claude Haiku 4.5 (Paling Cepat)"
-        }
-      ]
-    },
-
-    {
-      "id": "openai",
-      "label": "🔵 OpenAI (GPT langsung)",
-      "description": "Memanggil model GPT langsung lewat OpenAI API. Butuh OPENAI_API_KEY.",
-      "mode": "openai_compatible",
-      "requires_base_url": false,
-      "default_base_url": "https://api.openai.com/v1",
-      "api_key_env": "OPENAI_API_KEY",
-      "allow_custom_model": true,
-      "models": [
-        {
-          "id": "gpt-5.2",
-          "label": "GPT-5.2 (Rekomendasi)"
-        },
-        {
-          "id": "gpt-5.2-mini",
-          "label": "GPT-5.2 Mini (Lebih Cepat/Murah)"
-        },
-        {
-          "id": "gpt-5.2-pro",
-          "label": "GPT-5.2 Pro (Paling Mendalam)"
-        }
-      ]
-    },
-    {
-      "id": "gemini",
-      "label": "🟡 Google Gemini (langsung)",
-      "description": "Memanggil Gemini langsung lewat endpoint OpenAI-compatible Google. Butuh GEMINI_API_KEY.",
-      "mode": "openai_compatible",
-      "requires_base_url": false,
-      "default_base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
-      "api_key_env": "GEMINI_API_KEY",
-      "allow_custom_model": true,
-      "models": [
-        {
-          "id": "gemini-3.5-flash",
-          "label": "Gemini 3.5 Flash (Rekomendasi — GA, paling seimbang)"
-        },
-        {
-          "id": "gemini-3.1-pro",
-          "label": "Gemini 3.1 Pro (Paling Mendalam)"
-        },
-        {
-          "id": "gemini-3.1-flash-lite",
-          "label": "Gemini 3.1 Flash-Lite (Paling Cepat/Murah)"
-        }
-      ]
-    },
-    {
-      "id": "custom",
-      "label": "⚪ 9Router AI Proxy (ai.sahru.my.id)",
-      "description": "Proxy AI self-hosted lewat 9Router. Mendukung multi-provider (Gemini, Claude, GPT) dengan satu API key.",
+      "id": "nine_router",
+      "label": "⚡ 9Router (Free)",
+      "description": "Gunakan server 9Router dengan puluhan model premium tanpa perlu API Key sendiri.",
       "mode": "openai_compatible",
       "requires_base_url": true,
       "default_base_url": "https://ai.sahru.my.id/v1",
@@ -85,48 +12,61 @@
       "allow_custom_model": true,
       "models": [
         {
-          "id": "ag/gemini-3.7-flash-high",
-          "label": "⚡ Gemini 3.7 Flash High (Rekomendasi — Cepat & Akurat)"
-        },
-        {
-          "id": "gemini/gemini-3.6-flash",
-          "label": "⚡ Gemini 3.6 Flash (Direct — Cepat)"
-        },
-        {
           "id": "Combo-Maut",
-          "label": "🔥 Combo Maut (Multi-Provider Auto-fallback)"
-        },
-        {
-          "id": "Google",
-          "label": "Google (9Router)"
+          "label": "Combo-Maut",
+          "description": "Otomatis pilih model terkuat dengan failover cadangan."
         },
         {
           "id": "ComToken",
-          "label": "ComToken (9Router)"
+          "label": "ComToken",
+          "description": "Model Fallback super cepat & stabil."
         },
         {
-          "id": "ag/gemini-3.6-flash-high",
-          "label": "Gemini 3.6 Flash High (AG)"
+          "id": "Google",
+          "label": "Google",
+          "description": "Grup model Google Gemini via 9Router dengan auto-fallback."
+        },
+        {
+          "id": "ag/gemini-3.7-flash-high",
+          "label": "Gemini 3.7 Flash High (AG)",
+          "description": "Model Gemini 3.7 Flash High via 9Router."
         },
         {
           "id": "ag/claude-sonnet-4-6",
-          "label": "Claude Sonnet 4.6 (AG)"
-        },
-        {
-          "id": "ag/gemini-3.1-pro-low",
-          "label": "Gemini 3.1 Pro Low (AG)"
-        },
-        {
-          "id": "kr/claude-sonnet-5",
-          "label": "Claude Sonnet 5 (KR)"
+          "label": "Claude Sonnet 4.6 (AG)",
+          "description": "Model Claude Sonnet 4.6 via 9Router."
         },
         {
           "id": "kr/claude-opus-4.7",
-          "label": "Claude Opus 4.7 (KR, Premium)"
+          "label": "Claude Opus 4.7 (KR, Premium)",
+          "description": "Model Claude Opus 4.7 Premium via 9Router."
+        }
+      ]
+    },
+    {
+      "id": "google_ai_studio",
+      "label": "🟡 Google AI Studio",
+      "description": "Gunakan API Key sendiri dari Google AI Studio untuk akses model Gemini secara langsung.",
+      "mode": "google",
+      "requires_base_url": false,
+      "default_base_url": "",
+      "api_key_env": "GEMINI_API_KEY",
+      "allow_custom_model": true,
+      "models": [
+        {
+          "id": "gemini-2.5-flash",
+          "label": "gemini-2.5-flash",
+          "description": "Model tercepat & terbaru dari Google (Sangat Mumpuni)."
         },
         {
-          "id": "kr/gpt-5.6-sol",
-          "label": "GPT 5.6 Sol (KR)"
+          "id": "gemini-2.5-flash-lite",
+          "label": "gemini-2.5-flash-lite",
+          "description": "Model sangat cepat dan hemat token."
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "label": "gemini-2.5-pro",
+          "description": "Model paling pintar dari Google untuk reasoning mendalam."
         }
       ]
     }

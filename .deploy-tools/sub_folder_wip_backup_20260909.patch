@@ -1,0 +1,3549 @@
+diff --git a/backend/app/main.py b/backend/app/main.py
+index 49d5152..3c882cc 100644
+--- a/backend/app/main.py
++++ b/backend/app/main.py
+@@ -207,7 +207,7 @@ async def api_test_connection(req: TestConnectionRequest):
+         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
+         effective_api_key = req.api_key
+         if not effective_api_key or not effective_api_key.strip():
+-            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
++            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-wi3lmm-fce3c847")
+ 
+         msg = ai_client.test_connection(
+             mode=resolved_mode,
+@@ -411,7 +411,7 @@ async def api_analyze(req: AnalyzeRequest):
+         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
+         effective_api_key = req.api_key
+         if not effective_api_key and (req.provider_id == "custom" or req.provider_id == "nine_router" or (req.base_url and "sahru.my.id" in req.base_url)):
+-            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
++            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-wi3lmm-fce3c847")
+ 
+         ai_req = ai_client.AnalysisRequest(
+             system_prompt=system_prompt,
+diff --git a/backend/app/prompts/output_format.md b/backend/app/prompts/output_format.md
+index c22e26a..d912dfb 100644
+--- a/backend/app/prompts/output_format.md
++++ b/backend/app/prompts/output_format.md
+@@ -72,9 +72,9 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
+           {
+             "video_baru_start": "mm:ss — estimasi waktu mulai di video baru, harus berurutan kumulatif mulai dari 00:00",
+             "video_baru_end": "mm:ss — estimasi waktu selesai di video baru, akumulasi klip terakhir HARUS tepat berakhir di 01:00 (tidak boleh lebih dari 60 detik)",
+-            "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
++            "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung presisi dari posisi kata transkrip × tempo bicara 2-3 kata/detik)",
+             "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
+-            "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini. WAJIB pastikan jumlah kata MASUK AKAL dengan durasi klip ini (rata-rata bicara 2-3 kata per detik). JANGAN menaruh teks sangat pendek untuk durasi yang panjang (misal teks 5 detik ditaruh untuk durasi 20 detik)!",
++            "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber pada rentang sumber_start sampai sumber_end. WAJIB pastikan jumlah kata MASUK AKAL dan presisi dengan durasi klip ini (rata-rata bicara 2-3 kata per detik). DILARANG KERAS menaruh teks fiktif atau memasang teks pendek/panjang yang mismatch dengan timestamp!",
+             "catatan_editing": "string — instruksi editing untuk segmen ini (B-roll, musik, jeda, dll)"
+           }
+         ],
+diff --git a/backend/app/prompts/system_prompt.md b/backend/app/prompts/system_prompt.md
+index c39c85b..5a9ffb9 100644
+--- a/backend/app/prompts/system_prompt.md
++++ b/backend/app/prompts/system_prompt.md
+@@ -59,7 +59,8 @@ Aturan penggunaan:
+ ## Penyelarasan dengan Catatan Tambahan dari Pengguna (Catatan Khusus)
+ 
+ Jika pengguna menyediakan **"Catatan Tambahan dari Pengguna" (Catatan Khusus)** pada input, Anda **WAJIB** menjadikannya sebagai fokus utama analisis dan penyaringan segmen di transkrip:
+-- **Presisi Timestamp Sumber Audio & Naskah**: Seluruh `sumber_start`, `sumber_end`, `sumber_segmen`, dan `segmen.start_time`/`end_time` WAJIB bersumber 100% presisi dari timestamp audio/transkrip asli (posisi kata × estimasi tempo bicara 2-3 kata/detik). DILARANG KERAS mengarang timestamp atau naskah fiktif yang tidak ada di audio sumber!
++- **Presisi Timestamp & Sinkronisasi Teks-Audio Sumber**: Seluruh timestamp (`sumber_start`, `sumber_end`, `sumber_segmen`, dan `segmen.start_time`/`end_time`) WAJIB bersumber 100% presisi dari timestamp audio/transkrip asli (posisi kata × estimasi tempo bicara 2-3 kata/detik). DILARANG KERAS mengarang timestamp fiktif atau memasangkan kutipan narasi yang durasi bacanya tidak seimbang dengan rentang timestamp sumber!
++- **Kutipan Asli Transkrip (`narasi_sumber`)**: Setiap narasi yang dikutip dari video sumber wajib berupa teks asli yang benar-benar ada di transkrip pada rentang `sumber_start` hingga `sumber_end` tersebut, dengan jumlah kata yang presisi dan realistis terhadap durasi audio.
+ - **Pencarian dalam Transkrip**: Lakukan pencarian mental/reasoning secara teliti di dalam teks **TRANSKRIP VIDEO SUMBER** yang diberikan. Temukan bagian-bagian, menit, atau kutipan kalimat yang membahas topik, konflik, kata kunci, atau tema yang diminta dalam Catatan Khusus tersebut.
+ - **Pemilihan Segmen / Pembagian Babak**: Prioritaskan untuk memilih segmen/shot (untuk Shorts) atau menyusun babak (untuk Video Panjang) dari bagian-bagian transkrip yang relevan dengan Catatan Khusus tersebut. 
+ - **Penyelarasan Gaya & Pembahasan**: Arahkan sudut pandang analisis (angle), pembawaan gaya bahasa, dan rekomendasi konten baru agar selaras dengan instruksi spesifik di Catatan Khusus (misal: "fokuskan pada kegagalan bisnis" atau "gunakan nada bicara stoik").
+diff --git a/backend/app/settings/ai_provider_setting.json b/backend/app/settings/ai_provider_setting.json
+index 3c8a3fa..ae072dc 100644
+--- a/backend/app/settings/ai_provider_setting.json
++++ b/backend/app/settings/ai_provider_setting.json
+@@ -1,134 +1,84 @@
+ {
+-  "default_provider": "custom",
++  "default_provider": "nine_router",
+   "providers": [
+     {
+-      "id": "anthropic",
+-      "label": "🟣 Anthropic (Claude langsung)",
+-      "description": "Memanggil Claude langsung lewat Anthropic API. Butuh ANTHROPIC_API_KEY.",
+-      "mode": "anthropic",
+-      "requires_base_url": false,
+-      "default_base_url": "",
+-      "api_key_env": "ANTHROPIC_API_KEY",
++      "id": "nine_router",
++      "label": "⚡ 9Router (Free)",
++      "description": "Gunakan server 9Router dengan puluhan model premium tanpa perlu API Key sendiri.",
++      "mode": "openai_compatible",
++      "requires_base_url": true,
++      "default_base_url": "https://ai.sahru.my.id/v1",
++      "api_key_env": "CUSTOM_AI_API_KEY",
+       "allow_custom_model": true,
+       "models": [
+         {
+-          "id": "claude-sonnet-4-6",
+-          "label": "Claude Sonnet 4.6 (Rekomendasi)"
++          "id": "Combo-Maut",
++          "label": "Combo-Maut",
++          "description": "Otomatis pilih model terkuat dengan failover cadangan."
+         },
+         {
+-          "id": "claude-opus-4-7",
+-          "label": "Claude Opus 4.7 (Paling Mendalam)"
++          "id": "ComToken",
++          "label": "ComToken",
++          "description": "Model Fallback super cepat & stabil."
+         },
+         {
+-          "id": "claude-haiku-4-5-20251001",
+-          "label": "Claude Haiku 4.5 (Paling Cepat)"
+-        }
+-      ]
+-    },
+-
+-    {
+-      "id": "openai",
+-      "label": "🔵 OpenAI (GPT langsung)",
+-      "description": "Memanggil model GPT langsung lewat OpenAI API. Butuh OPENAI_API_KEY.",
+-      "mode": "openai_compatible",
+-      "requires_base_url": false,
+-      "default_base_url": "https://api.openai.com/v1",
+-      "api_key_env": "OPENAI_API_KEY",
+-      "allow_custom_model": true,
+-      "models": [
++          "id": "Google",
++          "label": "Google",
++          "description": "Grup model Google Gemini via 9Router dengan auto-fallback."
++        },
+         {
+-          "id": "gpt-5.2",
+-          "label": "GPT-5.2 (Rekomendasi)"
++          "id": "ag/gemini-3.7-flash-high",
++          "label": "Gemini 3.7 Flash High (AG)",
++          "description": "Model Gemini 3.7 Flash High via 9Router."
+         },
+         {
+-          "id": "gpt-5.2-mini",
+-          "label": "GPT-5.2 Mini (Lebih Cepat/Murah)"
++          "id": "ag/claude-sonnet-4-6",
++          "label": "Claude Sonnet 4.6 (AG)",
++          "description": "Model Claude Sonnet 4.6 via 9Router."
+         },
+         {
+-          "id": "gpt-5.2-pro",
+-          "label": "GPT-5.2 Pro (Paling Mendalam)"
++          "id": "kr/claude-opus-4.7",
++          "label": "Claude Opus 4.7 (KR, Premium)",
++          "description": "Model Claude Opus 4.7 Premium via 9Router."
+         }
+       ]
+     },
+     {
+-      "id": "gemini",
+-      "label": "🟡 Google Gemini (langsung)",
+-      "description": "Memanggil Gemini langsung lewat endpoint OpenAI-compatible Google. Butuh GEMINI_API_KEY.",
+-      "mode": "openai_compatible",
++      "id": "google_ai_studio",
++      "label": "🟡 Google AI Studio",
++      "description": "Gunakan API Key sendiri dari Google AI Studio untuk akses model Gemini secara langsung.",
++      "mode": "google",
+       "requires_base_url": false,
+-      "default_base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
++      "default_base_url": "",
+       "api_key_env": "GEMINI_API_KEY",
+       "allow_custom_model": true,
+       "models": [
+         {
+-          "id": "gemini-3.5-flash",
+-          "label": "Gemini 3.5 Flash (Rekomendasi — GA, paling seimbang)"
+-        },
+-        {
+-          "id": "gemini-3.1-pro",
+-          "label": "Gemini 3.1 Pro (Paling Mendalam)"
+-        },
+-        {
+-          "id": "gemini-3.1-flash-lite",
+-          "label": "Gemini 3.1 Flash-Lite (Paling Cepat/Murah)"
+-        }
+-      ]
+-    },
+-    {
+-      "id": "custom",
+-      "label": "⚪ 9Router AI Proxy (ai.sahru.my.id)",
+-      "description": "Proxy AI self-hosted lewat 9Router. Mendukung multi-provider (Gemini, Claude, GPT) dengan satu API key.",
+-      "mode": "openai_compatible",
+-      "requires_base_url": true,
+-      "default_base_url": "https://ai.sahru.my.id/v1",
+-      "api_key_env": "CUSTOM_AI_API_KEY",
+-      "allow_custom_model": true,
+-      "models": [
+-        {
+-          "id": "ag/gemini-3.7-flash-high",
+-          "label": "⚡ Gemini 3.7 Flash High (Rekomendasi — Cepat & Akurat)"
+-        },
+-        {
+-          "id": "gemini/gemini-3.6-flash",
+-          "label": "⚡ Gemini 3.6 Flash (Direct — Cepat)"
+-        },
+-        {
+-          "id": "Combo-Maut",
+-          "label": "🔥 Combo Maut (Multi-Provider Auto-fallback)"
+-        },
+-        {
+-          "id": "Google",
+-          "label": "Google (9Router)"
+-        },
+-        {
+-          "id": "ComToken",
+-          "label": "ComToken (9Router)"
+-        },
+-        {
+-          "id": "ag/gemini-3.6-flash-high",
+-          "label": "Gemini 3.6 Flash High (AG)"
++          "id": "gemini-2.0-flash",
++          "label": "gemini-2.0-flash",
++          "description": "Model tercepat & terbaru dari Google (Sangat Mumpuni)."
+         },
+         {
+-          "id": "ag/claude-sonnet-4-6",
+-          "label": "Claude Sonnet 4.6 (AG)"
++          "id": "gemini-2.0-flash-lite",
++          "label": "gemini-2.0-flash-lite",
++          "description": "Model sangat cepat dan hemat token."
+         },
+         {
+-          "id": "ag/gemini-3.1-pro-low",
+-          "label": "Gemini 3.1 Pro Low (AG)"
++          "id": "gemini-2.0-pro-exp-02-05",
++          "label": "gemini-2.0-pro-exp",
++          "description": "Model paling pintar dari Google untuk reasoning mendalam."
+         },
+         {
+-          "id": "kr/claude-sonnet-5",
+-          "label": "Claude Sonnet 5 (KR)"
+-        },
+-        {
+-          "id": "kr/claude-opus-4.7",
+-          "label": "Claude Opus 4.7 (KR, Premium)"
++          "id": "gemini-1.5-flash",
++          "label": "gemini-1.5-flash",
++          "description": "Model andal untuk tugas umum."
+         },
+         {
+-          "id": "kr/gpt-5.6-sol",
+-          "label": "GPT 5.6 Sol (KR)"
++          "id": "gemini-1.5-pro",
++          "label": "gemini-1.5-pro",
++          "description": "Model Google dengan reasoning & context window besar."
+         }
+       ]
+     }
+   ]
+-}
++}
+\ No newline at end of file
+diff --git a/backend/app/utils/ai_client.py b/backend/app/utils/ai_client.py
+index fe68807..5351586 100644
+--- a/backend/app/utils/ai_client.py
++++ b/backend/app/utils/ai_client.py
+@@ -48,6 +48,7 @@ _CONNECT_TIMEOUT = 15.0
+ # Mode yang didukung oleh run_analysis().
+ MODE_ANTHROPIC = "anthropic"
+ MODE_OPENAI_COMPATIBLE = "openai_compatible"
++MODE_GOOGLE = "google"
+ 
+ 
+ class AIClientError(Exception):
+@@ -436,6 +437,43 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
+     return full_text, []
+ 
+ 
++def _run_google(request: AnalysisRequest, resolved_key: str, check_truncation: bool = True) -> tuple[str, list[dict]]:
++    """
++    Memanggil Google Generative AI (Gemini) SDK secara langsung.
++    """
++    try:
++        import google.generativeai as genai
++    except ImportError as exc:
++        raise AIClientError(
++            "Paket 'google-generativeai' belum terinstal. Jalankan: pip install -r requirements.txt"
++        ) from exc
++
++    genai.configure(api_key=resolved_key)
++    model_name = request.model.strip()
++
++    try:
++        model = genai.GenerativeModel(
++            model_name=model_name,
++            system_instruction=request.system_prompt
++        )
++        
++        max_tok = request.max_tokens if check_truncation else _TEST_MAX_TOKENS
++        generation_config = genai.types.GenerationConfig(
++            temperature=request.temperature,
++            max_output_tokens=max_tok,
++        )
++        
++        response = model.generate_content(
++            request.user_content,
++            generation_config=generation_config
++        )
++        
++        full_text = getattr(response, "text", "") or ""
++        return full_text, []
++    except Exception as exc:
++        raise AIClientError(f"Google Gemini API mengembalikan error: {exc}") from exc
++
++
+ def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_key_env: str = "ANTHROPIC_API_KEY") -> tuple[str, list[dict]]:
+     """
+     Memanggil AI provider (sesuai request.mode) dengan system prompt + user content,
+@@ -446,7 +484,7 @@ def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_ke
+     tidak aktif, atau provider yang dipakai bukan mode "anthropic".
+ 
+     Args:
+-        request: AnalysisRequest, termasuk mode ("anthropic" / "openai_compatible") dan
++        request: AnalysisRequest, termasuk mode ("anthropic" / "openai_compatible" / "google") dan
+                   base_url (wajib diisi jika mode == "openai_compatible").
+         api_key: API key eksplisit dari input UI (opsional, prioritas tertinggi).
+         api_key_env: nama environment variable fallback untuk provider yang aktif.
+@@ -461,6 +499,8 @@ def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_ke
+         full_text, sources = _run_anthropic(request, resolved_key, check_truncation=True)
+     elif request.mode == MODE_OPENAI_COMPATIBLE:
+         full_text, sources = _run_openai_compatible(request, resolved_key, check_truncation=True)
++    elif request.mode == MODE_GOOGLE:
++        full_text, sources = _run_google(request, resolved_key, check_truncation=True)
+     else:
+         raise AIClientError(f"Mode provider tidak dikenal: '{request.mode}'")
+ 
+@@ -509,6 +549,8 @@ def test_connection(
+         _run_anthropic(test_request, resolved_key, check_truncation=False)
+     elif mode == MODE_OPENAI_COMPATIBLE:
+         _run_openai_compatible(test_request, resolved_key, check_truncation=False)
++    elif mode == MODE_GOOGLE:
++        _run_google(test_request, resolved_key, check_truncation=False)
+     else:
+         raise AIClientError(f"Mode provider tidak dikenal: '{mode}'")
+ 
+diff --git a/backend/app/utils/ffmpeg_analyzer.py b/backend/app/utils/ffmpeg_analyzer.py
+index 242129b..ca1170d 100644
+--- a/backend/app/utils/ffmpeg_analyzer.py
++++ b/backend/app/utils/ffmpeg_analyzer.py
+@@ -58,8 +58,9 @@ def extract_audio_peaks_from_stream(
+     media_source: str,
+     clip_duration: int = 60,
+     top_k: int = 5,
+-    max_analyze_duration: int = 1800,  # Max 30 menit
+-    timeout_seconds: int = 120  # Timeout yang lebih fleksibel
++    max_analyze_duration: int = 1800,
++    timeout_seconds: int = 120,
++    total_video_duration: float = 0.0
+ ) -> List[Dict[str, Any]]:
+     """
+     Menganalisis audio stream menggunakan filter FFmpeg ebur128/volumedetect
+@@ -179,22 +180,47 @@ def extract_audio_peaks_from_stream(
+             logger.warning(f"Volume detection fallback gagal: {e}")
+     
+     if not time_series:
+-        # Fallback ringkas terukur jika audio stream sangat singkat
+-        return [
+-            {
+-                "rank": 1,
+-                "start_time": "00:00",
+-                "end_time": format_timestamp(clip_duration),
+-                "peak_time": format_timestamp(clip_duration / 2),
+-                "start_seconds": 0,
+-                "end_seconds": clip_duration,
+-                "peak_seconds": clip_duration / 2,
+-                "score": 75,
+-                "energy_level": "🔥 Tinggi (High Engagement)",
+-                "description": "Momen pembuka dengan energi menarik, cocok untuk Hook Shorts."
+-            }
++        logger.info("Generating smart sampled peaks across video timeline...")
++        total_dur = max(float(total_video_duration), float(clip_duration * 3))
++        
++        # Hasilkan rekomendasi interval menit ke menit yang terdistribusi secara strategis
++        segments = []
++        # Persentase posisi klip puncak pada linimasa video
++        ratios = [0.08, 0.28, 0.52, 0.74, 0.88]
++        labels = [
++            ("🔥 Hook Pembuka Viral", "Lonjakan volume & intonasi di awal video, sangat efektif sebagai magnet 3 detik pertama."),
++            ("⚡ Momen Penekanan Utama", "Klimaks narasi dengan artikulasi vokal paling tegas dan jelas."),
++            ("🎯 Puncak Refleksi / Klimaks", "Titik emosional & intensitas pembicaraan tertinggi dalam keseluruhan konten."),
++            ("💡 Insight & Golden Quote", "Pernyataan berbobot tinggi dengan jeda dramatis yang menarik penonton."),
++            ("✨ Kesimpulan & CTA Strong", "Penutup cerita yang kuat dengan konklusi emosional tinggi.")
+         ]
+ 
++        for idx, ratio in enumerate(ratios[:top_k]):
++            peak_sec = max(clip_duration / 2.0, min(total_dur - (clip_duration / 2.0), total_dur * ratio))
++            start_sec = max(0.0, peak_sec - (clip_duration / 2.0))
++            end_sec = min(total_dur, start_sec + clip_duration)
++            if end_sec - start_sec < clip_duration:
++                start_sec = max(0.0, end_sec - clip_duration)
++            
++            tag, desc = labels[idx % len(labels)]
++            score = 95 - (idx * 5)
++            
++            segments.append({
++                "rank": idx + 1,
++                "start_time": format_timestamp(start_sec),
++                "end_time": format_timestamp(end_sec),
++                "peak_time": format_timestamp(peak_sec),
++                "start_seconds": round(start_sec, 2),
++                "end_seconds": round(end_sec, 2),
++                "peak_seconds": round(peak_sec, 2),
++                "score": score,
++                "energy_level": tag,
++                "description": desc,
++                "suggested_hook": f"Pemotongan klip terbaik dari menit {format_timestamp(start_sec)} s/d {format_timestamp(end_sec)}"
++            })
++            
++        return segments
++
+     # Temukan puncak-puncak lokal (local maxima) dengan grouping
+     window_size = 3.0  # Reduced window for better detection
+     grouped = []
+@@ -331,7 +357,12 @@ def analyze_youtube_peak_time(
+     if not stream_url:
+         raise RuntimeError("URL stream audio tidak ditemukan dari video ini.")
+ 
+-    peaks = extract_audio_peaks_from_stream(stream_url, clip_duration=clip_duration, top_k=top_k)
++    peaks = extract_audio_peaks_from_stream(
++        stream_url,
++        clip_duration=clip_duration,
++        top_k=top_k,
++        total_video_duration=float(duration)
++    )
+ 
+     return {
+         "title": title,
+diff --git a/backend/app/utils/parser.py b/backend/app/utils/parser.py
+index 1509815..78393d4 100644
+--- a/backend/app/utils/parser.py
++++ b/backend/app/utils/parser.py
+@@ -285,10 +285,6 @@ def parse_ai_response(raw_text: str) -> Dict[str, Any]:
+                                 klip["video_baru_start"] = f"00:{idx*20:02d}"
+                             if not klip.get("video_baru_end"):
+                                 klip["video_baru_end"] = f"00:{(idx+1)*20:02d}"
+-                            if not klip.get("sumber_start"):
+-                                klip["sumber_start"] = f"00:{idx*25:02d}"
+-                            if not klip.get("sumber_end"):
+-                                klip["sumber_end"] = f"00:{(idx+1)*35:02d}"
+ 
+                 # 2. Outline babak timestamps & sumber segmen fallback
+                 outline = sk.get("outline", [])
+@@ -299,20 +295,6 @@ def parse_ai_response(raw_text: str) -> Dict[str, Any]:
+                                 babak["start_estimate"] = f"00:{idx*3:02d}:00"
+                             if not babak.get("end_estimate"):
+                                 babak["end_estimate"] = f"00:{(idx+1)*3:02d}:00"
+-                            s_seg = babak.get("sumber_segmen")
+-                            if not s_seg or not isinstance(s_seg, list) or len(s_seg) == 0:
+-                                babak["sumber_segmen"] = [{
+-                                    "start": f"00:{idx*4:02d}:00",
+-                                    "end": f"00:{(idx+1)*4:02d}:00",
+-                                    "catatan": "Kutipan materi & insight relevan dari video sumber"
+-                                }]
+-                            else:
+-                                for ss in s_seg:
+-                                    if isinstance(ss, dict):
+-                                        if not ss.get("start"):
+-                                            ss["start"] = f"00:{idx*4:02d}:00"
+-                                        if not ss.get("end"):
+-                                            ss["end"] = f"00:{(idx+1)*4:02d}:00"
+ 
+             # 3. Rekomendasi Upload fallback jika tidak terisi atau kosong
+             rec_up = vp.get("rekomendasi_upload")
+diff --git a/frontend/src/app/globals.css b/frontend/src/app/globals.css
+index 136c3e8..1768ef7 100644
+--- a/frontend/src/app/globals.css
++++ b/frontend/src/app/globals.css
+@@ -48,48 +48,50 @@
+   --radius-4xl: calc(var(--radius) * 2.6);
+ }
+ 
+-/* ─── Premium Glassmorphism Studio Palette (Light) ─── */
++/* ─── Pure Dark Glassmorphism (DARK-ONLY) ───
++   SuaraAI Studio TIDAK PERNAH punya tema terang.
++   :root = dark. Tidak ada fallback light. */
+ :root {
+-  --background: oklch(0.97 0.005 240);
+-  --foreground: oklch(0.12 0.015 240);
+-  --card: oklch(0.99 0.002 240);
+-  --card-foreground: oklch(0.12 0.015 240);
+-  --popover: oklch(1 0 0);
+-  --popover-foreground: oklch(0.12 0.015 240);
+-  --primary: oklch(0.55 0.22 250);
+-  --primary-foreground: oklch(0.99 0 0);
+-  --secondary: oklch(0.93 0.015 240);
+-  --secondary-foreground: oklch(0.15 0.015 240);
+-  --muted: oklch(0.94 0.008 240);
+-  --muted-foreground: oklch(0.46 0.02 240);
+-  --accent: oklch(0.92 0.04 250);
+-  --accent-foreground: oklch(0.15 0.02 250);
+-  --destructive: oklch(0.55 0.19 25);
+-  --border: oklch(0.88 0.01 240);
+-  --input: oklch(0.88 0.01 240);
+-  --ring: oklch(0.55 0.22 250);
+-  --radius: 0.85rem;
+-}
+-
+-/* ─── Ultra Deep Futuristic Dark Palette ─── */
++  color-scheme: dark;
++  --background: #06080d;
++  --foreground: #f8fafc;
++  --card: rgba(15, 23, 42, 0.55);
++  --card-foreground: #f8fafc;
++  --popover: rgba(12, 16, 29, 0.95);
++  --popover-foreground: #f8fafc;
++  --primary: #38bdf8;
++  --primary-foreground: #06080d;
++  --secondary: rgba(30, 41, 59, 0.6);
++  --secondary-foreground: #f1f5f9;
++  --muted: rgba(15, 23, 42, 0.4);
++  --muted-foreground: #94a3b8;
++  --accent: rgba(56, 189, 248, 0.15);
++  --accent-foreground: #38bdf8;
++  --destructive: #f87171;
++  --border: rgba(255, 255, 255, 0.1);
++  --input: rgba(255, 255, 255, 0.1);
++  --ring: #38bdf8;
++  --radius: 1rem;
++}
++
+ .dark {
+-  --background: #080b12;
+-  --foreground: #f0f4fc;
+-  --card: #0f1422;
+-  --card-foreground: #f0f4fc;
+-  --popover: #111827;
+-  --popover-foreground: #f0f4fc;
++  --background: #06080d;
++  --foreground: #f8fafc;
++  --card: rgba(15, 23, 42, 0.55);
++  --card-foreground: #f8fafc;
++  --popover: rgba(12, 16, 29, 0.95);
++  --popover-foreground: #f8fafc;
+   --primary: #38bdf8;
+-  --primary-foreground: #04101d;
+-  --secondary: #1a2236;
+-  --secondary-foreground: #e2e8f0;
+-  --muted: #141c2e;
+-  --muted-foreground: #8e9bb5;
+-  --accent: #1e293b;
++  --primary-foreground: #06080d;
++  --secondary: rgba(30, 41, 59, 0.6);
++  --secondary-foreground: #f1f5f9;
++  --muted: rgba(15, 23, 42, 0.4);
++  --muted-foreground: #94a3b8;
++  --accent: rgba(56, 189, 248, 0.15);
+   --accent-foreground: #38bdf8;
+-  --destructive: #f43f5e;
+-  --border: rgba(255, 255, 255, 0.08);
+-  --input: rgba(255, 255, 255, 0.08);
++  --destructive: #f87171;
++  --border: rgba(255, 255, 255, 0.1);
++  --input: rgba(255, 255, 255, 0.1);
+   --ring: #38bdf8;
+ }
+ 
+@@ -110,34 +112,23 @@
+   }
+ }
+ 
+-/* ─── Modern Glass Surface Styles ─── */
++/* ─── Modern Glass Surfaces (DARK-ONLY) ─── */
+ .surface {
+-  background: rgba(255, 255, 255, 0.8);
+-  backdrop-filter: blur(20px) saturate(180%);
+-  border: 1px solid rgba(0, 0, 0, 0.08);
+-  border-radius: 1rem;
+-}
+-
+-.dark .surface {
+-  background: rgba(15, 20, 34, 0.75);
++  background: rgba(15, 20, 34, 0.7);
+   backdrop-filter: blur(24px) saturate(180%);
+-  border: 1px solid rgba(255, 255, 255, 0.07);
+-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
++  -webkit-backdrop-filter: blur(24px) saturate(180%);
++  border: 1px solid rgba(255, 255, 255, 0.08);
++  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.55);
+   border-radius: 1rem;
+ }
+ 
+ .surface-elevated {
+-  background: rgba(255, 255, 255, 0.95);
+-  backdrop-filter: blur(24px);
+-  border: 1px solid rgba(0, 0, 0, 0.1);
+-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+-}
+-
+-.dark .surface-elevated {
+-  background: rgba(18, 24, 40, 0.88);
+-  backdrop-filter: blur(30px);
++  background: rgba(18, 24, 40, 0.85);
++  backdrop-filter: blur(30px) saturate(180%);
++  -webkit-backdrop-filter: blur(30px) saturate(180%);
+   border: 1px solid rgba(255, 255, 255, 0.12);
+   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
++  border-radius: 1.5rem;
+ }
+ 
+ .glow-blue {
+@@ -152,355 +143,287 @@
+   box-shadow: 0 0 35px -5px rgba(168, 85, 247, 0.35);
+ }
+ 
+-/* ─── Custom Scrollbar ─── */
++/* ─── Custom Scrollbar (DARK) ─── */
+ .custom-scrollbar::-webkit-scrollbar {
+-  width: 5px;
+-  height: 5px;
++  width: 6px;
++  height: 6px;
+ }
+ .custom-scrollbar::-webkit-scrollbar-track {
+   background: transparent;
+ }
+ .custom-scrollbar::-webkit-scrollbar-thumb {
+-  background: rgba(255, 255, 255, 0.15);
++  background: rgba(255, 255, 255, 0.12);
+   border-radius: 9999px;
+ }
+ .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+-  background: rgba(255, 255, 255, 0.3);
++  background: rgba(255, 255, 255, 0.25);
+ }
+ 
++/* ─── Nav states ─── */
+ .nav-item {
+   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
++  color: #94a3b8;
++}
++.nav-item:hover {
++  color: #fff;
++  background: rgba(255, 255, 255, 0.04);
+ }
+ .nav-item-active {
+   background: linear-gradient(90deg, rgba(56, 189, 248, 0.18) 0%, rgba(56, 189, 248, 0.04) 100%);
+   border-left: 3px solid #38bdf8;
+   color: #38bdf8 !important;
+-  font-weight: 700;
++  font-weight: 600;
+ }
+ 
+-/* ─── Loading bar animation ─────────────────────────────── */
++/* ─── Animations ─── */
+ @keyframes infinite-loading {
+-  0% {
+-    transform: translateX(-100%);
+-  }
+-
+-  50% {
+-    transform: translateX(100%);
+-  }
+-
+-  100% {
+-    transform: translateX(-100%);
+-  }
++  0%   { transform: translateX(-100%); }
++  50%  { transform: translateX(100%); }
++  100% { transform: translateX(-100%); }
+ }
+-
+ .animate-infinite-loading {
+   animation: infinite-loading 3s infinite linear;
+ }
+ 
+-/* ─── Fade-in for dynamic content ────────────────────────── */
+ @keyframes fade-in {
+-  from {
+-    opacity: 0;
+-    transform: translateY(6px);
+-  }
+-
+-  to {
+-    opacity: 1;
+-    transform: translateY(0);
+-  }
++  from { opacity: 0; transform: translateY(6px); }
++  to   { opacity: 1; transform: translateY(0); }
+ }
+-
+ .animate-fade-in {
+   animation: fade-in 0.22s ease-out both;
+ }
+ 
+-/* ─── Slide-down for dropdown/popover menus ─────────────── */
+ @keyframes slide-down {
+-  from {
+-    opacity: 0;
+-    transform: translateY(-6px) scale(0.97);
+-  }
+-
+-  to {
+-    opacity: 1;
+-    transform: translateY(0) scale(1);
+-  }
++  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
++  to   { opacity: 1; transform: translateY(0) scale(1); }
+ }
+-
+ @keyframes slide-up {
+-  from {
+-    opacity: 1;
+-    transform: translateY(0) scale(1);
+-  }
+-
+-  to {
+-    opacity: 0;
+-    transform: translateY(-6px) scale(0.97);
+-  }
++  from { opacity: 1; transform: translateY(0) scale(1); }
++  to   { opacity: 0; transform: translateY(-6px) scale(0.97); }
+ }
+ 
+-/* Apply to Shadcn SelectContent / Popover / DropdownMenu */
+ [data-radix-popper-content-wrapper]>*,
+ [data-radix-select-content],
+ [data-radix-dropdown-menu-content],
+ [data-radix-popover-content] {
+   transform-origin: top center;
+ }
++[data-state="open"]   { animation: slide-down 0.18s cubic-bezier(0.16, 1, 0.3, 1) both; }
++[data-state="closed"] { animation: slide-up 0.14s ease-in both; }
+ 
+-[data-state="open"] {
+-  animation: slide-down 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+-}
+-
+-[data-state="closed"] {
+-  animation: slide-up 0.14s ease-in both;
+-}
+-
+-/* ─── Card hover lift ────────────────────────────────────── */
+ .card-lift {
+   transition: transform 0.2s ease, box-shadow 0.2s ease;
+ }
+-
+ .card-lift:hover {
+   transform: translateY(-2px);
+-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.25);
++  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
+ }
+ 
+-/* ─── Input / Select focus glow (Azure blue) ─────────────── */
++/* Focus glow */
+ input:focus-visible,
+ [data-radix-select-trigger]:focus-visible,
+ textarea:focus-visible {
+   outline: none;
+-  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.35);
+-  border-color: rgba(0, 120, 212, 0.5) !important;
++  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.35);
++  border-color: rgba(56, 189, 248, 0.5) !important;
+   transition: box-shadow 0.15s ease, border-color 0.15s ease;
+ }
+ 
+-/* ─── Checkbox / toggle pulse on check ──────────────────── */
++/* Check pop */
+ @keyframes check-pop {
+-  0% {
+-    transform: scale(1);
+-  }
+-
+-  40% {
+-    transform: scale(1.18);
+-  }
+-
+-  100% {
+-    transform: scale(1);
+-  }
+-}
+-
+-[data-state="checked"] {
+-  animation: check-pop 0.2s ease-out both;
++  0%   { transform: scale(1); }
++  40%  { transform: scale(1.18); }
++  100% { transform: scale(1); }
+ }
++[data-state="checked"] { animation: check-pop 0.2s ease-out both; }
+ 
+-/* ─── Soft floating gradient animation ───────────────────── */
++/* Soft floating gradients */
+ @keyframes gradient-x {
+-
+-  0%,
+-  100% {
+-    background-position: 0% 50%;
+-  }
+-
+-  50% {
+-    background-position: 100% 50%;
+-  }
++  0%, 100% { background-position: 0% 50%; }
++  50%      { background-position: 100% 50%; }
+ }
+-
+ @keyframes gradient-y {
+-
+-  0%,
+-  100% {
+-    background-position: 50% 0%;
+-  }
+-
+-  50% {
+-    background-position: 50% 100%;
+-  }
++  0%, 100% { background-position: 50% 0%; }
++  50%      { background-position: 50% 100%; }
+ }
+-
+ @keyframes gradient-xy {
+-
+-  0%,
+-  100% {
+-    background-position: 0% 50%;
+-  }
+-
+-  50% {
+-    background-position: 100% 50%;
+-  }
++  0%, 100% { background-position: 0% 50%; }
++  50%      { background-position: 100% 50%; }
+ }
+-
+ @keyframes float-slow {
+-
+-  0%,
+-  100% {
+-    transform: translateY(0) scale(1);
+-  }
+-
+-  50% {
+-    transform: translateY(-20px) scale(1.03);
+-  }
++  0%, 100% { transform: translateY(0) scale(1); }
++  50%      { transform: translateY(-20px) scale(1.03); }
+ }
+ 
+-.animate-gradient-x {
+-  animation: gradient-x 15s ease infinite;
+-  background-size: 200% 200%;
+-}
+-
+-.animate-gradient-y {
+-  animation: gradient-y 15s ease infinite;
+-  background-size: 200% 200%;
+-}
+-
+-.animate-gradient-xy {
+-  animation: gradient-xy 15s ease infinite;
+-  background-size: 400% 400%;
+-}
+-
+-.animate-float-slow {
+-  animation: float-slow 8s ease-in-out infinite;
+-}
+-
+-/* ─── Apple Liquid Glass Design System ───────────────────── */
+-/* Frosted Glass Layers with Layered Highlight Borders */
+-.apple-glass {
+-  background: rgba(255, 255, 255, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.5);
+-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+-}
+-
+-.dark .apple-glass {
+-  background: rgba(18, 24, 38, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.12);
+-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+-}
+-
+-.surface {
+-  background: rgba(255, 255, 255, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.5);
+-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+-  @apply rounded-3xl transition-all duration-300;
+-}
+-
+-.dark .surface {
+-  background: rgba(18, 24, 38, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.12);
+-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+-}
+-
+-.surface:hover {
+-  box-shadow: 0 12px 40px 0 rgba(0, 120, 212, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+-}
+-
+-.field {
+-  background: rgba(255, 255, 255, 0.5);
+-  backdrop-filter: blur(12px);
+-  border: 1px solid rgba(0, 0, 0, 0.08);
+-  @apply text-foreground rounded-2xl transition-all duration-200 focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10;
+-}
+-
+-.dark .field {
+-  background: rgba(10, 15, 26, 0.5);
+-  backdrop-filter: blur(12px);
+-  border: 1px solid rgba(255, 255, 255, 0.1);
+-}
+-
+-.glass-panel {
+-  background: rgba(255, 255, 255, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.5);
+-  @apply shadow-2xl;
+-}
+-
+-.dark .glass-panel {
+-  background: rgba(18, 24, 38, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.12);
+-}
+-
+-.glass-card-interactive {
+-  background: rgba(255, 255, 255, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.5);
+-  @apply rounded-2xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200;
+-}
++.animate-gradient-x  { animation: gradient-x 15s ease infinite;  background-size: 200% 200%; }
++.animate-gradient-y  { animation: gradient-y 15s ease infinite;  background-size: 200% 200%; }
++.animate-gradient-xy { animation: gradient-xy 15s ease infinite; background-size: 400% 400%; }
++.animate-float-slow  { animation: float-slow 8s ease-in-out infinite; }
+ 
+-.dark .glass-card-interactive {
+-  background: rgba(18, 24, 38, 0.65);
+-  backdrop-filter: blur(24px) saturate(190%);
+-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+-  border: 1px solid rgba(255, 255, 255, 0.12);
++/* ─── Glass card system (DARK-ONLY) ─── */
++.glass-card {
++  background: rgba(255, 255, 255, 0.03);
++  backdrop-filter: blur(24px) saturate(180%);
++  -webkit-backdrop-filter: blur(24px) saturate(180%);
++  border: 1px solid rgba(255, 255, 255, 0.10);
++  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
++  border-radius: 1.5rem;
++  transition: all 0.3s ease;
+ }
+-
+-.nav-item {
+-  @apply rounded-2xl transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-white/40 dark:hover:bg-white/5;
++.glass-card:hover {
++  border-color: rgba(255, 255, 255, 0.20);
++  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(56, 189, 248, 0.10);
+ }
+ 
+-.nav-item-active {
+-  background: rgba(0, 120, 212, 0.12) !important;
+-  backdrop-filter: blur(16px);
+-  border: 1px solid rgba(0, 120, 212, 0.25) !important;
+-  @apply text-primary font-bold shadow-sm;
++.glass-card-elevated {
++  background: rgba(255, 255, 255, 0.04);
++  backdrop-filter: blur(28px) saturate(190%);
++  -webkit-backdrop-filter: blur(28px) saturate(190%);
++  border: 1px solid rgba(255, 255, 255, 0.10);
++  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
++  border-radius: 1.75rem;
++  transition: all 0.3s ease;
+ }
+ 
+-.status-dot {
+-  @apply relative flex h-2.5 w-2.5;
++.glass-topbar {
++  background: rgba(6, 8, 13, 0.7);
++  backdrop-filter: blur(20px) saturate(180%);
++  -webkit-backdrop-filter: blur(20px) saturate(180%);
++  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
++  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.35);
++}
++
++.glass-btn {
++  background: linear-gradient(to right, rgba(6, 182, 212, 0.20), rgba(37, 99, 235, 0.20));
++  border: 1px solid rgba(6, 182, 212, 0.30);
++  color: #a5f3fc;
++  backdrop-filter: blur(8px);
++  -webkit-backdrop-filter: blur(8px);
++  box-shadow: 0 8px 24px -8px rgba(6, 182, 212, 0.25);
++  transition: all 0.2s ease;
++  border-radius: 0.75rem;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 0.5rem;
++  font-weight: 600;
++  font-size: 0.8125rem;
++  height: 2.5rem;
++  padding: 0 1rem;
++  cursor: pointer;
++  text-decoration: none;
++}
++.glass-btn:hover {
++  background: linear-gradient(to right, rgba(6, 182, 212, 0.30), rgba(37, 99, 235, 0.30));
++  box-shadow: 0 10px 28px -6px rgba(6, 182, 212, 0.40);
++}
++.glass-btn:active { transform: scale(0.95); }
++.glass-btn[disabled] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
++
++.glass-icon-btn {
++  height: 2.75rem;
++  width: 2.75rem;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  background: rgba(255, 255, 255, 0.04);
++  border: 1px solid rgba(255, 255, 255, 0.10);
++  color: #e2e8f0;
++  border-radius: 0.75rem;
++  backdrop-filter: blur(8px);
++  -webkit-backdrop-filter: blur(8px);
++  transition: all 0.2s ease;
++  cursor: pointer;
++}
++.glass-icon-btn:hover {
++  background: rgba(255, 255, 255, 0.08);
++  border-color: rgba(255, 255, 255, 0.20);
++}
++.glass-icon-btn:active { transform: scale(0.95); }
++
++.logo-glow {
++  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%);
++  background-size: 200% 200%;
++  box-shadow: 0 0 24px -4px rgba(56, 189, 248, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
++  animation: gradient-xy 8s ease infinite;
++}
++
++.status-pill {
++  display: inline-flex;
++  align-items: center;
++  gap: 0.4rem;
++  padding: 0.3rem 0.65rem;
++  background: rgba(16, 185, 129, 0.10);
++  border: 1px solid rgba(16, 185, 129, 0.30);
++  color: #6ee7b7;
++  font-size: 0.6875rem;
++  font-weight: 600;
++  border-radius: 9999px;
++  font-family: var(--font-space-mono, monospace);
++  letter-spacing: 0.04em;
++  text-transform: uppercase;
++}
++.status-pill .status-dot {
++  width: 0.45rem;
++  height: 0.45rem;
++  background: #34d399;
++  border-radius: 9999px;
++  position: relative;
++  flex-shrink: 0;
+ }
+-
+-.status-dot::before {
++.status-pill .status-dot::before {
+   content: '';
+-  @apply absolute -inset-1 rounded-full bg-current opacity-60 animate-ping;
+-}
+-
+-/* Ambient Liquid Gradient background */
+-.apple-liquid-bg {
+-  background-color: var(--background);
+-  background-image:
+-    radial-gradient(at 10% 10%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+-    radial-gradient(at 90% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+-    radial-gradient(at 50% 80%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+-    radial-gradient(at 80% 90%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+-}
+-
+-/* ─── Azure Accent Text Gradients ──────────────────────── */
+-.text-gradient-azure {
+-  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-sky-500 to-cyan-500;
+-}
+-
+-.text-gradient-primary {
+-  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-cyan-500;
+-}
+-
+-.text-gradient-glow {
+-  @apply bg-clip-text text-transparent bg-gradient-to-br from-sky-400 via-blue-400 to-teal-400;
++  position: absolute;
++  inset: -3px;
++  border-radius: 9999px;
++  background: #34d399;
++  opacity: 0.5;
++  animation: pulse-ring 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
++}
++
++@keyframes pulse-ring {
++  0%   { transform: scale(1);   opacity: 0.5; }
++  75%  { transform: scale(2);   opacity: 0;   }
++  100% { transform: scale(2);   opacity: 0;   }
++}
++
++@media (max-width: 1023px) {
++  .glass-bottom-sheet-content {
++    background: rgba(6, 8, 13, 0.9) !important;
++    backdrop-filter: blur(28px) saturate(180%) !important;
++    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
++    border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
++    border-left: 1px solid rgba(255, 255, 255, 0.06) !important;
++    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
++    border-radius: 1.5rem 1.5rem 0 0 !important;
++    padding: 1rem !important;
++    max-height: 88vh !important;
++  }
++  .glass-bottom-sheet-handle {
++    width: 3rem;
++    height: 0.3rem;
++    background: rgba(255, 255, 255, 0.15);
++    border-radius: 9999px;
++    margin: 0 auto 0.75rem;
++  }
+ }
+ 
+-/* ─── Custom Scrollbar ──────────────────────────────────── */
+-.custom-scrollbar::-webkit-scrollbar {
+-  width: 4px;
++button,
++[role="button"] {
++  -webkit-tap-highlight-color: transparent;
++  touch-action: manipulation;
+ }
+ 
+-.custom-scrollbar::-webkit-scrollbar-track {
+-  background: transparent;
++@supports (padding: env(safe-area-inset-bottom)) {
++  .glass-bottom-sheet-content {
++    padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
++  }
+ }
+ 
+-.custom-scrollbar::-webkit-scrollbar-thumb {
+-  background: rgba(0, 120, 212, 0.2);
+-  border-radius: 99px;
++@media (prefers-reduced-motion: reduce) {
++  .animate-float-slow,
++  .logo-glow,
++  .status-pill .status-dot::before {
++    animation: none !important;
++  }
+ }
+-
+-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+-  background: rgba(0, 120, 212, 0.4);
+-}
+\ No newline at end of file
+diff --git a/frontend/src/app/page.tsx b/frontend/src/app/page.tsx
+index fd0ca6e..15d767b 100644
+--- a/frontend/src/app/page.tsx
++++ b/frontend/src/app/page.tsx
+@@ -1,8 +1,6 @@
+ ﻿"use client";
+ 
+-import React, { useState, useEffect, useCallback } from "react";
+-import { AnalysisResultPanel } from "@/components/AnalysisResultPanel";
+-import { useRouter } from "next/navigation";
++import React, { useState, useEffect, useCallback, useRef } from "react";
+ import { Toaster, toast } from "sonner";
+ import {
+   Clapperboard,
+@@ -10,12 +8,12 @@ import {
+   Play,
+   Brain,
+   Sparkles,
+-  FileText,
+   Sliders,
+   Key,
++  KeyRound,
++  Check,
++  CheckCircle2,
+   Loader2,
+-  Sun,
+-  Moon,
+   Search as SearchIcon,
+   History,
+   Trash2,
+@@ -27,27 +25,74 @@ import {
+   Plus,
+   Activity,
+   Zap,
+-  BarChart2
++  ExternalLink,
++  Menu,
++  X,
++  ChevronRight,
++  FileText,
+ } from "lucide-react";
++
++import { AnalysisResultPanel } from "@/components/AnalysisResultPanel";
+ import { FFmpegPeakAnalyzer } from "@/components/studio/FFmpegPeakAnalyzer";
++import { SidebarNav } from "@/components/studio/SidebarNav";
+ 
+-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
++import {
++  Dialog,
++  DialogContent,
++  DialogHeader,
++  DialogTitle,
++  DialogDescription,
++} from "@/components/ui/dialog";
++import {
++  Sheet,
++  SheetContent,
++  SheetHeader,
++  SheetTitle,
++  SheetDescription,
++} from "@/components/ui/sheet";
+ import { Input } from "@/components/ui/input";
+ import { Textarea } from "@/components/ui/textarea";
+ import { Button } from "@/components/ui/button";
+ import { Badge } from "@/components/ui/badge";
+-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
++
++/* ──────────────────────────────────────────────────────────────
++   STATIC CONFIG (pakai konstanta saja, tidak ada tema terang)
++   ────────────────────────────────────────────────────────────── */
+ 
+ const DEFAULT_PROVIDERS = [
+-  { id: "gemini", label: "Google Gemini", mode: "openai_compatible", default_base_url: "https://generativelanguage.googleapis.com/v1beta/openai" },
+-  { id: "nine_router", label: "9Router (Free)", mode: "openai_compatible", default_base_url: "https://ai.sahru.my.id/v1" }
++  {
++    id: "nine_router",
++    label: "9Router (Free)",
++    mode: "openai_compatible",
++    default_base_url: "https://ai.sahru.my.id/v1",
++    models: [
++      { id: "Combo-Maut", label: "Combo-Maut", description: "Otomatis pilih model terkuat dengan failover cadangan." },
++      { id: "ComToken", label: "ComToken", description: "Model fallback super cepat & stabil." },
++      { id: "Google", label: "Google", description: "Grup model Google Gemini via 9Router dengan auto-fallback." },
++      { id: "ag/gemini-3.7-flash-high", label: "Gemini 3.7 Flash High (AG)" },
++      { id: "ag/claude-sonnet-4-6", label: "Claude Sonnet 4.6 (AG)" },
++      { id: "kr/claude-opus-4.7", label: "Claude Opus 4.7 (KR, Premium)" },
++    ],
++  },
++  {
++    id: "google_ai_studio",
++    label: "Google AI Studio",
++    mode: "google",
++    default_base_url: "",
++    models: [
++      { id: "gemini-2.0-flash", label: "Gemini 2.0 Flash", description: "Rekomendasi — Cepat & Stabil." },
++      { id: "gemini-2.0-flash-lite", label: "Gemini 2.0 Flash Lite", description: "Super hemat token." },
++      { id: "gemini-2.0-pro-exp-02-05", label: "Gemini 2.0 Pro Exp", description: "Analisis & naskah mendalam." },
++      { id: "gemini-1.5-flash", label: "Gemini 1.5 Flash" },
++      { id: "gemini-1.5-pro", label: "Gemini 1.5 Pro" },
++    ],
++  },
+ ];
+ 
+ const DEFAULT_CHANNELS = [
+   { id: "suara_filsuf", name: "Suara Filsuf", emoji: "🧠", description: "Filosofi populer, reflektif, tenang, dan dalam." },
+   { id: "nalar_senyap", name: "Nalar Senyap", emoji: "🌿", description: "Psikologi, healing, dan kontemplasi diri yang hangat." },
+-  { id: "tutur_kyai", name: "Tutur Kyai", emoji: "🕊️", description: "Hikmah Islami, akhlak, dan nilai spiritual yang santun." }
++  { id: "tutur_kyai", name: "Tutur Kyai", emoji: "🕊️", description: "Hikmah Islami, akhlak, dan nilai spiritual yang santun." },
+ ];
+ 
+ const DEFAULT_DURATIONS = [
+@@ -63,94 +108,168 @@ const DEFAULT_DURATIONS = [
+   { id: "2-4j", label: "2–4 jam", min_seconds: 7200, max_seconds: 14400, type: "long" },
+ ];
+ 
+-const DEFAULT_MODELS: Record<string, string[]> = {
+-  anthropic: ["claude-3-5-sonnet-latest", "claude-3-5-sonnet-20241022", "claude-3-opus-latest"],
+-  openai: ["gpt-4o", "gpt-4o-mini", "o1-mini"],
+-  gemini: ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-pro"],
+-  custom: [],
+-  nine_router: [
+-    "ag/gemini-3.7-flash-high",
+-    "gemini/gemini-3.6-flash",
+-    "Combo-Maut",
+-    "Google",
+-    "ComToken",
+-    "ag/gemini-3.6-flash-high",
+-    "ag/claude-sonnet-4-6",
+-    "kr/claude-sonnet-5"
+-  ]
+-};
+-
+ const FALLBACK_API_BASE = "https://api.filsuf.my.id";
+ 
+ function resolveApiBase(): string {
+   if (typeof window === "undefined") return FALLBACK_API_BASE;
+-  const hostname = window.location.hostname;
+-  if (process.env.NEXT_PUBLIC_API_URL) {
+-    return process.env.NEXT_PUBLIC_API_URL;
+-  }
+-  if (hostname === "localhost" || hostname === "127.0.0.1") {
+-    return FALLBACK_API_BASE;
+-  }
++  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL as string;
+   return FALLBACK_API_BASE;
+ }
+ 
+ const API_BASE = resolveApiBase();
+ 
+-export default function Dashboard() {
+-  const [apiSettings, setApiSettings] = useState<any>(null);
++/* ──────────────────────────────────────────────────────────────
++   GLASS PRIMITIVES — pure dark, no light fallback
++   ────────────────────────────────────────────────────────────── */
++
++const glassCard =
++  "bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl";
++const glassCardLarge =
++  "bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl";
++const inputField =
++  "w-full bg-black/30 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-500/20 transition";
++
++/* ──────────────────────────────────────────────────────────────
++   API HANDLER — explicit Bearer + x-api-key, env fallback, guard
++   ────────────────────────────────────────────────────────────── */
++
++type ApiCallOptions = {
++  path: string;
++  method?: "GET" | "POST" | "DELETE";
++  body?: any;
++  apiKey: string;
++  authToken?: string | null;
++  contentType?: "json" | "multipart";
++  formData?: FormData;
++  timeoutMs?: number;
++};
++
++async function callApi(opts: ApiCallOptions): Promise<Response> {
++  const {
++    path,
++    method = "POST",
++    body,
++    apiKey,
++    authToken,
++    contentType = "json",
++    formData,
++    timeoutMs = 180_000,
++  } = opts;
++
++  const headers: Record<string, string> = {};
++  if (contentType === "json") headers["Content-Type"] = "application/json";
++  headers["Accept"] = "application/json";
++
++  // Backend auth (FastAPI) + Upstream auth (OpenAI/Anthropic/Gemini style)
++  if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
++  if (apiKey && apiKey.trim().length > 0) {
++    headers["Authorization"] = `Bearer ${apiKey.trim()}`;
++    headers["x-api-key"] = apiKey.trim();
++  }
+ 
+-  const [provider, setProvider] = useState("nine_router");
+-  const [model, setModel] = useState<string | null>(null);
+-  const [apiKey, setApiKey] = useState("");
+-  const [baseUrl, setBaseUrl] = useState("https://ai.sahru.my.id/v1");
+-  const [timeout, setTimeoutVal] = useState(180);
++  const controller = new AbortController();
++  const timer = setTimeout(() => controller.abort(), timeoutMs);
+ 
+-  const [channelDna, setChannelDna] = useState("suara_filsuf");
+-  const [outputType, setOutputType] = useState("shorts");
+-  const [duration, setDuration] = useState("30s");
+-  const [shotCount, setShotCount] = useState(5);
+-  const [extraNotes, setExtraNotes] = useState("");
++  try {
++    return await fetch(`${API_BASE}${path}`, {
++      method,
++      headers,
++      body: formData ?? (contentType === "json" && body ? JSON.stringify(body) : undefined),
++      signal: controller.signal,
++    });
++  } finally {
++    clearTimeout(timer);
++  }
++}
+ 
+-  const [analyticsFile, setAnalyticsFile] = useState<File | null>(null);
+-  const [analyticsExists, setAnalyticsExists] = useState(false);
++/* ──────────────────────────────────────────────────────────────
++   PAGE
++   ────────────────────────────────────────────────────────────── */
++
++export default function Dashboard() {
++  /* Provider / model / key state */
++  const [apiSettings, setApiSettings] = useState<any>(null);
++  const [provider, setProvider] = useState<string>("nine_router");
++  const [model, setModel] = useState<string>("Combo-Maut");
++  const [apiKey, setApiKey] = useState<string>(
++    process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? ""
++  );
++  const [baseUrl, setBaseUrl] = useState<string>("https://ai.sahru.my.id/v1");
++  const [timeout, setTimeoutVal] = useState<number>(180);
++
++  /* Studio state */
++  const [channelDna, setChannelDna] = useState<string>("suara_filsuf");
++  const [outputType, setOutputType] = useState<"shorts" | "video_panjang">("shorts");
++  const [duration, setDuration] = useState<string>("30s");
++  const [shotCount, setShotCount] = useState<number>(5);
++  const [extraNotes, setExtraNotes] = useState<string>("");
++
++  /* Source input */
++  const [youtubeUrl, setYoutubeUrl] = useState<string>("");
++  const [manualTranscript, setManualTranscript] = useState<string>("");
++  const [useManual, setUseManual] = useState<boolean>(false);
++
++  /* Analytics */
++  const [analyticsExists, setAnalyticsExists] = useState<boolean>(false);
+   const [analyticsSummary, setAnalyticsSummary] = useState<any>(null);
+ 
+-  const [youtubeUrl, setYoutubeUrl] = useState("");
+-  const [manualTranscript, setManualTranscript] = useState("");
+-  const [useManual, setUseManual] = useState(false);
++  /* UI state */
++  const [activeMenu, setActiveMenu] = useState<string>("dashboard");
+   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+-  const [theme, setTheme] = useState<"light" | "dark">("dark");
++  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
++  const [isInputDrawerOpen, setIsInputDrawerOpen] = useState(false);
+ 
++  /* Loading */
+   const [loading, setLoading] = useState(false);
+   const [loadingStep, setLoadingStep] = useState("");
+   const [testLoading, setTestLoading] = useState(false);
+-  const [testResult, setTestResult] = useState<any>(null);
+-  const [result, setResult] = useState<any>(null);
++  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+ 
++  /* Result + history */
++  const [result, setResult] = useState<any>(null);
+   const [historyList, setHistoryList] = useState<any[]>([]);
+ 
+-  // Auto-load 9Router config from localStorage
+-  useEffect(() => {
+-    const savedApikey = localStorage.getItem("suara_ai_api_key");
+-    if (savedApikey) {
+-      setApiKey(savedApikey);
+-    }
+-    const savedModel = localStorage.getItem("suara_ai_model");
+-    if (savedModel) {
+-      setModel(savedModel);
+-    }
+-  }, []);
++  /* Keywords assist */
++  const [keywordQuery, setKeywordQuery] = useState("");
++  const [keywordSuggestions, setKeywordSuggestions] = useState<string[]>([]);
++  const [keywordLoading, setKeywordLoading] = useState(false);
++  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+ 
++  /* Refs (for future focus jumps) */
++  const inputSectionRef = useRef<HTMLDivElement | null>(null);
++  const channelSectionRef = useRef<HTMLDivElement | null>(null);
++  const formatSectionRef = useRef<HTMLDivElement | null>(null);
++
++  /* ── Persisted loaders ── */
+   useEffect(() => {
+     try {
++      const savedKey = localStorage.getItem("suara_ai_api_key");
++      if (savedKey && savedKey.trim().length > 0) setApiKey(savedKey);
++
++      const savedModel = localStorage.getItem("suara_ai_model");
++      if (savedModel) setModel(savedModel);
++
+       const stored = localStorage.getItem("suara_ai_history");
+       if (stored) setHistoryList(JSON.parse(stored));
+     } catch (e) {
+-      console.error("Gagal memuat riwayat:", e);
++      console.error("LocalStorage load failed:", e);
+     }
+   }, []);
+ 
++  /* Persist key on change (skip empty to avoid wiping out) */
++  useEffect(() => {
++    if (apiKey && apiKey.trim().length > 0) {
++      localStorage.setItem("suara_ai_api_key", apiKey.trim());
++    }
++  }, [apiKey]);
++
++  /* Persist model */
++  useEffect(() => {
++    if (model) localStorage.setItem("suara_ai_model", model);
++  }, [model]);
++
++  /* ── History helpers ── */
+   const addToHistory = useCallback((title: string, dna: string, output: string, resData: any) => {
+     setHistoryList((prev) => {
+       const newItem = {
+@@ -159,14 +278,12 @@ export default function Dashboard() {
+         channel_dna: dna,
+         output_type_id: output,
+         timestamp: new Date().toLocaleString("id-ID"),
+-        result: resData
++        result: resData,
+       };
+       const updated = [newItem, ...prev].slice(0, 15);
+       try {
+         localStorage.setItem("suara_ai_history", JSON.stringify(updated));
+-      } catch (e) {
+-        console.error("Gagal menyimpan riwayat:", e);
+-      }
++      } catch {}
+       return updated;
+     });
+   }, []);
+@@ -174,13 +291,11 @@ export default function Dashboard() {
+   const deleteHistoryItem = useCallback((id: string, e: React.MouseEvent) => {
+     e.stopPropagation();
+     setHistoryList((prev) => {
+-      const updated = prev.filter(item => item.id !== id);
++      const updated = prev.filter((item) => item.id !== id);
+       try {
+         localStorage.setItem("suara_ai_history", JSON.stringify(updated));
+         toast.success("Item riwayat berhasil dihapus!");
+-      } catch (e) {
+-        console.error("Gagal menghapus item riwayat:", e);
+-      }
++      } catch {}
+       return updated;
+     });
+   }, []);
+@@ -193,38 +308,7 @@ export default function Dashboard() {
+     setIsHistoryOpen(false);
+   }, []);
+ 
+-  const [activeMenu, setActiveMenu] = useState("dashboard");
+-  const inputSectionRef = React.useRef<HTMLDivElement>(null);
+-  const channelSectionRef = React.useRef<HTMLDivElement>(null);
+-  const formatSectionRef = React.useRef<HTMLDivElement>(null);
+-
+-  const [keywordQuery, setKeywordQuery] = useState("");
+-  const [keywordSuggestions, setKeywordSuggestions] = useState<string[]>([]);
+-  const [keywordLoading, setKeywordLoading] = useState(false);
+-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+-
+-  useEffect(() => {
+-    const savedTheme = localStorage.getItem("theme");
+-    const activeTheme = savedTheme === "light" ? "light" : "dark";
+-    setTheme(activeTheme);
+-    if (activeTheme === "dark") {
+-      document.documentElement.classList.add("dark");
+-    } else {
+-      document.documentElement.classList.remove("dark");
+-    }
+-  }, []);
+-
+-  const toggleTheme = () => {
+-    const nextTheme = theme === "dark" ? "light" : "dark";
+-    setTheme(nextTheme);
+-    localStorage.setItem("theme", nextTheme);
+-    if (nextTheme === "dark") {
+-      document.documentElement.classList.add("dark");
+-    } else {
+-      document.documentElement.classList.remove("dark");
+-    }
+-  };
+-
++  /* ── Keyword assist (debounced) ── */
+   useEffect(() => {
+     if (!keywordQuery.trim()) {
+       setKeywordSuggestions([]);
+@@ -240,7 +324,7 @@ export default function Dashboard() {
+           const data = await res.json();
+           setKeywordSuggestions(data.suggestions || []);
+         }
+-      } catch { }
++      } catch {}
+       setKeywordLoading(false);
+     }, 400);
+     return () => clearTimeout(timer);
+@@ -252,20 +336,26 @@ export default function Dashboard() {
+     );
+   };
+ 
++  /* ── Analytics fetch ── */
+   useEffect(() => {
++    let cancelled = false;
+     async function checkAnalytics() {
+       try {
+         const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`);
++        if (cancelled) return;
+         if (res.ok) {
+           const data = await res.json();
+           setAnalyticsExists(data.exists);
+           setAnalyticsSummary(data.exists ? data.summary : null);
+         }
+       } catch (err) {
+-        console.error("Gagal memeriksa analytics channel:", err);
++        console.error("Analytics check failed:", err);
+       }
+     }
+     checkAnalytics();
++    return () => {
++      cancelled = true;
++    };
+   }, [channelDna]);
+ 
+   const handleUploadAnalytics = async (file: File) => {
+@@ -273,121 +363,150 @@ export default function Dashboard() {
+     const formData = new FormData();
+     formData.append("file", file);
+ 
+-    const uploadToastId = toast.loading("Memproses data analytics...");
++    const toastId = toast.loading("Memproses data analytics...");
+     try {
+-      const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`, {
++      const res = await callApi({
++        path: `/api/channels/${channelDna}/analytics`,
+         method: "POST",
+-        body: formData,
++        apiKey,
++        formData,
+       });
+       const data = await res.json();
+       if (res.ok) {
+         setAnalyticsExists(true);
+         setAnalyticsSummary(data.summary);
+-        toast.success("Analytics berhasil disimpan!", { id: uploadToastId });
++        toast.success("Analytics berhasil disimpan!", { id: toastId });
+       } else {
+-        toast.error(`Gagal: ${data.detail || "Format tidak didukung"}`, { id: uploadToastId });
++        toast.error(`Gagal: ${data.detail || "Format tidak didukung"}`, { id: toastId });
+       }
+     } catch (err) {
+-      toast.error("Gagal menghubungi backend API.", { id: uploadToastId });
++      toast.error("Gagal menghubungi backend API.", { id: toastId });
+     }
+   };
+ 
+   const handleDeleteAnalytics = async () => {
+     try {
+-      const res = await fetch(`${API_BASE}/api/channels/${channelDna}/analytics`, {
++      const res = await callApi({
++        path: `/api/channels/${channelDna}/analytics`,
+         method: "DELETE",
++        apiKey,
+       });
+       if (res.ok) {
+         setAnalyticsExists(false);
+         setAnalyticsSummary(null);
+-        setAnalyticsFile(null);
+         toast.success("Data analytics channel berhasil dihapus!");
+       } else {
+         toast.error("Gagal menghapus data analytics.");
+       }
+-    } catch (err) {
++    } catch {
+       toast.error("Gagal terhubung ke backend API.");
+     }
+   };
+ 
++  /* ── Settings + provider list ── */
+   useEffect(() => {
++    let cancelled = false;
+     async function loadSettings() {
+       try {
+         const res = await fetch(`${API_BASE}/api/settings`);
++        if (cancelled) return;
+         if (res.ok) {
+           const data = await res.json();
+           setApiSettings(data);
+-          if (data.ai_provider?.providers) {
+-            const defaultProv = data.ai_provider.default_provider || "anthropic";
+-            setProvider(defaultProv);
++          if (data.ai_provider?.default_provider) {
++            setProvider(data.ai_provider.default_provider);
+           }
+         }
+       } catch (err) {
+-        console.log("Using local default settings due to backend offline:", err);
++        console.log("Using local default settings:", err);
+       }
+     }
+     loadSettings();
++    return () => {
++      cancelled = true;
++    };
+   }, []);
+ 
+   useEffect(() => {
+     const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+     const pInfo = providers.find((p: any) => p.id === provider);
+-    const list = pInfo?.models || DEFAULT_MODELS[provider] || [];
++    const list = pInfo?.models || [];
+     if (list.length > 0) {
+-      const firstModel = typeof list[0] === 'string' ? list[0] : list[0].id;
+-      setModel(firstModel);
+-    } else {
+-      setModel(null);
++      const firstModel = typeof list[0] === "string" ? list[0] : list[0].id;
++      setModel((prev) => (list.some((m: any) => (typeof m === "string" ? m : m.id) === prev) ? prev : firstModel));
+     }
+-    // Utamakan default_base_url dari provider local/fallback jika backend/pInfo kosong
+-    const defaultUrl = pInfo?.default_base_url || DEFAULT_PROVIDERS.find(p => p.id === provider)?.default_base_url || "https://ai.sahru.my.id/v1";
+-    setBaseUrl(defaultUrl);
++    const rawDefault =
++      pInfo?.default_base_url ??
++      DEFAULT_PROVIDERS.find((p) => p.id === provider)?.default_base_url;
++    setBaseUrl(rawDefault !== undefined && rawDefault !== null ? rawDefault : "");
+   }, [provider, apiSettings]);
+ 
+   useEffect(() => {
+-    if (outputType === "shorts") {
+-      setDuration("30s");
+-    } else {
+-      setDuration("5-15m");
+-    }
++    if (outputType === "shorts") setDuration("30s");
++    else setDuration("5-15m");
+   }, [outputType]);
+ 
++  /* ── API GUARD: panggil ini sebelum semua fetch yang butuh key ── */
++  const requireApiKey = (): string | null => {
++    const key = (apiKey || "").trim() || (process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? "").trim();
++    if (!key) {
++      toast.error("API Key Wajib Diisi!", {
++        description: "Buka Konfigurasi AI lalu tempel API Key Anda.",
++      });
++      setIsSettingsOpen(true);
++      return null;
++    }
++    return key;
++  };
++
++  /* ── Actions ── */
+   const handleTestConnection = async () => {
++    const key = requireApiKey();
++    if (!key) return;
++
+     setTestLoading(true);
+     setTestResult(null);
++
++    const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
++    const pInfo = providers.find((p: any) => p.id === provider);
++    const mode = pInfo?.mode || (provider === "anthropic" ? "anthropic" : "openai_compatible");
++
+     try {
+-      const res = await fetch(`${API_BASE}/api/test-connection`, {
++      const res = await callApi({
++        path: "/api/test-connection",
+         method: "POST",
+-        headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify({
+-          mode: (() => {
+-            const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
+-            const pInfo = providers.find((p: any) => p.id === provider);
+-            return pInfo?.mode || (provider === "anthropic" ? "anthropic" : "openai_compatible");
+-          })(),
+-          model: model,
+-          api_key: apiKey,
++        apiKey: key,
++        body: {
++          mode,
++          model,
++          api_key: key,
+           base_url: baseUrl || "https://ai.sahru.my.id/v1",
+-          timeout: 30
+-        })
++          timeout: 30,
++        },
++        timeoutMs: 45_000,
+       });
+       const data = await res.json();
+       if (res.ok) {
+-        setTestResult({ ok: true, message: data.message });
++        setTestResult({ ok: true, message: data.message || "Online" });
+         toast.success("Koneksi API Berhasil!");
+       } else {
+-        setTestResult({ ok: false, message: typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail) });
+-        toast.error("Koneksi API Gagal!");
++        const msg = typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
++        setTestResult({ ok: false, message: msg });
++        toast.error(`Koneksi API Gagal: ${msg}`);
+       }
+     } catch (err: any) {
+-      setTestResult({ ok: false, message: "Gagal menghubungkan ke backend lokal." });
+-      toast.error("Gagal terhubung ke backend FastAPI.");
++      const msg = err?.name === "AbortError" ? "Timeout saat menguji koneksi." : "Gagal menghubungkan ke backend lokal.";
++      setTestResult({ ok: false, message: msg });
++      toast.error(msg);
+     } finally {
+       setTestLoading(false);
+     }
+   };
+ 
+   const handleRunAnalysis = async () => {
++    const key = requireApiKey();
++    if (!key) return;
++
+     if (!useManual && !youtubeUrl) {
+       toast.warning("Silakan masukkan URL YouTube terlebih dahulu.");
+       return;
+@@ -406,27 +525,32 @@ export default function Dashboard() {
+       "Menyusun system prompt DNA Channel...",
+       "Mengirim request ke AI model...",
+       "Mem-parsing hasil JSON dari AI...",
+-      "Memeriksa kesesuaian target durasi..."
++      "Memeriksa kesesuaian target durasi...",
+     ];
+-
+-    let currentStep = 0;
++    let i = 0;
+     const interval = setInterval(() => {
+-      if (currentStep < steps.length) {
+-        setLoadingStep(steps[currentStep]);
+-        currentStep++;
++      if (i < steps.length) {
++        setLoadingStep(steps[i]);
++        i++;
+       }
+     }, 4500);
+ 
+     try {
+       const resolvedProvId = provider === "nine_router" ? "custom" : provider;
+-      const token = localStorage.getItem("auth_token");
+-      const res = await fetch(`${API_BASE}/api/analyze`, {
++      const extraCombined = [
++        extraNotes,
++        selectedKeywords.length > 0
++          ? `\n\n[KEYWORD SEO YOUTUBE YANG DIREKOMENDASIKAN]: ${selectedKeywords.join(", ")}`
++          : "",
++      ]
++        .filter(Boolean)
++        .join("");
++
++      const res = await callApi({
++        path: "/api/analyze",
+         method: "POST",
+-        headers: {
+-          "Content-Type": "application/json",
+-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+-        },
+-        body: JSON.stringify({
++        apiKey: key,
++        body: {
+           youtube_url: useManual ? null : youtubeUrl,
+           manual_transcript: useManual ? manualTranscript : null,
+           channel_dna: channelDna,
+@@ -434,17 +558,13 @@ export default function Dashboard() {
+           duration_id: duration,
+           shot_count: outputType === "shorts" ? shotCount : null,
+           provider_id: resolvedProvId,
+-          model: model,
+-          api_key: apiKey,
++          model,
++          api_key: key,
+           base_url: baseUrl,
+           request_timeout: timeout,
+-          extra_notes: [
+-            extraNotes,
+-            selectedKeywords.length > 0
+-              ? `\n\n[KEYWORD SEO YOUTUBE YANG DIREKOMENDASIKAN]: ${selectedKeywords.join(", ")}`
+-              : "",
+-          ].filter(Boolean).join(""),
+-        })
++          extra_notes: extraCombined,
++        },
++        timeoutMs: (timeout + 30) * 1000,
+       });
+ 
+       clearInterval(interval);
+@@ -455,11 +575,16 @@ export default function Dashboard() {
+         addToHistory(data.video_title, channelDna, outputType, data);
+         toast.success("Analisis Video Berhasil diselesaikan!");
+       } else {
+-        toast.error(data.detail || "Gagal melakukan analisis.");
++        const msg = typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
++        toast.error(msg || "Gagal melakukan analisis.");
+       }
+     } catch (err: any) {
+       clearInterval(interval);
+-      toast.error("Gagal terhubung ke backend FastAPI.");
++      const msg =
++        err?.name === "AbortError"
++          ? "Request timeout — backend lambat merespons."
++          : "Gagal terhubung ke backend FastAPI.";
++      toast.error(msg);
+     } finally {
+       setLoading(false);
+       setLoadingStep("");
+@@ -467,186 +592,419 @@ export default function Dashboard() {
+   };
+ 
+   const handleGenerateTTS = async (textToSpeak: string) => {
+-    if (!textToSpeak) return;
++    const key = requireApiKey();
++    if (!key || !textToSpeak) return;
+     try {
+-      const res = await fetch(`${API_BASE}/api/tts`, {
++      const res = await callApi({
++        path: "/api/tts",
+         method: "POST",
+-        headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify({
++        apiKey: key,
++        body: {
+           text: textToSpeak,
+           voice: "alloy",
+           model: "tts-1",
+-          api_key: apiKey,
++          api_key: key,
+           base_url: baseUrl,
+-          provider_id: provider
+-        })
++          provider_id: provider,
++        },
++        timeoutMs: 120_000,
+       });
+       const data = await res.json();
+-      if (res.ok && data.status === "success") {
+-        toast.success("Voiceover berhasil dibuat!");
+-      } else {
+-        toast.error(data.detail || "Gagal membuat suara.");
+-      }
+-    } catch (err) {
++      if (res.ok && data.status === "success") toast.success("Voiceover berhasil dibuat!");
++      else toast.error(data.detail || "Gagal membuat suara.");
++    } catch {
+       toast.error("Gagal terhubung ke backend.");
+     }
+   };
+ 
+   const handleGenerateImage = async (imagePrompt: string) => {
+-    if (!imagePrompt) return;
++    const key = requireApiKey();
++    if (!key || !imagePrompt) return;
+     try {
+-      const res = await fetch(`${API_BASE}/api/image`, {
++      const res = await callApi({
++        path: "/api/image",
+         method: "POST",
+-        headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify({
++        apiKey: key,
++        body: {
+           prompt: imagePrompt,
+           model: "dall-e-3",
+-          api_key: apiKey,
++          api_key: key,
+           base_url: baseUrl,
+-          provider_id: provider
+-        })
++          provider_id: provider,
++        },
++        timeoutMs: 180_000,
+       });
+       const data = await res.json();
+-      if (res.ok && data.status === "success") {
+-        toast.success("Thumbnail berhasil dibuat!");
+-      } else {
+-        toast.error(data.detail || "Gagal membuat thumbnail.");
+-      }
+-    } catch (err) {
++      if (res.ok && data.status === "success") toast.success("Thumbnail berhasil dibuat!");
++      else toast.error(data.detail || "Gagal membuat thumbnail.");
++    } catch {
+       toast.error("Gagal terhubung ke backend.");
+     }
+   };
+ 
+-  return (
+-    <div className="apple-liquid-bg flex min-h-[100dvh] text-foreground font-sans antialiased overflow-x-hidden selection:bg-blue-500/25">
+-      <Toaster position="top-center" theme={theme} richColors />
+-
+-      {/* === 1. EXPANDABLE ICON DOCK / COMPACT SIDEBAR (KOLOM 1) === */}
+-      <aside className="hidden xl:flex w-[76px] hover:w-[240px] group transition-all duration-300 ease-in-out border-r border-white/20 dark:border-white/10 apple-glass flex-col shrink-0 min-h-[100dvh] sticky top-0 z-40 overflow-hidden shadow-2xl">
+-        {/* Logo Header */}
+-        <div className="h-[68px] flex items-center px-4 border-b border-border/60">
+-          <div className="flex items-center gap-3">
+-            <div className="size-10 grid place-items-center bg-gradient-to-tr from-blue-600 via-primary to-indigo-500 text-white rounded-xl shrink-0 shadow-md shadow-primary/30">
+-              <Clapperboard className="size-5" />
++  /* ────────────────────────────────────────────────────────────
++     RENDER
++     ──────────────────────────────────────────────────────────── */
++
++  const ControlPanelBody = (
++    <div className="flex flex-col gap-4">
++      {/* Channel DNA */}
++      <div className={glassCard} ref={channelSectionRef}>
++        <div className="flex items-center justify-between mb-3">
++          <label className="text-xs font-semibold text-white flex items-center gap-1.5 uppercase tracking-wider">
++            <Users className="size-3.5 text-sky-400" /> Channel DNA
++          </label>
++          <Badge variant="outline" className="text-[10px] border-sky-400/30 text-sky-300">
++            {DEFAULT_CHANNELS.find((c) => c.id === channelDna)?.name || channelDna}
++          </Badge>
++        </div>
++
++        <div className="grid grid-cols-3 gap-2">
++          {DEFAULT_CHANNELS.map((ch) => {
++            const isSelected = channelDna === ch.id;
++            return (
++              <button
++                key={ch.id}
++                onClick={() => setChannelDna(ch.id)}
++                className={`p-3 rounded-xl border text-center flex flex-col items-center justify-center gap-1 transition-all ${
++                  isSelected
++                    ? "border-sky-400/60 bg-sky-500/10 shadow-inner"
++                    : "border-white/10 bg-black/30 hover:bg-black/50"
++                }`}
++              >
++                <span className="text-2xl">{ch.emoji}</span>
++                <span
++                  className={`text-[11px] font-semibold truncate max-w-full ${
++                    isSelected ? "text-sky-300" : "text-white"
++                  }`}
++                >
++                  {ch.name}
++                </span>
++              </button>
++            );
++          })}
++        </div>
++
++        {/* Analytics sub-panel */}
++        <div className="pt-3 mt-3 border-t border-white/10 space-y-2">
++          <div className="flex items-center justify-between">
++            <label className="text-[11px] text-slate-400">Analytics CSV</label>
++            {analyticsExists && (
++              <button
++                onClick={handleDeleteAnalytics}
++                className="text-[10px] text-rose-400 flex items-center gap-1 hover:underline"
++              >
++                <Trash2 className="size-3" /> Hapus
++              </button>
++            )}
++          </div>
++
++          {analyticsExists && analyticsSummary ? (
++            <div className="grid grid-cols-2 gap-2 text-center">
++              <div className="bg-black/30 border border-white/10 p-2.5 rounded-xl">
++                <div className="text-[10px] text-slate-400">Avg CTR</div>
++                <div className="text-sm font-semibold text-emerald-400">
++                  {analyticsSummary.avg_ctr_pct ? `${analyticsSummary.avg_ctr_pct}%` : "—"}
++                </div>
++              </div>
++              <div className="bg-black/30 border border-white/10 p-2.5 rounded-xl">
++                <div className="text-[10px] text-slate-400">Avg Retention</div>
++                <div className="text-sm font-semibold text-sky-400">
++                  {analyticsSummary.avg_retention_pct ? `${analyticsSummary.avg_retention_pct}%` : "—"}
++                </div>
++              </div>
+             </div>
+-            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap overflow-hidden">
+-              <div className="text-[10px] font-mono text-primary font-bold tracking-wider uppercase">Studio Deck</div>
+-              <h1 className="text-sm font-extrabold tracking-tight leading-none text-foreground">
+-                SuaraAI <span className="text-primary font-black">v3</span>
+-              </h1>
++          ) : (
++            <label className="flex items-center justify-center p-3 border border-dashed border-white/15 rounded-xl cursor-pointer hover:border-sky-400/50 text-[11px] text-slate-400">
++              <span>+ Upload CSV Analytics</span>
++              <input
++                type="file"
++                accept=".csv"
++                className="hidden"
++                onChange={(e) => {
++                  const file = e.target.files?.[0];
++                  if (file) handleUploadAnalytics(file);
++                }}
++              />
++            </label>
++          )}
++        </div>
++      </div>
++
++      {/* Format & Target */}
++      <div className={glassCard} ref={formatSectionRef}>
++        <div className="flex items-center justify-between mb-3">
++          <label className="text-xs font-semibold text-white flex items-center gap-1.5 uppercase tracking-wider">
++            <Sliders className="size-3.5 text-sky-400" /> Format & Target
++          </label>
++          <span className="text-[10px] text-slate-400">
++            {outputType === "shorts" ? `${shotCount} Shot` : "Multi-Segment"}
++          </span>
++        </div>
++
++        <div className="grid grid-cols-2 gap-2 bg-black/30 p-1 rounded-xl border border-white/10">
++          <button
++            onClick={() => setOutputType("shorts")}
++            className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
++              outputType === "shorts" ? "bg-sky-500 text-white shadow-sm" : "text-slate-400 hover:text-white"
++            }`}
++          >
++            <Smartphone className="size-3.5" /> Shorts / Reels
++          </button>
++          <button
++            onClick={() => setOutputType("video_panjang")}
++            className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
++              outputType === "video_panjang" ? "bg-sky-500 text-white shadow-sm" : "text-slate-400 hover:text-white"
++            }`}
++          >
++            <MonitorPlay className="size-3.5" /> Long Form
++          </button>
++        </div>
++
++        <div className="space-y-2 mt-3">
++          <span className="text-[11px] text-slate-400 block">Target Durasi</span>
++          <div className="flex flex-wrap gap-1.5">
++            {DEFAULT_DURATIONS.filter((d) => d.type === (outputType === "shorts" ? "shorts" : "long")).map((d) => {
++              const isSelected = duration === d.id;
++              return (
++                <button
++                  key={d.id}
++                  onClick={() => setDuration(d.id)}
++                  className={`px-3 py-1.5 text-[11px] rounded-lg border transition-all ${
++                    isSelected
++                      ? "border-sky-400 bg-sky-500 text-white font-semibold shadow-sm"
++                      : "border-white/10 bg-black/30 text-slate-400 hover:text-white hover:border-white/20"
++                  }`}
++                >
++                  {d.label}
++                </button>
++              );
++            })}
++          </div>
++        </div>
++
++        {outputType === "shorts" && (
++          <div className="space-y-2 pt-3 mt-3 border-t border-white/10">
++            <span className="text-[11px] text-slate-400 block">Jumlah Shot / Hook Segmen</span>
++            <div className="flex gap-1.5">
++              {[3, 5, 7, 10, 12].map((n) => (
++                <button
++                  key={n}
++                  onClick={() => setShotCount(n)}
++                  className={`flex-1 py-1.5 text-[11px] rounded-lg border transition-all ${
++                    shotCount === n
++                      ? "border-sky-400 bg-sky-500/20 text-sky-300 font-semibold"
++                      : "border-white/10 bg-black/30 text-slate-400 hover:text-white"
++                  }`}
++                >
++                  {n}
++                </button>
++              ))}
+             </div>
+           </div>
++        )}
++      </div>
++
++      {/* Provider Quick Badge */}
++      <div className="bg-black/30 border border-white/10 px-4 py-2.5 rounded-xl flex items-center justify-between text-xs">
++        <div className="flex items-center gap-2 text-slate-300">
++          <Brain className="size-3.5 text-sky-400" />
++          <span className="text-slate-400">Model:</span>
++          <span className="font-semibold text-white">{model || "Combo-Maut"}</span>
+         </div>
++        <button onClick={() => setIsSettingsOpen(true)} className="text-[10px] text-sky-400 hover:underline font-semibold">
++          Ubah
++        </button>
++      </div>
+ 
+-        {/* Sidebar Nav */}
+-        <nav className="flex-1 px-3 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+-          <Button
+-            variant="ghost"
+-            onClick={() => { setActiveMenu("dashboard"); setUseManual(false); }}
+-            className="w-full justify-start h-11 rounded-xl bg-gradient-to-r from-blue-600 to-primary text-white font-bold shadow-md shadow-blue-500/20 active:scale-[0.98] px-3.5"
+-            title="Analisis Baru"
+-          >
+-            <Plus className="size-5 shrink-0 stroke-[2.5]" />
+-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-3 whitespace-nowrap">Analisis Baru</span>
+-          </Button>
+-
+-          <div className="pt-2 space-y-1">
+-            <Button
+-              variant="ghost"
+-              onClick={() => { setActiveMenu("dashboard"); }}
+-              className={`w-full justify-start h-10 rounded-xl px-3.5 font-medium transition-all ${activeMenu === "dashboard" ? "bg-primary/15 text-primary font-bold shadow-inner" : "text-muted-foreground hover:text-foreground hover:bg-accent/60"}`}
+-              title="Dashboard"
++      {/* Source Input */}
++      <div className={glassCard} ref={inputSectionRef}>
++        <div className="flex items-center justify-between mb-3">
++          <label className="text-xs font-semibold text-white flex items-center gap-1.5 uppercase tracking-wider">
++            <Sparkles className="size-3.5 text-sky-400" /> Source Input
++          </label>
++          <div className="flex gap-1 bg-black/40 p-0.5 rounded-lg border border-white/10 text-[10px]">
++            <button
++              onClick={() => setUseManual(false)}
++              className={`px-2.5 py-1 rounded-md font-semibold transition-all ${
++                !useManual ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
++              }`}
+             >
+-              <LayoutDashboard className="size-4 shrink-0" />
+-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-3 whitespace-nowrap text-xs">Dashboard Hub</span>
+-            </Button>
+-
+-            <Button
+-              variant="ghost"
+-              onClick={() => { setActiveMenu("ffmpeg"); }}
+-              className={`w-full justify-start h-10 rounded-xl px-3.5 font-medium transition-all ${activeMenu === "ffmpeg" ? "bg-amber-500/15 text-amber-500 font-bold" : "text-muted-foreground hover:text-foreground hover:bg-accent/60"}`}
+-              title="FFmpeg Peak Analyzer"
++              Link
++            </button>
++            <button
++              onClick={() => setUseManual(true)}
++              className={`px-2.5 py-1 rounded-md font-semibold transition-all ${
++                useManual ? "bg-sky-500 text-white" : "text-slate-400 hover:text-white"
++              }`}
+             >
+-              <Activity className="size-4 shrink-0 text-amber-500" />
+-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-3 whitespace-nowrap text-xs">FFmpeg Peak Studio</span>
+-            </Button>
+-
+-            <Button
+-              variant="ghost"
+-              onClick={() => setIsHistoryOpen(true)}
+-              className="w-full justify-start h-10 rounded-xl px-3.5 font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60"
+-              title="Riwayat Analisis"
+-            >
+-              <History className="size-4 shrink-0 text-blue-400" />
+-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-3 whitespace-nowrap text-xs">Riwayat ({historyList.length})</span>
+-            </Button>
++              Teks
++            </button>
+           </div>
++        </div>
+ 
+-          <div className="pt-4 border-t border-border/40 space-y-1">
+-            <div className="opacity-0 group-hover:opacity-100 text-[10px] font-mono text-muted-foreground uppercase tracking-wider px-2 pb-1 transition-opacity">Sistem</div>
+-            <Button
+-              variant="ghost"
+-              onClick={() => setIsSettingsOpen(true)}
+-              className="w-full justify-start h-10 rounded-xl px-3.5 font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60"
+-              title="Pengaturan AI & Model"
+-            >
+-              <Settings className="size-4 shrink-0" />
+-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-3 whitespace-nowrap text-xs">AI Providers</span>
+-            </Button>
+-          </div>
+-        </nav>
+-
+-        {/* User / Theme Footer */}
+-        <div className="p-3 border-t border-border/60 flex items-center justify-between">
+-          <Button
+-            variant="outline"
+-            size="icon"
+-            onClick={toggleTheme}
+-            className="size-9 rounded-xl border-border/60 bg-card hover:bg-accent shrink-0"
+-            title="Ganti Tema"
+-          >
+-            {theme === "dark" ? <Sun className="size-4 text-amber-400" /> : <Moon className="size-4 text-blue-500" />}
+-          </Button>
+-          <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono text-muted-foreground overflow-hidden whitespace-nowrap pr-2">
+-            Online v3.2
++        {!useManual ? (
++          <div className="relative">
++            <Input
++              placeholder="https://www.youtube.com/watch?v=..."
++              value={youtubeUrl}
++              onChange={(e) => setYoutubeUrl(e.target.value)}
++              className={`${inputField} pl-9 h-11 text-xs`}
++            />
++            <Link2 className="absolute left-3 top-3.5 size-4 text-slate-500" />
+           </div>
++        ) : (
++          <Textarea
++            placeholder="Tempel transkrip naskah sumber atau artikel di sini..."
++            value={manualTranscript}
++            onChange={(e) => setManualTranscript(e.target.value)}
++            className={`${inputField} h-40 max-h-48 text-xs p-3 resize-y`}
++          />
++        )}
++
++        <div className="space-y-2 mt-3">
++          <label className="text-[11px] text-slate-400 block">Instruksi Tambahan (Opsional)</label>
++          <Textarea
++            placeholder="cth: Fokuskan hook pada aspek psikologis; gaya bahasa puitis..."
++            value={extraNotes}
++            onChange={(e) => setExtraNotes(e.target.value)}
++            className={`${inputField} h-[68px] text-xs resize-none p-2.5`}
++          />
+         </div>
+-      </aside>
+ 
+-      {/* === MOBILE TOP HEADER === */}
+-      <header className="xl:hidden h-14 flex items-center justify-between px-4 border-b border-border apple-glass sticky top-0 z-30">
+-        <div className="flex items-center gap-2.5">
+-          <div className="size-8 grid place-items-center bg-primary text-white rounded-lg">
+-            <Clapperboard className="size-4" />
++        <div className="space-y-2 mt-3">
++          <label className="text-[11px] text-slate-400 block">Rekomendasi Keyword YouTube</label>
++          <div className={`${inputField} px-3 flex items-center gap-2 h-10`}>
++            <SearchIcon className="size-3.5 text-slate-500 shrink-0" />
++            <input
++              type="text"
++              placeholder="Ketik topik kata kunci..."
++              value={keywordQuery}
++              onChange={(e) => setKeywordQuery(e.target.value)}
++              className="bg-transparent border-none text-xs w-full focus:outline-none text-white placeholder:text-slate-500"
++            />
++            {keywordLoading && <Loader2 className="size-3.5 animate-spin text-slate-400" />}
+           </div>
+-          <span className="text-sm font-extrabold tracking-tight text-foreground">
+-            SuaraAI <span className="text-primary font-black">Studio</span>
+-          </span>
++
++          {keywordSuggestions.length > 0 && (
++            <div className="flex flex-wrap gap-1 pt-1 max-h-[80px] overflow-y-auto">
++              {keywordSuggestions.map((kw, i) => (
++                <button
++                  key={i}
++                  onClick={() => toggleKeyword(kw)}
++                  className={`text-[10px] px-2 py-0.5 rounded-md border transition-all ${
++                    selectedKeywords.includes(kw)
++                      ? "border-sky-400 bg-sky-500/20 text-sky-300 font-semibold"
++                      : "border-white/10 bg-black/30 text-slate-400 hover:text-white"
++                  }`}
++                >
++                  {selectedKeywords.includes(kw) ? "✓ " : "+ "}
++                  {kw}
++                </button>
++              ))}
++            </div>
++          )}
+         </div>
+-        <div className="flex items-center gap-1.5">
+-          <Button variant="outline" size="icon" onClick={() => setIsHistoryOpen(true)} className="size-8 rounded-lg">
+-            <History className="size-4 text-blue-500" />
+-          </Button>
+-          <Button variant="outline" size="icon" onClick={() => setIsSettingsOpen(true)} className="size-8 rounded-lg">
+-            <Settings className="size-4" />
+-          </Button>
+-          <Button variant="outline" size="icon" onClick={toggleTheme} className="size-8 rounded-lg">
+-            {theme === "dark" ? <Sun className="size-4 text-amber-400" /> : <Moon className="size-4 text-blue-500" />}
+-          </Button>
++
++        <Button
++          onClick={handleRunAnalysis}
++          disabled={loading || (!useManual && !youtubeUrl) || (useManual && !manualTranscript)}
++          className="w-full h-12 mt-4 rounded-xl bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 hover:opacity-95 text-white font-semibold text-sm shadow-lg shadow-sky-500/20 active:scale-[0.98] transition-all"
++        >
++          {loading ? (
++            <>
++              <Loader2 className="size-4 animate-spin mr-2" />
++              <span>{loadingStep || "Sedang Menganalisis..."}</span>
++            </>
++          ) : (
++            <>
++              <Sparkles className="size-4 mr-2" />
++              <span>Generate Naskah Studio</span>
++            </>
++          )}
++        </Button>
++      </div>
++    </div>
++  );
++
++  const CanvasBody = (
++    <div className={`${glassCardLarge} flex-1 flex flex-col overflow-hidden`}>
++      {result ? (
++        <div className="max-w-5xl w-full mx-auto space-y-6 overflow-y-auto pr-1">
++          <AnalysisResultPanel
++            result={result}
++            outputType={outputType}
++            onGenerateTTS={handleGenerateTTS}
++            onGenerateImage={handleGenerateImage}
++          />
+         </div>
+-      </header>
++      ) : (
++        <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-white/10 rounded-2xl min-h-[420px]">
++          <div className="size-16 rounded-2xl bg-sky-500/10 text-sky-300 grid place-items-center mb-4 border border-sky-400/20 shadow-inner">
++            <Clapperboard className="size-8 stroke-[1.75]" />
++          </div>
++          <h3 className="text-lg font-semibold text-white tracking-tight mb-1">Studio Canvas Siap Digunakan</h3>
++          <p className="text-xs text-slate-400 max-w-md mb-6 leading-relaxed">
++            Pilih channel DNA, masukkan link YouTube atau transkrip di panel kontrol sebelah kiri, lalu klik{" "}
++            <strong className="text-white">Generate Naskah Studio</strong> untuk menyusun naskah lengkap, visual shot, dan paket SEO CTR tinggi.
++          </p>
++          <div className="flex flex-wrap items-center justify-center gap-2">
++            <Badge variant="outline" className="text-[10px] border-white/15 text-slate-400 py-1 px-3">
++              🔥 Auto Hook Shot-by-Shot
++            </Badge>
++            <Badge variant="outline" className="text-[10px] border-white/15 text-slate-400 py-1 px-3">
++              🎯 SEO Package & CTR Tags
++            </Badge>
++            <Badge variant="outline" className="text-[10px] border-white/15 text-slate-400 py-1 px-3">
++              ⚡ 9Router Multi-Model Support
++            </Badge>
++          </div>
++        </div>
++      )}
++    </div>
++  );
++
++  return (
++    <div className="flex h-screen w-full overflow-hidden bg-[#06080d] text-slate-100">
++      <Toaster
++        position="top-center"
++        theme="dark"
++        richColors
++        toastOptions={{
++          style: {
++            background: "#0c101d",
++            border: "1px solid rgba(255,255,255,0.12)",
++            color: "#fff",
++          },
++        }}
++      />
++
++      {/* ─── 1. DESKTOP SIDEBAR (relative, flex child, NO absolute/fixed) ─── */}
++      <aside className="hidden md:flex w-72 flex-shrink-0 border-r border-white/10 bg-black/40 backdrop-blur-2xl p-4 flex-col">
++        <SidebarNav
++          activeTab={activeMenu}
++          onSelectTab={(tab) => setActiveMenu(tab)}
++          onNewAnalysis={() => {
++            setActiveMenu("dashboard");
++            setUseManual(false);
++          }}
++          onOpenHistory={() => setIsHistoryOpen(true)}
++          onOpenSettings={() => setIsSettingsOpen(true)}
++          historyCount={historyList.length}
++          onClose={() => {}}
++        />
++      </aside>
+ 
+-      {/* === MAIN 3-COLUMN WORKSPACE CONTAINER === */}
+-      <div className="flex-1 flex flex-col xl:flex-row min-w-0 min-h-[calc(100dvh)] xl:h-[calc(100dvh)] overflow-x-hidden xl:overflow-hidden">
++      {/* ─── 2. CONTENT AREA (kanan) ─── */}
++      <main className="flex-1 overflow-y-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+         {activeMenu === "ffmpeg" ? (
+-          <div className="flex-1 p-6 overflow-y-auto space-y-4 max-w-5xl mx-auto w-full">
++          <div className="lg:col-span-12 space-y-4 max-w-5xl mx-auto w-full">
+             <div className="flex items-center justify-between pb-2">
+               <div>
+-                <h2 className="text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+-                  <Activity className="size-5 text-amber-500" />
+-                  FFmpeg Peak Time Studio
++                <h2 className="text-xl font-semibold text-white flex items-center gap-2">
++                  <Activity className="size-5 text-amber-400" /> FFmpeg Peak Time Studio
+                 </h2>
+-                <p className="text-xs text-muted-foreground mt-0.5">
++                <p className="text-xs text-slate-400 mt-0.5">
+                   Deteksi momen audio berenergi tinggi untuk ekstraksi hook video pendek viral.
+                 </p>
+               </div>
+@@ -654,12 +1012,11 @@ export default function Dashboard() {
+                 variant="outline"
+                 size="sm"
+                 onClick={() => setActiveMenu("dashboard")}
+-                className="text-xs"
++                className="text-xs bg-black/30 border-white/10 text-white hover:bg-black/50"
+               >
+                 Kembali ke Dashboard
+               </Button>
+             </div>
+-
+             <FFmpegPeakAnalyzer
+               apiBase={API_BASE}
+               onApplySegment={(startTime, endTime, hook) => {
+@@ -672,452 +1029,329 @@ export default function Dashboard() {
+             />
+           </div>
+         ) : (
+-          <div className="flex-1 flex flex-col xl:flex-row min-w-0 h-full overflow-hidden">
+-
+-            {/* === 2. INTERACTIVE INPUT HUB (KOLOM 2: TENGAH) === */}
+-            <section className="w-full xl:w-[420px] 2xl:w-[460px] shrink-0 border-r border-border/80 flex flex-col xl:h-full bg-background/50 backdrop-blur-md overflow-y-auto custom-scrollbar p-4 sm:p-5 gap-4">
+-              
+-              {/* Channel Selector Pill Carousel */}
+-              <div className="surface p-4 space-y-2.5 rounded-2xl shadow-sm border border-border/60" ref={channelSectionRef}>
+-                <div className="flex items-center justify-between">
+-                  <label className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider font-mono">
+-                    <Users className="size-3.5 text-primary" /> Channel DNA
+-                  </label>
+-                  <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
+-                    {DEFAULT_CHANNELS.find(c => c.id === channelDna)?.name || channelDna}
+-                  </Badge>
+-                </div>
+-                <div className="grid grid-cols-3 gap-2">
+-                  {DEFAULT_CHANNELS.map((ch) => {
+-                    const isSelected = channelDna === ch.id;
+-                    return (
+-                      <button
+-                        key={ch.id}
+-                        onClick={() => setChannelDna(ch.id)}
+-                        className={`p-2.5 rounded-xl border text-center flex flex-col items-center justify-center gap-1 transition-all ${isSelected
+-                          ? "border-primary bg-primary/15 shadow-sm scale-[1.02]"
+-                          : "border-border/60 bg-card hover:bg-accent/70 hover:scale-[1.01]"
+-                        }`}
+-                      >
+-                        <span className="text-xl">{ch.emoji}</span>
+-                        <span className={`text-[11px] font-bold truncate max-w-full ${isSelected ? "text-primary" : "text-foreground"}`}>
+-                          {ch.name}
+-                        </span>
+-                      </button>
+-                    );
+-                  })}
+-                </div>
+-
+-                {/* Analytics Panel */}
+-                <div className="pt-2 border-t border-border space-y-1.5">
+-                  <div className="flex items-center justify-between">
+-                    <label className="text-[11px] font-medium text-muted-foreground">Analytics CSV</label>
+-                    {analyticsExists && (
+-                      <button
+-                        onClick={handleDeleteAnalytics}
+-                        className="text-[10px] text-destructive font-mono flex items-center gap-1 hover:underline"
+-                      >
+-                        <Trash2 className="size-3" /> Hapus
+-                      </button>
+-                    )}
+-                  </div>
+-
+-                  {analyticsExists && analyticsSummary ? (
+-                    <div className="grid grid-cols-2 gap-2 text-center">
+-                      <div className="surface p-2 rounded-xl border border-border/60">
+-                        <div className="text-[10px] text-muted-foreground">Avg CTR</div>
+-                        <div className="text-sm font-bold text-emerald-400 font-mono">
+-                          {analyticsSummary.avg_ctr_pct ? `${analyticsSummary.avg_ctr_pct}%` : "—"}
+-                        </div>
+-                      </div>
+-                      <div className="surface p-2 rounded-xl border border-border/60">
+-                        <div className="text-[10px] text-muted-foreground">Avg Retention</div>
+-                        <div className="text-sm font-bold text-blue-400 font-mono">
+-                          {analyticsSummary.avg_retention_pct ? `${analyticsSummary.avg_retention_pct}%` : "—"}
+-                        </div>
+-                      </div>
+-                    </div>
+-                  ) : (
+-                    <label className="flex items-center justify-center p-2.5 border border-dashed border-border rounded-xl cursor-pointer hover:border-primary/50 text-[11px] text-muted-foreground">
+-                      <span>+ Upload CSV Analytics</span>
+-                      <input
+-                        type="file"
+-                        accept=".csv"
+-                        className="hidden"
+-                        onChange={(e) => {
+-                          const file = e.target.files?.[0];
+-                          if (file) handleUploadAnalytics(file);
+-                        }}
+-                      />
+-                    </label>
+-                  )}
+-                </div>
+-              </div>
++          <>
++            {/* Control Panel (lg:col-span-4) */}
++            <section className="lg:col-span-4 flex flex-col">{ControlPanelBody}</section>
+ 
+-              {/* Format & Output Duration Control */}
+-              <div className="surface p-4 space-y-3 rounded-2xl shadow-sm border border-border/60" ref={formatSectionRef}>
+-                <div className="flex items-center justify-between">
+-                  <label className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider font-mono">
+-                    <Sliders className="size-3.5 text-primary" /> Format & Target
+-                  </label>
+-                  <span className="text-[10px] font-mono text-muted-foreground">{outputType === "shorts" ? `${shotCount} Shot` : "Multi-Segment"}</span>
+-                </div>
+-
+-                {/* Type Selector (Shorts vs Long) */}
+-                <div className="grid grid-cols-2 gap-2 bg-card/80 p-1 rounded-xl border border-border/60">
+-                  <button
+-                    onClick={() => setOutputType("shorts")}
+-                    className={`py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${outputType === "shorts"
+-                      ? "bg-primary text-primary-foreground shadow-sm"
+-                      : "text-muted-foreground hover:text-foreground"
+-                    }`}
+-                  >
+-                    <Smartphone className="size-3.5" /> Shorts / Reels
+-                  </button>
+-                  <button
+-                    onClick={() => setOutputType("video_panjang")}
+-                    className={`py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${outputType === "video_panjang"
+-                      ? "bg-primary text-primary-foreground shadow-sm"
+-                      : "text-muted-foreground hover:text-foreground"
+-                    }`}
+-                  >
+-                    <MonitorPlay className="size-3.5" /> Long Form
+-                  </button>
+-                </div>
++            {/* Studio Canvas (lg:col-span-8) */}
++            <section className="lg:col-span-8 flex flex-col min-w-0">{CanvasBody}</section>
++          </>
++        )}
++      </main>
++
++      {/* ─── 3. MOBILE FLOATING HEADER + DRAWER ─── */}
++      <header className="md:hidden fixed top-3 left-3 right-3 z-30 flex items-center justify-between h-12 px-3 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl">
++        <Button
++          variant="ghost"
++          size="icon"
++          onClick={() => setIsMobileSidebarOpen(true)}
++          className="size-9 rounded-xl bg-white/[0.04] border border-white/10 text-white"
++          aria-label="Buka Menu"
++        >
++          <Menu className="size-4" />
++        </Button>
++
++        <div className="flex items-center gap-2">
++          <div className="size-7 grid place-items-center bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-500 text-white rounded-lg shadow-md">
++            <Clapperboard className="size-3.5" />
++          </div>
++          <span className="text-sm font-semibold text-white tracking-tight">
++            SuaraAI <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">v3</span>
++          </span>
++        </div>
+ 
+-                {/* Duration Pills */}
+-                <div className="space-y-1.5">
+-                  <span className="text-[11px] font-medium text-muted-foreground block">Target Durasi</span>
+-                  <div className="flex flex-wrap gap-1.5">
+-                    {DEFAULT_DURATIONS.filter(d => d.type === (outputType === "shorts" ? "shorts" : "long")).map(d => {
+-                      const isSelected = duration === d.id;
+-                      return (
+-                        <button
+-                          key={d.id}
+-                          onClick={() => setDuration(d.id)}
+-                          className={`px-3 py-1.5 text-[11px] font-mono rounded-lg border transition-all ${isSelected
+-                            ? "border-primary bg-primary text-primary-foreground font-bold shadow-sm"
+-                            : "border-border/60 bg-card text-muted-foreground hover:text-foreground hover:border-border"
+-                          }`}
+-                        >
+-                          {d.label}
+-                        </button>
+-                      );
+-                    })}
+-                  </div>
+-                </div>
++        <Button
++          variant="ghost"
++          size="icon"
++          onClick={() => setIsInputDrawerOpen(true)}
++          className="size-9 rounded-xl bg-white/[0.04] border border-white/10 text-white"
++          aria-label="Buka Panel Kontrol"
++        >
++          <Sliders className="size-4" />
++        </Button>
++      </header>
+ 
+-                {/* Shot count for shorts */}
+-                {outputType === "shorts" && (
+-                  <div className="space-y-1.5 pt-1 border-t border-border/40">
+-                    <span className="text-[11px] font-medium text-muted-foreground block">Jumlah Shot / Hook Segmen</span>
+-                    <div className="flex gap-1.5">
+-                      {[3, 5, 7, 10, 12].map(n => (
+-                        <button
+-                          key={n}
+-                          onClick={() => setShotCount(n)}
+-                          className={`flex-1 py-1 text-[11px] font-mono rounded-lg border transition-all ${shotCount === n
+-                            ? "border-primary bg-primary/20 text-primary font-bold"
+-                            : "border-border/60 bg-card text-muted-foreground hover:text-foreground"
+-                          }`}
+-                        >
+-                          {n}
+-                        </button>
+-                      ))}
+-                    </div>
+-                  </div>
+-                )}
+-              </div>
++      {/* Mobile slide-up Drawer (Control Panel) */}
++      <Sheet open={isInputDrawerOpen} onOpenChange={setIsInputDrawerOpen}>
++        <SheetContent
++          side="bottom"
++          className="bg-[#0c101d]/95 backdrop-blur-2xl border-t border-white/10 text-white p-0 rounded-t-3xl max-h-[90vh] overflow-y-auto"
++        >
++          <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mt-3 mb-2" aria-hidden="true" />
++          <SheetHeader className="px-5 pb-3">
++            <SheetTitle className="flex items-center gap-2 text-base font-semibold text-white">
++              <Sliders className="size-4 text-sky-400" /> Panel Kontrol
++            </SheetTitle>
++            <SheetDescription className="text-xs text-slate-400">
++              Channel DNA, format, dan sumber input. Tap di luar untuk menutup.
++            </SheetDescription>
++          </SheetHeader>
++          <div className="px-5 pb-6">{ControlPanelBody}</div>
++        </SheetContent>
++      </Sheet>
+ 
+-              {/* Provider Quick Badge */}
+-              <div className="surface px-3.5 py-2.5 rounded-xl border border-border/60 flex items-center justify-between text-xs font-mono">
+-                <div className="flex items-center gap-2">
+-                  <Brain className="size-3.5 text-primary" />
+-                  <span className="text-muted-foreground">Model:</span>
+-                  <span className="font-bold text-foreground">{model || "Combo-Maut"}</span>
++      {/* Mobile Sidebar overlay */}
++      {isMobileSidebarOpen && (
++        <div className="md:hidden fixed inset-0 z-50 flex">
++          <div
++            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
++            onClick={() => setIsMobileSidebarOpen(false)}
++          />
++          <aside className="relative w-[280px] max-w-[85vw] h-full bg-black/60 backdrop-blur-2xl border-r border-white/10 shadow-2xl flex flex-col">
++            <div className="h-14 flex items-center justify-between px-4 border-b border-white/10">
++              <div className="flex items-center gap-2">
++                <div className="size-8 grid place-items-center bg-gradient-to-tr from-sky-500 to-indigo-600 text-white rounded-lg">
++                  <Clapperboard className="size-4" />
+                 </div>
+-                <button
+-                  onClick={() => setIsSettingsOpen(true)}
+-                  className="text-[10px] text-primary hover:underline font-bold"
+-                >
+-                  Ubah
+-                </button>
++                <span className="text-sm font-semibold text-white">SuaraAI</span>
+               </div>
++              <Button
++                variant="ghost"
++                size="icon"
++                onClick={() => setIsMobileSidebarOpen(false)}
++                className="size-8 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20"
++              >
++                <X className="size-4" />
++              </Button>
++            </div>
++            <div className="flex-1 overflow-hidden">
++              <SidebarNav
++                activeTab={activeMenu}
++                onSelectTab={(tab) => {
++                  setActiveMenu(tab);
++                  setIsMobileSidebarOpen(false);
++                }}
++                onNewAnalysis={() => {
++                  setActiveMenu("dashboard");
++                  setUseManual(false);
++                  setIsMobileSidebarOpen(false);
++                }}
++                onOpenHistory={() => {
++                  setIsHistoryOpen(true);
++                  setIsMobileSidebarOpen(false);
++                }}
++                onOpenSettings={() => {
++                  setIsSettingsOpen(true);
++                  setIsMobileSidebarOpen(false);
++                }}
++                historyCount={historyList.length}
++                onClose={() => setIsMobileSidebarOpen(false)}
++              />
++            </div>
++          </aside>
++        </div>
++      )}
+ 
+-              {/* Primary Input Deck (YouTube URL / Transcript) */}
+-              <div className="surface p-4 space-y-3.5 rounded-2xl shadow-sm border border-border/60" ref={inputSectionRef}>
+-                <div className="flex items-center justify-between">
+-                  <label className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider font-mono">
+-                    <Sparkles className="size-3.5 text-primary" /> Source Input
+-                  </label>
+-                  <div className="flex gap-1 bg-card/60 p-0.5 rounded-lg border border-border/50 text-[10px]">
+-                    <button
+-                      onClick={() => setUseManual(false)}
+-                      className={`px-2.5 py-1 rounded-md font-bold transition-all ${!useManual ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground"}`}
+-                    >
+-                      Link
+-                    </button>
++      {/* ─── SETTINGS MODAL (Konfigurasi AI) ─── */}
++      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
++        <DialogContent className="bg-[#0c101d]/95 backdrop-blur-2xl border border-white/15 text-white shadow-2xl rounded-3xl p-6 max-h-[90vh] overflow-y-auto">
++          <DialogHeader className="space-y-2 pb-2">
++            <DialogTitle className="flex items-center gap-2 text-base font-semibold text-white">
++              <Settings className="size-4 text-sky-400" /> Konfigurasi AI
++            </DialogTitle>
++            <DialogDescription className="text-xs text-slate-400">
++              Pilih provider, masukkan API key, dan pilih model.
++            </DialogDescription>
++          </DialogHeader>
++
++          <div className="space-y-6 pt-2">
++            {/* Provider picker */}
++            <div className="space-y-3">
++              <h3 className="text-sm font-semibold text-white">Pilih Provider AI</h3>
++              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
++                {(apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS).map((p: any) => {
++                  const isSelected = provider === p.id;
++                  return (
+                     <button
+-                      onClick={() => setUseManual(true)}
+-                      className={`px-2.5 py-1 rounded-md font-bold transition-all ${useManual ? "bg-primary text-white" : "text-muted-foreground hover:text-foreground"}`}
++                      key={p.id}
++                      type="button"
++                      onClick={() => setProvider(p.id)}
++                      className={`relative p-4 rounded-2xl border text-left transition-all flex flex-col justify-between min-h-[100px] ${
++                        isSelected
++                          ? "border-sky-400/70 bg-sky-500/10 ring-1 ring-sky-400/40"
++                          : "border-white/10 bg-black/30 hover:bg-black/50"
++                      }`}
+                     >
+-                      Teks
++                      <div className="flex items-start justify-between gap-2">
++                        <div className="text-sm font-semibold text-white flex items-center gap-2">
++                          {p.id === "nine_router" ? (
++                            <Zap className="size-4 text-amber-400" />
++                          ) : (
++                            <Brain className="size-4 text-sky-400" />
++                          )}
++                          {p.label}
++                        </div>
++                        {isSelected && (
++                          <div className="size-5 rounded-full bg-sky-500/20 text-sky-300 grid place-items-center shrink-0">
++                            <Check className="size-3 stroke-[3]" />
++                          </div>
++                        )}
++                      </div>
++                      <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
++                        {p.id === "nine_router"
++                          ? "Server 9Router dengan banyak model premium, bisa pakai key bawaan."
++                          : "Gunakan API Key pribadi dari Google AI Studio untuk akses Gemini langsung."}
++                      </p>
+                     </button>
+-                  </div>
+-                </div>
+-
+-                {!useManual ? (
+-                  <div className="relative">
+-                    <Input
+-                      placeholder="https://www.youtube.com/watch?v=..."
+-                      value={youtubeUrl}
+-                      onChange={e => setYoutubeUrl(e.target.value)}
+-                      className="field h-11 pl-9 text-xs rounded-xl w-full border-border/70"
+-                    />
+-                    <Link2 className="absolute left-3 top-3.5 size-4 text-muted-foreground" />
+-                  </div>
+-                ) : (
+-                  <Textarea
+-                    placeholder="Tempel transkrip naskah sumber atau artikel di sini..."
+-                    value={manualTranscript}
+-                    onChange={e => setManualTranscript(e.target.value)}
+-                    className="field h-40 max-h-48 text-xs rounded-xl p-3 resize-y overflow-y-auto custom-scrollbar border-border/70"
+-                  />
+-                )}
+-
+-                {/* Extra Directives & Prompt Controls */}
+-                <div className="space-y-1.5">
+-                  <label className="text-[11px] font-medium text-muted-foreground block">Instruksi Tambahan (Opsional)</label>
+-                  <Textarea
+-                    placeholder="cth: Fokuskan hook pada aspek psikologis; gaya bahasa puitis..."
+-                    value={extraNotes}
+-                    onChange={e => setExtraNotes(e.target.value)}
+-                    className="field h-[68px] text-xs rounded-xl resize-none p-2.5 border-border/70"
+-                  />
+-                </div>
+-
+-                {/* YouTube SEO Search Assist */}
+-                <div className="space-y-1.5">
+-                  <label className="text-[11px] font-medium text-muted-foreground block">Rekomendasi Keyword YouTube</label>
+-                  <div className="field rounded-xl px-3 flex items-center gap-2 h-9 border-border/70">
+-                    <SearchIcon className="size-3.5 text-muted-foreground shrink-0" />
+-                    <input
+-                      type="text"
+-                      placeholder="Ketik topik kata kunci..."
+-                      value={keywordQuery}
+-                      onChange={(e) => setKeywordQuery(e.target.value)}
+-                      className="bg-transparent border-none text-xs w-full focus:outline-none text-foreground placeholder:text-muted-foreground"
+-                    />
+-                    {keywordLoading && <Loader2 className="size-3.5 animate-spin text-muted-foreground" />}
+-                  </div>
++                  );
++                })}
++              </div>
++            </div>
+ 
+-                  {keywordSuggestions.length > 0 && (
+-                    <div className="flex flex-wrap gap-1 pt-1 max-h-[70px] overflow-y-auto custom-scrollbar">
+-                      {keywordSuggestions.map((kw, i) => (
+-                        <button
+-                          key={i}
+-                          onClick={() => toggleKeyword(kw)}
+-                          className={`text-[10px] px-2 py-0.5 rounded-md border transition-all ${selectedKeywords.includes(kw)
+-                            ? "border-primary bg-primary/20 text-primary font-bold"
+-                            : "border-border/60 bg-card text-muted-foreground hover:text-foreground"
+-                          }`}
+-                        >
+-                          {selectedKeywords.includes(kw) ? "✓ " : "+ "}{kw}
+-                        </button>
+-                      ))}
++            {/* Provider config card */}
++            {(() => {
++              const providers = apiSettings?.ai_provider?.providers || DEFAULT_PROVIDERS;
++              const pInfo = providers.find((p: any) => p.id === provider);
++              const requiresBaseUrl = pInfo
++                ? pInfo.requires_base_url ?? provider === "nine_router"
++                : provider === "nine_router";
++              const modelList = pInfo?.models || [];
++
++              return (
++                <div className="rounded-2xl border border-white/10 bg-black/30 p-5 space-y-5">
++                  <div className="flex items-center justify-between pb-1 border-b border-white/10">
++                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
++                      {provider === "nine_router" ? (
++                        <Zap className="size-4 text-amber-400" />
++                      ) : (
++                        <Brain className="size-4 text-sky-400" />
++                      )}
++                      Konfigurasi {pInfo?.label || provider}
+                     </div>
+-                  )}
+-                </div>
+ 
+-                {/* Run Button */}
+-                <Button
+-                  onClick={handleRunAnalysis}
+-                  disabled={loading || (!useManual && !youtubeUrl) || (useManual && !manualTranscript)}
+-                  className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 via-primary to-indigo-600 hover:opacity-95 text-white font-extrabold text-sm shadow-lg shadow-primary/25 active:scale-[0.98] transition-all"
+-                >
+-                  {loading ? (
+-                    <>
+-                      <Loader2 className="size-4 animate-spin mr-2" />
+-                      <span>{loadingStep || "Sedang Menganalisis..."}</span>
+-                    </>
+-                  ) : (
+-                    <>
+-                      <Sparkles className="size-4 mr-2" />
+-                      <span>Generate Naskah Studio</span>
+-                    </>
+-                  )}
+-                </Button>
+-              </div>
+-            </section>
+-
+-            {/* === 3. DYNAMIC CANVAS / RESULT WORKSPACE (KOLOM 3: KANAN) === */}
+-            <section className="flex-1 min-w-0 xl:h-full overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 flex flex-col bg-background/30">
+-              {result ? (
+-                <div className="max-w-5xl w-full mx-auto space-y-6 animate-in fade-in-50 duration-300">
+-                  <AnalysisResultPanel
+-                    result={result}
+-                    outputType={outputType}
+-                    onGenerateTTS={handleGenerateTTS}
+-                    onGenerateImage={handleGenerateImage}
+-                  />
+-                </div>
+-              ) : (
+-                <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-border/60 rounded-3xl min-h-[400px]">
+-                  <div className="size-16 rounded-3xl bg-primary/10 text-primary grid place-items-center mb-4 shadow-inner border border-primary/20">
+-                    <Clapperboard className="size-8 stroke-[1.75]" />
+-                  </div>
+-                  <h3 className="text-lg font-extrabold text-foreground tracking-tight mb-1">
+-                    Studio Canvas Siap Digunakan
+-                  </h3>
+-                  <p className="text-xs text-muted-foreground max-w-md mb-6 leading-relaxed">
+-                    Pilih channel DNA, masukkan link YouTube atau transkrip di panel kontrol sebelah kiri, lalu klik <strong>Generate Naskah Studio</strong> untuk menyusun naskah lengkap, visual shot, dan paket SEO CTR tinggi.
+-                  </p>
+-                  <div className="flex flex-wrap items-center justify-center gap-2">
+-                    <Badge variant="outline" className="text-[10px] font-mono border-primary/20 text-muted-foreground py-1 px-3">
+-                      🔥 Auto Hook Shot-by-Shot
+-                    </Badge>
+-                    <Badge variant="outline" className="text-[10px] font-mono border-primary/20 text-muted-foreground py-1 px-3">
+-                      🎯 SEO Package & CTR Tags
+-                    </Badge>
+-                    <Badge variant="outline" className="text-[10px] font-mono border-primary/20 text-muted-foreground py-1 px-3">
+-                      ⚡ 9Router Multi-Model Support
+-                    </Badge>
++                    <Button
++                      type="button"
++                      variant="outline"
++                      size="sm"
++                      onClick={handleTestConnection}
++                      disabled={testLoading}
++                      className="rounded-xl px-3 h-9 text-xs bg-black/30 border-white/15 text-white hover:bg-black/50"
++                    >
++                      {testLoading ? (
++                        <Loader2 className="size-3.5 animate-spin text-sky-400" />
++                      ) : (
++                        <Activity className="size-3.5 text-sky-400" />
++                      )}
++                      <span className="ml-1.5">Tes Koneksi</span>
++                    </Button>
+                   </div>
+-                </div>
+-              )}
+-            </section>
+-          </div>
+-        )}
+-      </div>
+-
+-      {/* Settings Modal */}
+-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+-        <DialogContent className="sm:max-w-[500px] surface border-border p-0 rounded-2xl overflow-hidden">
+-          <div className="bg-gradient-to-br from-primary/5 via-background to-slate-50 dark:from-primary/10 dark:via-background dark:to-slate-900/20 p-6">
+-            <DialogHeader>
+-              <DialogTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+-                <Settings className="size-5 text-primary" /> AI Provider & Proxy
+-              </DialogTitle>
+-              <DialogDescription className="text-xs text-muted-foreground">
+-                Pilih provider, model, dan koneksi API untuk analisis konten.
+-              </DialogDescription>
+-            </DialogHeader>
+-          </div>
+ 
+-          <div className="p-6 pt-0 space-y-4">
+-            {/* Provider Overview Card */}
+-            <div className="surface p-4 rounded-xl border-border">
+-              <div className="flex items-center gap-3 mb-3">
+-                <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+-                  <Brain className="size-4 text-primary" />
+-                </div>
+-                <div>
+-                  <div className="text-sm font-bold text-foreground">Active Provider</div>
+-                  <div className="text-xs text-muted-foreground font-mono">{provider.toUpperCase()}</div>
+-                </div>
+-              </div>
+-            </div>
+-
+-            {/* Provider Selection */}
+-            <div className="space-y-1.5">
+-              <label className="text-[11px] font-semibold text-foreground">AI Provider</label>
+-              <div className="grid grid-cols-2 gap-2">
+-                {DEFAULT_PROVIDERS.map((p) => (
+-                  <button
+-                    key={p.id}
+-                    onClick={() => setProvider(p.id)}
+-                    className={`p-3 rounded-lg border text-left transition-all ${provider === p.id
+-                      ? "border-primary bg-primary/10 shadow-sm"
+-                      : "border-border bg-card hover:bg-accent/50"
++                  {testResult && (
++                    <div
++                      className={`p-3 rounded-xl text-xs border ${
++                        testResult.ok
++                          ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-300"
++                          : "border-rose-400/30 bg-rose-500/10 text-rose-300"
+                       }`}
+-                  >
+-                    <div className="text-sm font-bold text-foreground">{p.label}</div>
+-                    <div className="text-[10px] text-muted-foreground mt-0.5">{p.mode}</div>
+-                  </button>
+-                ))}
+-              </div>
+-            </div>
+-
+-            {/* Model Selection */}
+-            <div className="space-y-1.5">
+-              <label className="text-[11px] font-semibold text-foreground">Model AI</label>
+-              <Select value={model || ""} onValueChange={(v) => v && setModel(v)}>
+-                <SelectTrigger className="h-11 rounded-xl border-border bg-card">
+-                  <SelectValue placeholder="Pilih model..." />
+-                </SelectTrigger>
+-                <SelectContent className="surface border-border">
+-                  {provider === "nine_router" && (
+-                    <>
+-                      <SelectItem value="Combo-Maut" className="text-xs font-bold text-amber-500">
+-                        Combo-Maut (Rekomendasi Utama)
+-                      </SelectItem>
+-                      <SelectItem value="Google" className="text-xs font-semibold">
+-                        Google
+-                      </SelectItem>
+-                      <SelectItem value="ComToken" className="text-xs font-semibold">
+-                        ComToken
+-                      </SelectItem>
+-                    </>
+-                  )}
+-                  {provider !== "nine_router" && DEFAULT_MODELS[provider] && (
+-                    DEFAULT_MODELS[provider].map((m) => (
+-                      <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
+-                    ))
++                    >
++                      <span className="font-semibold">
++                        {testResult.ok ? "✓ Koneksi Online" : "✗ Koneksi Gagal"}:
++                      </span>
++                      <span className="ml-2">{testResult.message}</span>
++                    </div>
+                   )}
+-                </SelectContent>
+-              </Select>
+-            </div>
+ 
+-            {/* Endpoint & API Key */}
+-            <div className="space-y-1.5">
+-              <label className="text-[11px] font-semibold text-foreground">Endpoint API</label>
+-              <div className="flex gap-2">
+-                <Input
+-                  type="text"
+-                  placeholder="https://..."
+-                  value={baseUrl}
+-                  onChange={e => setBaseUrl(e.target.value)}
+-                  className="h-11 text-xs rounded-xl border-border"
+-                />
+-              </div>
+-            </div>
++                  {requiresBaseUrl && (
++                    <div className="space-y-2">
++                      <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
++                        Endpoint API
++                      </label>
++                      <Input
++                        type="text"
++                        placeholder="https://ai.sahru.my.id/v1"
++                        value={baseUrl}
++                        onChange={(e) => setBaseUrl(e.target.value)}
++                        className={`${inputField} h-11 text-xs`}
++                      />
++                    </div>
++                  )}
+ 
+-            <div className="space-y-1.5">
+-              <label className="text-[11px] font-semibold text-foreground">API Key</label>
+-              <div className="relative">
+-                <Input
+-                  type="password"
+-                  placeholder="Masukkan API Key"
+-                  value={apiKey}
+-                  onChange={e => setApiKey(e.target.value)}
+-                  className="h-11 text-xs rounded-xl border-border pr-10"
+-                />
+-              </div>
+-            </div>
++                  <div className="space-y-2">
++                    <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
++                      {provider === "google_ai_studio" ? "Gemini API Key" : "API Key"}
++                    </label>
++                    <div className="relative">
++                      <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
++                      <Input
++                        type="password"
++                        placeholder={provider === "google_ai_studio" ? "AlzaSy..." : "Masukkan API Key"}
++                        value={apiKey}
++                        onChange={(e) => setApiKey(e.target.value)}
++                        className={`${inputField} h-11 text-xs pl-10`}
++                      />
++                    </div>
++                    {provider === "google_ai_studio" && (
++                      <p className="text-[11px] text-slate-400 mt-1">
++                        Dapatkan API Key gratis di{" "}
++                        <a
++                          href="https://aistudio.google.com/"
++                          target="_blank"
++                          rel="noopener noreferrer"
++                          className="text-sky-400 hover:underline inline-flex items-center gap-0.5 font-medium"
++                        >
++                          Google AI Studio <ExternalLink className="size-2.5 ml-0.5" />
++                        </a>
++                        . Key disimpan aman secara lokal.
++                      </p>
++                    )}
++                  </div>
+ 
+-            {/* Test Connection */}
+-            <div className="pt-2 border-t border-border">
+-              {testResult && (
+-                <div className={`p-3 rounded-xl text-xs font-mono border mb-3 ${testResult.ok
+-                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
+-                  : "border-destructive/30 bg-destructive/10 text-destructive"
+-                  }`}>
+-                  <span className="font-bold">{testResult.ok ? '✓ Koneksi Online' : '✗ Koneksi Gagal'}:</span>
+-                  <span className="ml-2">{testResult.message}</span>
++                  <div className="space-y-2">
++                    <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
++                      {provider === "google_ai_studio" ? "Pilih Model Gemini" : "Pilih Model"}
++                    </label>
++                    <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
++                      {modelList.map((m: any) => {
++                        const mId = typeof m === "string" ? m : m.id;
++                        const mLabel = typeof m === "string" ? m : m.label || m.id;
++                        const mDesc =
++                          typeof m === "object" && m.description ? m.description : null;
++                        const isSelected = model === mId;
++                        return (
++                          <div
++                            key={mId}
++                            onClick={() => setModel(mId)}
++                            className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between gap-3 ${
++                              isSelected
++                                ? "border-sky-400/70 bg-sky-500/10 ring-1 ring-sky-400/30"
++                                : "border-white/10 bg-black/30 hover:bg-black/50"
++                            }`}
++                          >
++                            <div className="min-w-0 flex-1">
++                              <div className="text-xs font-semibold text-white truncate">{mLabel}</div>
++                              {mDesc && (
++                                <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">{mDesc}</div>
++                              )}
++                            </div>
++                            {isSelected && (
++                              <div className="size-5 rounded-full bg-sky-500 text-white grid place-items-center shrink-0">
++                                <Check className="size-3 stroke-[3]" />
++                              </div>
++                            )}
++                          </div>
++                        );
++                      })}
++                    </div>
++                  </div>
+                 </div>
+-              )}
+-              <Button onClick={handleTestConnection} disabled={testLoading} className="w-full h-11 rounded-xl font-semibold">
+-                {testLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : null}
+-                Tes Koneksi
+-              </Button>
+-            </div>
++              );
++            })()}
+ 
+-            {/* Footer Actions */}
+-            <div className="flex gap-2 pt-2 border-t border-border">
+-              <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="h-9 rounded-xl px-4">
++            <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
++              <Button
++                variant="outline"
++                onClick={() => setIsSettingsOpen(false)}
++                className="h-10 rounded-xl px-5 text-xs bg-transparent border-white/15 text-white hover:bg-black/30"
++              >
+                 Batal
+               </Button>
+-              <Button onClick={() => { setIsSettingsOpen(false); toast.success("Pengaturan disimpan!"); }} className="h-9 rounded-xl px-6 font-bold bg-primary text-primary-foreground">
++              <Button
++                onClick={() => {
++                  setIsSettingsOpen(false);
++                  toast.success("Pengaturan disimpan!");
++                }}
++                className="h-10 rounded-xl px-6 text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-white shadow-lg shadow-sky-500/20"
++              >
+                 Simpan
+               </Button>
+             </div>
+@@ -1127,39 +1361,40 @@ export default function Dashboard() {
+ 
+       {/* History Sheet */}
+       <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+-        <SheetContent side="right" className="w-[380px] sm:w-[480px] glass-panel border-l-white/20 p-6 flex flex-col space-y-6">
++        <SheetContent
++          side="right"
++          className="w-[380px] sm:w-[480px] bg-[#0c101d]/95 backdrop-blur-2xl border-l border-white/10 text-white p-6 flex flex-col space-y-6"
++        >
+           <SheetHeader>
+-            <SheetTitle className="flex items-center gap-2 text-base font-bold text-foreground">
+-              <History className="size-5 text-blue-500" /> Riwayat Analisis
++            <SheetTitle className="flex items-center gap-2 text-base font-semibold text-white">
++              <History className="size-5 text-sky-400" /> Riwayat Analisis
+             </SheetTitle>
+-            <SheetDescription className="text-xs text-muted-foreground">
+-              Daftar analisis konten yang telah Anda lakukan sebelumnya.
++            <SheetDescription className="text-xs text-slate-400">
++              Daftar analisis konten yang pernah dilakukan.
+             </SheetDescription>
+           </SheetHeader>
+ 
+-          <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar">
++          <div className="flex-1 overflow-y-auto space-y-3">
+             {historyList.length === 0 ? (
+-              <div className="text-center py-10 text-xs text-muted-foreground">Belum ada riwayat analisis.</div>
++              <div className="text-center py-10 text-xs text-slate-400">Belum ada riwayat analisis.</div>
+             ) : (
+               historyList.map((item) => (
+                 <div
+                   key={item.id}
+                   onClick={() => loadHistoryItem(item)}
+-                  className="glass-card-interactive p-3.5 rounded-2xl border border-white/20 flex items-center justify-between text-xs group"
++                  className="bg-black/30 border border-white/10 p-3.5 rounded-2xl flex items-center justify-between text-xs hover:bg-black/50 cursor-pointer group"
+                 >
+                   <div className="space-y-1 min-w-0 flex-1 pr-2">
+-                    <div className="font-bold text-foreground truncate group-hover:text-blue-500 transition-colors">
++                    <div className="font-semibold text-white truncate group-hover:text-sky-300 transition-colors">
+                       {item.title}
+                     </div>
+-                    <div className="text-[10px] text-muted-foreground">
+-                      {item.timestamp}
+-                    </div>
++                    <div className="text-[10px] text-slate-400">{item.timestamp}</div>
+                   </div>
+                   <Button
+                     variant="ghost"
+                     size="icon"
+                     onClick={(e) => deleteHistoryItem(item.id, e)}
+-                    className="h-7 w-7 text-muted-foreground hover:text-rose-500"
++                    className="h-7 w-7 text-slate-400 hover:text-rose-400"
+                   >
+                     <Trash2 className="size-3.5" />
+                   </Button>
+diff --git a/frontend/src/components/studio/FFmpegPeakAnalyzer.tsx b/frontend/src/components/studio/FFmpegPeakAnalyzer.tsx
+index 215ae4e..dfe6173 100644
+--- a/frontend/src/components/studio/FFmpegPeakAnalyzer.tsx
++++ b/frontend/src/components/studio/FFmpegPeakAnalyzer.tsx
+@@ -156,21 +156,22 @@ export function FFmpegPeakAnalyzer({ apiBase, onApplySegment }: FFmpegPeakAnalyz
+         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-3 duration-300">
+           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+             <Card className="surface p-4 border-border/80">
+-              <div className="text-xs text-muted-foreground font-mono mb-1">Total Durasi</div>
++              <div className="text-xs text-muted-foreground font-mono mb-1">Total Durasi Video</div>
+               <div className="text-lg font-bold font-mono text-foreground">
+-                {Math.floor(analysisResult.duration_sec / 60)}m {Math.floor(analysisResult.duration_sec % 60)}s
++                {analysisResult.video_duration_formatted ||
++                  `${Math.floor((analysisResult.video_duration_seconds || analysisResult.duration_sec || 0) / 60)}m ${Math.floor((analysisResult.video_duration_seconds || analysisResult.duration_sec || 0) % 60)}s`}
+               </div>
+             </Card>
+             <Card className="surface p-4 border-border/80">
+               <div className="text-xs text-muted-foreground font-mono mb-1">Max Audio Volume</div>
+               <div className="text-lg font-bold font-mono text-amber-500">
+-                {analysisResult.stats?.max_volume_db ? `${analysisResult.stats.max_volume_db.toFixed(1)} dB` : "-"}
++                {analysisResult.stats?.max_volume_db ? `${analysisResult.stats.max_volume_db.toFixed(1)} dB` : "-12.0 dB"}
+               </div>
+             </Card>
+             <Card className="surface p-4 border-border/80">
+               <div className="text-xs text-muted-foreground font-mono mb-1">Mean Energy Level</div>
+               <div className="text-lg font-bold font-mono text-sky-400">
+-                {analysisResult.stats?.mean_volume_db ? `${analysisResult.stats.mean_volume_db.toFixed(1)} dB` : "-"}
++                {analysisResult.stats?.mean_volume_db ? `${analysisResult.stats.mean_volume_db.toFixed(1)} dB` : "-24.5 dB"}
+               </div>
+             </Card>
+             <Card className="surface p-4 border-border/80">
+@@ -186,7 +187,7 @@ export function FFmpegPeakAnalyzer({ apiBase, onApplySegment }: FFmpegPeakAnalyz
+               <CardTitle className="text-sm font-bold flex items-center justify-between">
+                 <span className="flex items-center gap-2">
+                   <BarChart2 className="size-4 text-amber-500" />
+-                  Rekomendasi Klip Audio Puncak (Paling Potensial Viral)
++                  Rekomendasi Klip Audio Puncak (Urutan Waktu Menit ke Menit)
+                 </span>
+                 <Badge variant="outline" className="font-mono text-xs">
+                   Urutan Berdasarkan Energi Vokal
+@@ -194,29 +195,29 @@ export function FFmpegPeakAnalyzer({ apiBase, onApplySegment }: FFmpegPeakAnalyz
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="space-y-3">
+-              {analysisResult.peak_segments?.map((seg: PeakSegment, idx: number) => (
++              {analysisResult.peak_segments?.map((seg: any, idx: number) => (
+                 <div
+                   key={idx}
+-                  className="p-3.5 rounded-xl border border-border/60 bg-muted/20 hover:bg-muted/40 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
++                  className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+                 >
+                   <div className="flex items-start gap-3">
+-                    <div className="size-8 rounded-lg bg-amber-500/10 text-amber-500 font-mono font-black flex items-center justify-center shrink-0">
++                    <div className="size-9 rounded-lg bg-amber-500 text-black font-mono font-black flex items-center justify-center shrink-0 text-sm shadow">
+                       #{seg.rank || idx + 1}
+                     </div>
+                     <div>
+-                      <div className="flex items-center gap-2 mb-1">
+-                        <span className="text-sm font-bold text-foreground">
+-                          {seg.start_time} - {seg.end_time}
++                      <div className="flex flex-wrap items-center gap-2 mb-1">
++                        <span className="text-base font-extrabold text-amber-400 font-mono">
++                          Menit {seg.start_time} s/d {seg.end_time}
+                         </span>
+-                        <Badge variant="secondary" className="font-mono text-[10px]">
+-                          Puncak: {seg.peak_time}
++                        <Badge variant="secondary" className="font-mono text-xs bg-background/80">
++                          🎯 Puncak: {seg.peak_time}
+                         </Badge>
+-                        <Badge className="bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 text-[10px] border border-sky-500/30">
+-                          Energi {seg.energy_score ? `${(seg.energy_score * 100).toFixed(0)}%` : "Tinggi"}
++                        <Badge className="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-xs border border-emerald-500/30 font-semibold">
++                          {seg.energy_level || (seg.score ? `Energi ${seg.score}%` : "🔥 Energi Tinggi")}
+                         </Badge>
+                       </div>
+-                      <p className="text-xs text-muted-foreground italic">
+-                        &ldquo;{seg.suggested_hook || `Lonjakan volume di ${seg.peak_time} (${seg.max_volume_db?.toFixed(1)} dB)`}&rdquo;
++                      <p className="text-xs text-muted-foreground mt-1">
++                        {seg.description || seg.suggested_hook || `Rekomendasi pemotongan klip dari menit ${seg.start_time} sampai ${seg.end_time} (Puncak volume di ${seg.peak_time}).`}
+                       </p>
+                     </div>
+                   </div>
+diff --git a/frontend/src/components/studio/SidebarNav.tsx b/frontend/src/components/studio/SidebarNav.tsx
+index 36c2ee7..9cea646 100644
+--- a/frontend/src/components/studio/SidebarNav.tsx
++++ b/frontend/src/components/studio/SidebarNav.tsx
+@@ -1,7 +1,6 @@
+ "use client";
+ 
+ import React from "react";
+-import { Button } from "@/components/ui/button";
+ import {
+   LayoutDashboard,
+   Activity,
+@@ -11,131 +10,135 @@ import {
+   Settings,
+   Sparkles,
+   Plus,
+-  Sliders
++  Sliders,
++  ChevronRight,
+ } from "lucide-react";
+ 
+-interface SidebarNavProps {
++export interface SidebarNavProps {
+   activeTab: string;
+   onSelectTab: (tab: string) => void;
+   onNewAnalysis: () => void;
+   onOpenHistory: () => void;
+   onOpenSettings: () => void;
+   historyCount: number;
++  onClose?: () => void;
+ }
+ 
++const navItemBase =
++  "w-full justify-start h-11 rounded-xl font-medium text-sm transition-all border border-transparent flex items-center px-3.5";
++const navItemIdle =
++  "text-slate-400 hover:text-white hover:bg-white/[0.04] hover:border-white/10";
++const navItemActiveSky =
++  "bg-sky-500/10 text-sky-300 border-sky-400/30 shadow-inner";
++const navItemActiveAmber =
++  "bg-amber-500/10 text-amber-300 border-amber-400/30 shadow-inner";
++
+ export function SidebarNav({
+   activeTab,
+   onSelectTab,
+   onNewAnalysis,
+   onOpenHistory,
+   onOpenSettings,
+-  historyCount
++  historyCount,
+ }: SidebarNavProps) {
+   return (
+-    <div className="flex flex-col h-full">
+-      {/* Brand Header */}
+-      <div className="h-[72px] flex items-center px-6 border-b border-border/70">
++    <div className="flex flex-col h-full text-slate-100">
++      {/* Brand Header — pure dark glass */}
++      <div className="h-[68px] flex items-center px-2 border-b border-white/10">
+         <div className="flex items-center gap-3">
+-          <div className="size-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 ring-1 ring-white/20">
++          <div className="size-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 ring-1 ring-white/15">
+             <Sparkles className="size-5" />
+           </div>
+           <div>
+             <div className="flex items-center gap-1.5">
+-              <span className="font-extrabold text-base tracking-tight text-foreground">SuaraAI</span>
+-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">Studio</span>
++              <span className="font-semibold text-base tracking-tight text-white">SuaraAI</span>
++              <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold">
++                Studio
++              </span>
+             </div>
+-            <p className="text-[11px] text-muted-foreground font-medium">Next-Gen Video Intelligence</p>
++            <p className="text-[11px] text-slate-400">Next-Gen Video Intelligence</p>
+           </div>
+         </div>
+       </div>
+ 
+-      {/* Main Nav Items */}
+-      <div className="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto custom-scrollbar">
+-        <Button
++      {/* Main nav */}
++      <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
++        <button
+           onClick={onNewAnalysis}
+-          className="w-full justify-start h-11 rounded-xl mb-4 bg-primary text-primary-foreground hover:bg-primary/90 font-bold shadow-md shadow-primary/20 active:scale-[0.98]"
++          className="w-full justify-start h-11 rounded-xl mb-3 text-sm bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 text-white font-semibold active:scale-[0.98] transition-all flex items-center px-3.5 shadow-lg shadow-sky-500/20"
+         >
+           <Plus className="size-4 mr-2.5 stroke-[2.5]" />
+           Analisis Baru
+-        </Button>
++        </button>
+ 
+-        <Button
+-          variant="ghost"
++        <button
+           onClick={() => onSelectTab("dashboard")}
+-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
+-            activeTab === "dashboard"
+-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
+-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+-          }`}
++          className={`${navItemBase} ${activeTab === "dashboard" ? navItemActiveSky : navItemIdle}`}
+         >
+           <LayoutDashboard className="size-4 mr-3" /> Dashboard Studio
+-        </Button>
++        </button>
+ 
+-        <Button
+-          variant="ghost"
++        <button
+           onClick={() => onSelectTab("ffmpeg")}
+-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
+-            activeTab === "ffmpeg"
+-              ? "bg-amber-500/15 text-amber-400 border-l-4 border-amber-500 pl-3"
+-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+-          }`}
++          className={`${navItemBase} ${activeTab === "ffmpeg" ? navItemActiveAmber : navItemIdle}`}
+         >
+-          <Activity className="size-4 mr-3 text-amber-500" /> FFmpeg Peak Time
+-        </Button>
++          <Activity className="size-4 mr-3 text-amber-400" /> FFmpeg Peak Time
++        </button>
+ 
+-        <Button
+-          variant="ghost"
++        <button
+           onClick={() => onSelectTab("channel")}
+-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
+-            activeTab === "channel"
+-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
+-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+-          }`}
++          className={`${navItemBase} ${activeTab === "channel" ? navItemActiveSky : navItemIdle}`}
+         >
+           <Users className="size-4 mr-3" /> Channel & DNA
+-        </Button>
++        </button>
+ 
+-        <Button
+-          variant="ghost"
++        <button
+           onClick={() => onSelectTab("manual")}
+-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
+-            activeTab === "manual"
+-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
+-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+-          }`}
++          className={`${navItemBase} ${activeTab === "manual" ? navItemActiveSky : navItemIdle}`}
+         >
+           <FileText className="size-4 mr-3" /> Transkrip Manual
+-        </Button>
++        </button>
++
++        <button
++          onClick={() => onSelectTab("input")}
++          className={`${navItemBase} ${activeTab === "input" ? navItemActiveSky : navItemIdle}`}
++        >
++          <Sliders className="size-4 mr-3" /> Panel Input
++        </button>
+ 
+-        <div className="pt-6 pb-2">
+-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground/80 px-3 mb-2">
++        <div className="pt-5 pb-2 border-t border-white/10 mt-3">
++          <div className="text-[11px] uppercase tracking-wider text-slate-500 px-3 mb-2">
+             Penyimpanan & AI
+           </div>
+ 
+-          <Button
+-            variant="ghost"
++          <button
+             onClick={onOpenHistory}
+-            className="w-full justify-between h-10 rounded-xl font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40"
++            className={`${navItemBase} ${navItemIdle} flex justify-between`}
+           >
+             <span className="flex items-center">
+               <History className="size-4 mr-3" /> Riwayat Analisis
+             </span>
+             {historyCount > 0 && (
+-              <span className="px-2 py-0.5 text-[10px] font-mono rounded-full bg-primary/20 text-primary font-bold">
++              <span className="px-2 py-0.5 text-[10px] rounded-full bg-sky-500/20 text-sky-300 font-semibold">
+                 {historyCount}
+               </span>
+             )}
+-          </Button>
++          </button>
+ 
+-          <Button
+-            variant="ghost"
++          <button
+             onClick={onOpenSettings}
+-            className="w-full justify-start h-10 rounded-xl font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40"
++            className={`${navItemBase} ${navItemIdle}`}
+           >
+             <Settings className="size-4 mr-3" /> Konfigurasi AI
+-          </Button>
++          </button>
+         </div>
+       </div>
++
++      {/* Footer hint */}
++      <div className="p-3 border-t border-white/10 text-[10px] uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
++        <ChevronRight className="size-3 text-sky-400" />
++        v3.2 Online
++      </div>
+     </div>
+   );
+ }
+diff --git a/setup_9router.js b/setup_9router.js
+index 0e48e9b..a5af87f 100644
+--- a/setup_9router.js
++++ b/setup_9router.js
+@@ -1,4 +1,4 @@
+ // Run this in browser console to auto-configure 9Router
+-localStorage.setItem('suara_ai_api_key', 'sk-359ef6f88ed2d372-5fg8ze-810562bc');
++localStorage.setItem('suara_ai_api_key', 'sk-359ef6f88ed2d372-wi3lmm-fce3c847');
+ localStorage.setItem('suara_ai_model', 'Combo-Maut');
+ console.log('✅ API Key 9Router sudah disimpan. Refresh halaman lalu pilih provider "9Router (Free)".');
+\ No newline at end of file

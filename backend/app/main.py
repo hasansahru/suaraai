@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import httpx
 import base64
+import re
 
 from app.utils import prompt_loader
 from app.utils import youtube_utils
@@ -207,7 +208,7 @@ async def api_test_connection(req: TestConnectionRequest):
         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
         effective_api_key = req.api_key
         if not effective_api_key or not effective_api_key.strip():
-            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
+            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-wi3lmm-fce3c847")
 
         msg = ai_client.test_connection(
             mode=resolved_mode,
@@ -264,6 +265,8 @@ async def api_analyze(req: AnalyzeRequest):
 
         video_title = "Video Kustom / Transkrip Manual"
         transcript_text = ""
+        transcript_segments: list = []
+        video_duration_seconds: Optional[float] = None
         metadata = {}
 
         url = req.youtube_url or req.Clapperboard_url
@@ -300,6 +303,14 @@ async def api_analyze(req: AnalyzeRequest):
                     proxy_config=proxy_config
                 )
                 transcript_text = video_transcript.full_text
+                # Simpan segmen transkrip (posisi detik asli per baris) untuk:
+                # (a) format transkrip ber-timestamp yang dikirim ke AI
+                # (b) validasi/penyesuaian timestamp sumber di hasil AI (fuzzy match)
+                transcript_segments = list(video_transcript.segments)
+                try:
+                    video_duration_seconds = video_transcript.total_duration_seconds
+                except Exception:
+                    video_duration_seconds = None
             except Exception as exc:
                 raise HTTPException(
                     status_code=400,
@@ -310,6 +321,28 @@ async def api_analyze(req: AnalyzeRequest):
 
         if not transcript_text.strip():
             raise HTTPException(status_code=400, detail="Transkrip video kosong atau tidak dapat diekstraksi.")
+
+        # ── Transkrip ber-timestamp untuk prompt AI ─────────────────────────
+        # Jika tersedia segmen ber-timestamp asli (transkrip YouTube otomatis),
+        # kirimkan format "[mm:ss - mm:ss] teks" agar AI MEMBACA nilai timestamp
+        # asli dari baris transkrip (bukan mengira-ngira/menghitung dari jumlah
+        # kata). Ini menghilangkan halusinasi angka sumber_start/sumber_end.
+        # Jika transkrip manual sudah mengandung timestamp, biarkan apa adanya
+        # (diparse oleh validator fuzzy di parser.validate_and_fix_source_timestamps).
+        timestamped_transcript: Optional[str] = None
+        if transcript_segments:
+            try:
+                _vt = youtube_utils.VideoTranscript(video_id="", language="", segments=transcript_segments)
+                ts_text = _vt.to_timestamped_text()
+                if ts_text.strip():
+                    # Cap baris transkrip agar tidak melebihi batas konteks model.
+                    _MAX_TS_LINES = 1500
+                    _lines = ts_text.splitlines()
+                    if len(_lines) > _MAX_TS_LINES:
+                        ts_text = "\n".join(_lines[:_MAX_TS_LINES])
+                    timestamped_transcript = ts_text
+            except Exception as e:
+                print(f"Warning: gagal menyusun transkrip ber-timestamp: {e}")
 
         # duration_setting.json: struktur output_types[{id, durations:[{id,...}]}]
         # Cari di semua output_types karena ID durasi unik di seluruh file
@@ -386,6 +419,8 @@ async def api_analyze(req: AnalyzeRequest):
             target_max_seconds=target_max_seconds,
             analytics_text=analytics_text,
             analytics_short_text=analytics_short_text,
+            transcript_timestamped=timestamped_transcript,
+            video_duration_seconds=video_duration_seconds,
         )
 
         # Hitung kebutuhan token berdasarkan output yang diminta:
@@ -411,7 +446,7 @@ async def api_analyze(req: AnalyzeRequest):
         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
         effective_api_key = req.api_key
         if not effective_api_key and (req.provider_id == "custom" or req.provider_id == "nine_router" or (req.base_url and "sahru.my.id" in req.base_url)):
-            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-5fg8ze-810562bc")
+            effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-wi3lmm-fce3c847")
 
         ai_req = ai_client.AnalysisRequest(
             system_prompt=system_prompt,
@@ -436,6 +471,32 @@ async def api_analyze(req: AnalyzeRequest):
 
         result = ai_parser.parse_ai_response(raw_text)
         result = ai_parser.enforce_shot_count(result, req.shot_count)
+
+        # ── Post-processing: cross-check timestamp sumber AI vs transkrip asli ──
+        # Kutipan verbatim AI (narasi_sumber/kutipan) difuzzy-match terhadap
+        # baris transkrip ber-timestamp asli; jika ada offset kecil, parser
+        # otomatis mengoreksi timestamp sumbernya.
+        timestamp_fixes: list = []
+        try:
+            _ts_lines: list = []
+            if transcript_segments:
+                _ts_lines = [
+                    (int(seg.start), int(seg.end), seg.text.strip())
+                    for seg in transcript_segments
+                    if seg.text and seg.text.strip()
+                ]
+            else:
+                # Transkrip manual: hanya bisa divalidasi jika sudah berisi
+                # prefix [mm:ss - mm:ss]
+                _ts_lines = ai_parser.parse_timestamp_lines(transcript_text)
+            if _ts_lines:
+                result, timestamp_fixes = ai_parser.validate_and_fix_source_timestamps(result, _ts_lines)
+                if timestamp_fixes:
+                    print(f"[timestamp-fix] {len(timestamp_fixes)} penyesuaian timestamp sumber:")
+                    for _fx in timestamp_fixes:
+                        print(f"   - {_fx}")
+        except Exception as _e:
+            print(f"Warning: validasi timestamp sumber gagal: {_e}")
         
         shot_segments_for_check = ai_parser.get_shot_segment_list(result)
         duration_warnings = ai_parser.check_segment_duration_mismatch(
@@ -447,6 +508,7 @@ async def api_analyze(req: AnalyzeRequest):
             "video_title": video_title,
             "metadata": metadata,
             "duration_warnings": duration_warnings,
+            "timestamp_fixes": timestamp_fixes,
             "web_sources": web_sources,
             "raw_ai_text": raw_text,
             "result": result,

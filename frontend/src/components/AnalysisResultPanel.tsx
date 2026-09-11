@@ -38,6 +38,8 @@ interface AnalysisResultPanelProps {
     outputType: "shorts" | "video_panjang" | string;
     onGenerateTTS?: (text: string) => void;
     onGenerateImage?: (prompt: string) => void;
+    canvasTab?: string;
+    onCanvasTabChange?: (value: string) => void;
 }
 
 export function AnalysisResultPanel({
@@ -45,6 +47,8 @@ export function AnalysisResultPanel({
     outputType,
     onGenerateTTS,
     onGenerateImage,
+    canvasTab,
+    onCanvasTabChange,
 }: AnalysisResultPanelProps) {
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
     const [selectedShotIndex, setSelectedShotIndex] = useState<number>(0);
@@ -325,7 +329,12 @@ export function AnalysisResultPanel({
             </div>
 
             {/* 8 Tabs Header */}
-            <Tabs defaultValue="ringkasan" className="space-y-6">
+            <Tabs
+  defaultValue="ringkasan"
+  value={canvasTab}
+  onValueChange={onCanvasTabChange}
+  className="space-y-6"
+>
                 <div className="border-b border-border/40 pb-3 overflow-x-auto no-scrollbar scroll-smooth">
                     <TabsList className="bg-muted/40 p-1 flex items-center gap-1 sm:gap-1.5 rounded-xl w-max min-w-full">
                         <TabsTrigger value="ringkasan" className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-lg data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all whitespace-nowrap">
@@ -788,7 +797,7 @@ export function AnalysisResultPanel({
                                                 🔥 Opening 60 Detik (Anti-Drop Retention Hook)
                                             </h3>
                                             <p className="text-[11px] text-muted-foreground mt-0.5">
-                                                {videoPanjang.strategi_konten.opening_60_detik.alasan || "Struktur klip presisi 00:00 - 01:00 diambil langsung dari audio sumber."}
+                                                {videoPanjang.strategi_konten.opening_60_detik.alasan || "Rancangan visual & narasi presisi 00:00 - 01:00 untuk video baru berdasarkan analisis transkrip."}
                                             </p>
                                         </div>
                                         <Button

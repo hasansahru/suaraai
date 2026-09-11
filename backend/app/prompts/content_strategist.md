@@ -63,6 +63,7 @@ Prinsip Penyusunan Outline
 - `end_time: "01:30"` → SALAH, harus `"01:00"`
 - `end_time: "02:00"` → SALAH, harus `"01:00"`
 - Klip terakhir `video_baru_end: "01:30"` → SALAH, harus `"01:00"`
+- Menggunakan timestamp contoh/template seperti `01:24:48` atau `01:22:xx` yang tidak ada di transkrip → DILARANG KERAS! Timestamp sumber HARUS selalu diambil dari data transkrip input asli!
 - Teks `narasi_sumber` hasil karangan AI yang tidak ada di transkrip asli → FUSI SALAH & DILARANG!
 - Timestamp `sumber_start`/`sumber_end` mengarang bebas tanpa acuan transkrip → DILARANG!
 

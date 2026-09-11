@@ -133,6 +133,34 @@ class VideoTranscript:
     def full_text(self) -> str:
         return " ".join(seg.text.strip() for seg in self.segments if seg.text.strip())
 
+    def to_timestamped_text(self, max_lines: Optional[int] = None) -> str:
+        """
+        Menyusun transkrip dalam format satu baris per segmen dengan timestamp asli
+        dari API YouTube, contoh:
+
+            [00:00 - 00:05] Halo semuanya, selamat datang kembali di channel ini.
+            [00:05 - 00:11] Hari ini kita akan membahas satu hal yang sangat penting.
+
+        Timestamp ini adalah SATU-SATUNYA sumber kebenaran untuk semua field
+        `sumber_start` / `sumber_end` / `start_time` / `end_time` / `sumber_segmen`
+        di output AI (lihat aturan STRIKT TIMESTAMP di prompt system).
+        """
+        lines: List[str] = []
+        for seg in self.segments:
+            text = seg.text.strip()
+            if not text:
+                continue
+            lines.append(f"[{format_seconds(seg.start)} - {format_seconds(seg.end)}] {text}")
+        if max_lines and len(lines) > max_lines:
+            lines = lines[:max_lines]
+        return "\n".join(lines)
+
+    @property
+    def total_duration_seconds(self) -> float:
+        if not self.segments:
+            return 0.0
+        return max(seg.end for seg in self.segments)
+
     def slice_by_time(self, start_seconds: float, end_seconds: float) -> "VideoTranscript":
         """Mengembalikan transkrip baru yang hanya berisi segmen di rentang waktu tertentu."""
         sliced = [

@@ -354,3 +354,298 @@ def get_safe(data, path, default=None):
         else:
             return default
     return current
+
+
+
+
+# ── Post-processing timestamp validation & fuzzy-matching helper ───────────────
+
+_TIMESTAMPED_LINE_RE = re.compile(
+    r"^\s*\[?\s*"
+    r"(\d{1,4}(?::\d{1,2}){1,2}(?:\.\d+)?)"
+    r"\s*[\u2013\u2014\u2212-]+\s*"
+    r"(\d{1,4}(?::\d{1,2}){1,2}(?:\.\d+)?)"
+    r"\]?\s*"
+    r"(.+?)\s*$"
+)
+
+_TS_STOPWORDS = frozenset(
+    "yang di ke dari dan ataupun untuk pada adalah ini itu dengan tidak ada "
+    "bisa sudah jadi dalam jika kita anda mereka ia dia saya kamu juga akan "
+    "tetapi namun karena sebab sehingga sampai antara lebih sangat mungkin harus "
+    "wajib agar lalu kemudian setelah sebelum saat ketika oh em uh the of to "
+    "and or is in on at for from with without be by as a an this that it "
+    "them their".split()
+)
+
+
+def _strip_fractional(ts: str) -> str:
+    if "." in ts:
+        return ts.split(".")[0]
+    return ts
+
+
+def parse_timestamp_lines(transcript_text: str) -> List[Tuple[int, int, str]]:
+    if not isinstance(transcript_text, str):
+        return []
+    results: List[Tuple[int, int, str]] = []
+    for raw in transcript_text.splitlines():
+        match = _TIMESTAMPED_LINE_RE.match(raw)
+        if not match:
+            continue
+        start_s = parse_mmss_to_seconds(_strip_fractional(match.group(1)))
+        end_s = parse_mmss_to_seconds(_strip_fractional(match.group(2)))
+        text = (match.group(3) or "").strip()
+        if start_s is None or end_s is None or not text:
+            continue
+        results.append((start_s, end_s, text))
+    return results
+
+
+def _clean_text_for_match(text: str) -> str:
+    if not text:
+        return ""
+    norm = re.sub(r"[\"'\`\u201c\u201d\u2018\u2019]", "", text)
+    norm = re.sub(r"[\u2013\u2014\u2212]", "-", norm)
+    norm = re.sub(r"\s+", " ", norm).strip().lower()
+    return norm
+
+
+def _content_tokens(text: str) -> List[str]:
+    tokens = re.findall(r"\w+", _clean_text_for_match(text))
+    return [t for t in tokens if len(t) > 1 and t not in _TS_STOPWORDS]
+
+
+def _ts_index(
+    segments: List[Tuple[int, int, str]]
+) -> Tuple[List[str], List[set]]:
+    return (
+        [_clean_text_for_match(text) for _, _, text in segments],
+        [set(_content_tokens(text)) for _, _, text in segments],
+    )
+
+
+def _find_best_timestamp_range(
+    quote: str,
+    segments: List[Tuple[int, int, str]],
+    index: Optional[Tuple[List[str], List[set]]] = None,
+) -> Optional[Tuple[int, int]]:
+    if not isinstance(segments, list) or not segments:
+        return None
+    q_clean = _clean_text_for_match(quote)
+    if not q_clean or len(q_clean.split()) < 3:
+        return None
+    q_tokens = _content_tokens(quote)
+    if len(q_tokens) < 3:
+        return None
+    qset = set(q_tokens)
+    n = len(segments)
+    if index is None:
+        index = _ts_index(segments)
+    ctexts, csets = index
+
+    coverage = [len(qset & cs) / len(qset) if cs else 0.0 for cs in csets]
+    if max(coverage, default=0.0) < 0.10:
+        return None
+    anchors = sorted(range(n), key=lambda i: (-coverage[i], -len(csets[i])))[:3]
+
+    best: Optional[Tuple[int, int]] = None
+    best_score = -1.0
+    for ai in anchors:
+        start = end = ai
+        matched = qset & csets[ai]
+        while (end - start + 1) < 8:
+            g_front = len((qset & csets[start - 1]) - matched) if start > 0 else -1
+            g_back = len((qset & csets[end + 1]) - matched) if end < n - 1 else -1
+            if g_front <= 0 and g_back <= 0:
+                break
+            if g_back >= g_front:
+                end += 1
+                matched |= qset & csets[end]
+
+
+
+def matchExactTimestamp(quoteText: str, transcriptSegments: List[Any]) -> Tuple[Optional[str], Optional[str]]:
+    if not quoteText or not transcriptSegments:
+        return None, None
+    
+    ts_lines: List[Tuple[int, int, str]] = []
+    for item in transcriptSegments:
+        if isinstance(item, tuple) and len(item) == 3:
+            ts_lines.append(item)
+        elif isinstance(item, dict):
+            st = item.get('start', item.get('start_time', 0))
+            et = item.get('end', item.get('end_time', 0))
+            txt = item.get('text', '')
+            ts_lines.append((int(st), int(et), txt))
+        elif hasattr(item, 'start') and hasattr(item, 'end') and hasattr(item, 'text'):
+            ts_lines.append((int(item.start), int(item.end), getattr(item, 'text', '')))
+    
+    if not ts_lines:
+        return None, None
+        
+    rng = _find_best_timestamp_range(quoteText, ts_lines)
+    if rng is not None:
+        i, j = rng
+        start_str = _seconds_to_timestamp(ts_lines[i][0])
+        end_str = _seconds_to_timestamp(ts_lines[j][1])
+        return start_str, end_str
+        
+    return None, None
+
+
+def _seconds_to_timestamp(total_seconds) -> str:
+    total = max(0, int(round(float(total_seconds))))
+    if total >= 3600:
+        return "%02d:%02d:%02d" % (
+            total // 3600, (total % 3600) // 60, total % 60
+        )
+    mins = total // 60
+    secs = total % 60
+    if mins < 60:
+        return "%02d:%02d" % (mins, secs)
+    return _fix_timestamp_string("%02d:%02d" % (mins, secs))
+
+
+_SOURCE_FAMILIES = (
+    ("sumber_start", "sumber_end"),
+
+
+
+def validate_and_fix_source_timestamps(
+    result: Dict[str, Any],
+    ts_lines: List[Tuple[int, int, str]],
+    tolerance_seconds: int = 15,
+) -> Tuple[Dict[str, Any], List[str]]:
+    if not isinstance(result, dict):
+        return result, []
+    if not isinstance(ts_lines, list) or not ts_lines:
+        return result, []
+    index = _ts_index(ts_lines)
+    fixes: List[str] = []
+
+    def _preview(quote: str, limit: int = 50) -> str:
+        cleaned = _clean_text_for_match(quote)
+        return (cleaned[:limit] + "...") if len(cleaned) > limit else cleaned
+
+    def _maybe_set(obj: Dict[str, Any], key: str, real: int) -> bool:
+        orig = obj.get(key)
+        cur = parse_mmss_to_seconds(orig)
+        if cur is None or abs(cur - real) > tolerance_seconds:
+            obj[key] = _seconds_to_timestamp(real)
+            return True
+        return False
+
+    def _fix(obj, label: str) -> None:
+        if not isinstance(obj, dict):
+            return
+        quote = _anchor_quote(obj)
+        if not quote:
+            return
+        rng = _find_best_timestamp_range(quote, ts_lines, index=index)
+        if rng is None:
+            return
+        i, j = rng
+        true_start, true_end = ts_lines[i][0], ts_lines[j][1]
+        if true_end <= true_start:
+            return
+        changed = False
+        start_val = None
+        for sk, ek in _SOURCE_FAMILIES:
+            if sk in obj:
+                if _maybe_set(obj, sk, true_start):
+                    changed = True
+                start_val = parse_mmss_to_seconds(obj.get(sk))
+            if ek in obj:
+                if _maybe_set(obj, ek, true_end):
+                    changed = True
+        if start_val is not None:
+            for ek in ("end_time", "sumber_end", "end"):
+                if ek in obj:
+                    ev = parse_mmss_to_seconds(obj.get(ek))
+                    if ev is None or ev <= start_val:
+                        obj[ek] = _seconds_to_timestamp(start_val + 1)
+                        changed = True
+        if changed:
+            fixes.append(
+                "%s: timestamp sumber disesuaikan ke %s-%s (transkrip baris %d-%d) — \"%s\""
+                % (
+                    label,
+                    _seconds_to_timestamp(true_start),
+                    _seconds_to_timestamp(true_end),
+                    i + 1,
+                    j + 1,
+                    _preview(quote),
+                )
+            )
+
+    shots = get_safe(result, "shots")
+    if isinstance(shots, list):
+        for idx, shot in enumerate(shots, 1):
+            seg = get_safe(shot, "segmen")
+            if isinstance(seg, dict):
+                _fix(seg, "shots[%d].segmen" % idx)
+
+    sk = get_safe(result, "video_panjang.strategi_konten")
+    if isinstance(sk, dict):
+        opening = sk.get("opening_60_detik")
+        if isinstance(opening, dict) and isinstance(opening.get("klip"), list):
+            for idx, klip in enumerate(opening["klip"], 1):
+                if isinstance(klip, dict):
+                    _fix(klip, "opening_60_detik.klip[%d]" % idx)
+        outline = sk.get("outline")
+        if isinstance(outline, list):
+            for b_idx, babak in enumerate(outline, 1):
+                if not isinstance(babak, dict):
+                    continue
+                segs = babak.get("sumber_segmen")
+                if isinstance(segs, list):
+                    for s_idx, seg in enumerate(segs, 1):
+                        if isinstance(seg, dict):
+                            _fix(
+                                seg,
+                                "outline[%d].sumber_segmen[%d]" % (b_idx, s_idx),
+                            )
+
+    max_ts = ts_lines[-1][1] if ts_lines else 0
+    momen = get_safe(result, "video_panjang.momen_highlight_sumber")
+    if isinstance(momen, list):
+        for idx, m in enumerate(momen, 1):
+            if isinstance(m, dict):
+                st_s = parse_mmss_to_seconds(m.get("start_time"))
+                if st_s is not None and st_s > max_ts and max_ts > 0:
+                    m["start_time"] = _seconds_to_timestamp(min(idx * 60, max_ts))
+                    m["end_time"] = _seconds_to_timestamp(min(idx * 60 + 30, max_ts))
+                    fixes.append(f"momen_highlight_sumber[{idx}]: timestamp halusinasi {st_s}s disesuaikan ke durasi real {max_ts}s")
+
+    return result, fixes
+
+    ("start_time", "end_time"),
+    ("start", "end"),
+)
+_QUOTE_KEYS = ("narasi_sumber", "kutipan")
+
+
+def _anchor_quote(obj) -> Optional[str]:
+    if not isinstance(obj, dict):
+        return None
+    for key in _QUOTE_KEYS:
+        value = obj.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+            else:
+                start -= 1
+                matched |= qset & csets[start]
+            if len(matched) >= 0.98 * len(qset):
+                break
+
+        cov = len(matched) / len(qset)
+        window_text = " ".join(ctexts[start:end + 1])
+        ratio = SequenceMatcher(None, q_clean, window_text).ratio()
+        score = cov + ratio
+        if cov >= 0.50 and ratio >= 0.40 and score > best_score:
+            best_score = score
+            best = (start, end)
+    return best

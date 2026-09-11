@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
   Activity,
@@ -11,17 +10,28 @@ import {
   Settings,
   Sparkles,
   Plus,
-  Sliders
+  Sliders,
+  ChevronRight,
 } from "lucide-react";
 
-interface SidebarNavProps {
+export interface SidebarNavProps {
   activeTab: string;
   onSelectTab: (tab: string) => void;
   onNewAnalysis: () => void;
   onOpenHistory: () => void;
   onOpenSettings: () => void;
   historyCount: number;
+  onClose?: () => void;
 }
+
+const navItemBase =
+  "w-full justify-start h-11 rounded-xl font-medium text-sm transition-all border border-transparent flex items-center px-3.5";
+const navItemIdle =
+  "text-slate-400 hover:text-white hover:bg-white/[0.04] hover:border-white/10";
+const navItemActiveSky =
+  "bg-sky-500/10 text-sky-300 border-sky-400/30 shadow-inner";
+const navItemActiveAmber =
+  "bg-amber-500/10 text-amber-300 border-amber-400/30 shadow-inner";
 
 export function SidebarNav({
   activeTab,
@@ -29,112 +39,105 @@ export function SidebarNav({
   onNewAnalysis,
   onOpenHistory,
   onOpenSettings,
-  historyCount
+  historyCount,
 }: SidebarNavProps) {
   return (
-    <div className="flex flex-col h-full">
-      {/* Brand Header */}
-      <div className="h-[72px] flex items-center px-6 border-b border-border/70">
+    <div className="flex flex-col h-full text-slate-100">
+      {/* Brand Header — pure dark glass */}
+      <div className="h-[68px] flex items-center px-2 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20 ring-1 ring-white/20">
+          <div className="size-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 ring-1 ring-white/15">
             <Sparkles className="size-5" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base tracking-tight text-foreground">SuaraAI</span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">Studio</span>
+              <span className="font-semibold text-base tracking-tight text-white">SuaraAI</span>
+              <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold">
+                Studio
+              </span>
             </div>
-            <p className="text-[11px] text-muted-foreground font-medium">Next-Gen Video Intelligence</p>
+            <p className="text-[11px] text-slate-400">Next-Gen Video Intelligence</p>
           </div>
         </div>
       </div>
 
-      {/* Main Nav Items */}
-      <div className="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto custom-scrollbar">
-        <Button
+      {/* Main nav */}
+      <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <button
           onClick={onNewAnalysis}
-          className="w-full justify-start h-11 rounded-xl mb-4 bg-primary text-primary-foreground hover:bg-primary/90 font-bold shadow-md shadow-primary/20 active:scale-[0.98]"
+          className="w-full justify-start h-11 rounded-xl mb-3 text-sm bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 text-white font-semibold active:scale-[0.98] transition-all flex items-center px-3.5 shadow-lg shadow-sky-500/20"
         >
           <Plus className="size-4 mr-2.5 stroke-[2.5]" />
           Analisis Baru
-        </Button>
+        </button>
 
-        <Button
-          variant="ghost"
+        <button
           onClick={() => onSelectTab("dashboard")}
-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
-            activeTab === "dashboard"
-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-          }`}
+          className={`${navItemBase} ${activeTab === "dashboard" ? navItemActiveSky : navItemIdle}`}
         >
           <LayoutDashboard className="size-4 mr-3" /> Dashboard Studio
-        </Button>
+        </button>
 
-        <Button
-          variant="ghost"
+        <button
           onClick={() => onSelectTab("ffmpeg")}
-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
-            activeTab === "ffmpeg"
-              ? "bg-amber-500/15 text-amber-400 border-l-4 border-amber-500 pl-3"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-          }`}
+          className={`${navItemBase} ${activeTab === "ffmpeg" ? navItemActiveAmber : navItemIdle}`}
         >
-          <Activity className="size-4 mr-3 text-amber-500" /> FFmpeg Peak Time
-        </Button>
+          <Activity className="size-4 mr-3 text-amber-400" /> FFmpeg Peak Time
+        </button>
 
-        <Button
-          variant="ghost"
+        <button
           onClick={() => onSelectTab("channel")}
-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
-            activeTab === "channel"
-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-          }`}
+          className={`${navItemBase} ${activeTab === "channel" ? navItemActiveSky : navItemIdle}`}
         >
           <Users className="size-4 mr-3" /> Channel & DNA
-        </Button>
+        </button>
 
-        <Button
-          variant="ghost"
+        <button
           onClick={() => onSelectTab("manual")}
-          className={`w-full justify-start h-10 rounded-xl font-semibold transition-all ${
-            activeTab === "manual"
-              ? "bg-primary/15 text-primary border-l-4 border-primary pl-3"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-          }`}
+          className={`${navItemBase} ${activeTab === "manual" ? navItemActiveSky : navItemIdle}`}
         >
           <FileText className="size-4 mr-3" /> Transkrip Manual
-        </Button>
+        </button>
 
-        <div className="pt-6 pb-2">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground/80 px-3 mb-2">
+        <button
+          onClick={() => onSelectTab("input")}
+          className={`${navItemBase} ${activeTab === "input" ? navItemActiveSky : navItemIdle}`}
+        >
+          <Sliders className="size-4 mr-3" /> Panel Input
+        </button>
+
+        <div className="pt-5 pb-2 border-t border-white/10 mt-3">
+          <div className="text-[11px] uppercase tracking-wider text-slate-500 px-3 mb-2">
             Penyimpanan & AI
           </div>
 
-          <Button
-            variant="ghost"
+          <button
             onClick={onOpenHistory}
-            className="w-full justify-between h-10 rounded-xl font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40"
+            className={`${navItemBase} ${navItemIdle} flex justify-between`}
           >
             <span className="flex items-center">
               <History className="size-4 mr-3" /> Riwayat Analisis
             </span>
             {historyCount > 0 && (
-              <span className="px-2 py-0.5 text-[10px] font-mono rounded-full bg-primary/20 text-primary font-bold">
+              <span className="px-2 py-0.5 text-[10px] rounded-full bg-sky-500/20 text-sky-300 font-semibold">
                 {historyCount}
               </span>
             )}
-          </Button>
+          </button>
 
-          <Button
-            variant="ghost"
+          <button
             onClick={onOpenSettings}
-            className="w-full justify-start h-10 rounded-xl font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40"
+            className={`${navItemBase} ${navItemIdle}`}
           >
             <Settings className="size-4 mr-3" /> Konfigurasi AI
-          </Button>
+          </button>
         </div>
+      </div>
+
+      {/* Footer hint */}
+      <div className="p-3 border-t border-white/10 text-[10px] uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+        <ChevronRight className="size-3 text-sky-400" />
+        v3.2 Online
       </div>
     </div>
   );

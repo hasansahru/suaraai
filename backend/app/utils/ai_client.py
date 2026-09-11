@@ -1,29 +1,55 @@
 """
 ai_client.py
+============
 
 Wrapper tipis untuk memanggil AI provider menggunakan system prompt gabungan
 dari prompt_loader.py, serta input pengguna (transkrip + setting).
 
-Mendukung dua mode pemanggilan:
+PENTING — JANGAN PAKAI RAW `fetch`/`requests`/`httpx` UNTUK PANGGIL AI DI SINI.
+Semua pemanggilan provider WAJIB melalui SDK resmi, dengan alasan:
+  - SDK sudah menangani retry, timeout granular, format request/response,
+    error code mapping, dan streaming — sehingga kompatibilitas lebih stabil
+    dibanding menulis HTTP call sendiri.
+  - Perubahan kontrak API (header, body, error envelope) di versi SDK akan
+    kita kelola via `pip install -U <sdk>` bukan patch manual di file ini.
+  - Konsistensi log: satu sumber error (`AIClientError`) untuk semua provider.
+
+Mendukung TIGA mode pemanggilan:
 
 1. mode="anthropic"
-   Memanggil Claude langsung lewat Anthropic SDK (client.messages.create).
+   Memanggil Claude langsung lewat Anthropic SDK (`anthropic.Anthropic`).
+   Tidak butuh `base_url`. Mendukung skill tambahan: web_search, code_execution,
+   dan extended thinking (lihat `AnalysisRequest`).
 
 2. mode="openai_compatible"
    Memanggil provider mana pun yang mengikuti format OpenAI Chat Completions
-   (base_url + api_key + model). Mode ini dipakai untuk:
+   lewat SDK resmi `openai.OpenAI(base_url=..., api_key=...)`. Mode ini dipakai
+   untuk:
    - 9Router Proxy (proxy lokal self-hosted, lihat https://github.com/decolua/9router)
    - OpenAI (GPT) langsung
-   - Google Gemini langsung (lewat endpoint OpenAI-compatible Google)
+   - Google Gemini lewat endpoint OpenAI-compatible Google
    - Provider/proxy custom lain apa pun (OpenRouter, Groq, DeepSeek, LiteLLM, dll)
+   Retry otomatis untuk status 503/529 dan timeout dengan backoff eksponensial.
+
+3. mode="google"
+   Memanggil Google Gemini langsung lewat SDK resmi `google.generativeai`
+   (`genai.GenerativeModel`). Tidak butuh `base_url`. Pakai fallback env
+   `GEMINI_API_KEY` / `GOOGLE_API_KEY` jika `api_key` tidak diisi di UI.
 
 Provider mana yang aktif & konfigurasinya (base_url default, env var API key,
-daftar model) diatur lewat settings/ai_provider_setting.json, dibaca oleh app.py.
+daftar model) diatur lewat `settings/ai_provider_setting.json`, dibaca oleh app.py.
+
+Resolusi API key (lihat `get_api_key`):
+  1. Key eksplisit dari input UI (`api_key` argumen).
+  2. Env var spesifik provider (mis. `CUSTOM_AI_API_KEY`).
+  3. Fallback chain: `GEMINI_API_KEY` -> `GOOGLE_API_KEY` ->
+     `NEXT_PUBLIC_GEMINI_API_KEY` -> `ANTHROPIC_API_KEY`.
 """
 
 from __future__ import annotations
 
 import os
+import json
 import time
 from dataclasses import dataclass
 from typing import Optional
@@ -48,6 +74,7 @@ _CONNECT_TIMEOUT = 15.0
 # Mode yang didukung oleh run_analysis().
 MODE_ANTHROPIC = "anthropic"
 MODE_OPENAI_COMPATIBLE = "openai_compatible"
+MODE_GOOGLE = "google"
 
 
 class AIClientError(Exception):
@@ -77,17 +104,25 @@ def get_api_key(env_var_name: str, explicit_key: Optional[str] = None) -> str:
     Mengambil API key dengan urutan prioritas:
     1. Key yang diberikan langsung (misalnya dari input UI).
     2. Environment variable sesuai provider yang aktif (env_var_name).
+    3. Fallback env var pendukung (GEMINI_API_KEY, GOOGLE_API_KEY, NEXT_PUBLIC_GEMINI_API_KEY).
     """
     if explicit_key and explicit_key.strip():
         return explicit_key.strip()
 
+    # Coba env var utama
     env_key = os.environ.get(env_var_name, "").strip()
     if env_key:
         return env_key
 
+    # Coba fallback alternatif jika mode Google / Gemini
+    for fallback_var in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "NEXT_PUBLIC_GEMINI_API_KEY", "ANTHROPIC_API_KEY"]:
+        alt_key = os.environ.get(fallback_var, "").strip()
+        if alt_key:
+            return alt_key
+
     raise AIClientError(
-        f"API key belum diatur untuk provider ini. Masukkan API key di sidebar, "
-        f"atau set environment variable {env_var_name} / gunakan file .env."
+        f"API key belum diatur untuk provider ini. Masukkan API key di UI/sidebar, "
+        f"atau set environment variable {env_var_name} / GEMINI_API_KEY di file .env."
     )
 
 
@@ -367,6 +402,12 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
                 last_exc = exc
                 time.sleep(wait)
                 continue
+            if status == 404:
+                raise AIClientError(
+                    f"Model '{normalized_model}' tidak ditemukan di endpoint ini (HTTP 404). "
+                    "Model mungkin sudah dihapus/retired, atau base_url provider salah. "
+                    "Cek kembali nama model & URL endpoint di Konfigurasi AI."
+                ) from exc
             raise AIClientError(f"Provider mengembalikan error: {exc}") from exc
         except openai.APITimeoutError as exc:
             if attempt < _MAX_RETRIES:
@@ -436,6 +477,125 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
     return full_text, []
 
 
+def _run_google(request: AnalysisRequest, resolved_key: str, check_truncation: bool = True) -> tuple[str, list[dict]]:
+    """
+    Memanggil Google AI Studio (Gemini API) langsung lewat REST v1beta.
+
+    WAJIB — JANGAN PAKAI endpoint OpenAI-compatible (ai.sahru.my.id / v1) di
+    mode ini. URL resmi & satu-satunya yang valid untuk key Google AI Studio:
+
+        POST https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent
+        header : x-goog-api-key: <KEY>
+        query  : ?key=<KEY>
+
+    Nama model harus BERSIH (mis. 'gemini-2.5-flash'). Jika masih memakai
+    prefix 'models/' (internal SDK lama) atau 'gemini/' (format OpenAI-
+    compatible), prefix itu di-strip — karena di URL REST path, prefix
+    'models/' sudah menjadi bagian dari URL, bukan nama modelnya.
+    """
+    try:
+        import httpx
+    except ImportError as exc:
+        raise AIClientError(
+            "Paket 'httpx' belum terinstal. Jalankan: pip install -r requirements.txt"
+        ) from exc
+
+    # Strip prefix `models/` / `gemini/` agar path URL benar:
+    # .../v1beta/models/gemini-2.5-flash:generateContent
+    model_name = request.model.strip().replace("models/", "").replace("gemini/", "")
+    if not model_name:
+        raise AIClientError("Nama model Google Gemini kosong.")
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
+    payload = {
+        "system_instruction": {"parts": [{"text": request.system_prompt}]},
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": request.user_content}],
+            }
+        ],
+        "generationConfig": {
+            "temperature": request.temperature,
+            # maxOutputTokens wajib untuk semua model Gemini 2.5 (400 jika tak ada)
+            "maxOutputTokens": request.max_tokens if check_truncation else _TEST_MAX_TOKENS,
+        },
+    }
+    headers = {
+        "Content-Type": "application/json",
+        # Dual auth: header `x-goog-api-key` + URL param `?key=`
+        "x-goog-api-key": resolved_key,
+    }
+    timeout_obj = _make_httpx_timeout(request.timeout, is_test=not check_truncation)
+
+    try:
+        resp = httpx.post(
+            url,
+            headers=headers,
+            params={"key": resolved_key},
+            json=payload,
+            timeout=timeout_obj,
+        )
+    except httpx.TimeoutException as exc:
+        raise AIClientError(
+            f"Google AI Studio tidak merespons dalam {request.timeout:.0f} detik (timeout). "
+            "Coba lagi atau naikkan Timeout API di sidebar."
+        ) from exc
+    except httpx.HTTPError as exc:
+        raise AIClientError(f"Gagal terhubung ke Google AI Studio: {exc}") from exc
+
+    if resp.status_code == 401 or resp.status_code == 403:
+        raise AIClientError(
+            "API Key Google AI Studio tidak valid (HTTP "
+            f"{resp.status_code} Unauthorized). Silakan periksa kembali API Key Anda."
+        )
+    if resp.status_code == 404:
+        raise AIClientError(
+            f"Model Google '{model_name}' tidak ditemukan (HTTP 404). "
+            "Model kemungkinan sudah retired/diubah. Gunakan model Gemini seri 2.5 "
+            "(mis. gemini-2.5-flash / gemini-2.5-pro) atau cek daftar model di "
+            "https://aistudio.google.com."
+        )
+    if resp.status_code >= 400:
+        try:
+            err_data = resp.json()
+            detail = err_data.get("error", {}).get("message", resp.text)
+        except Exception:
+            detail = resp.text
+        raise AIClientError(f"Google AI Studio API error HTTP {resp.status_code}: {detail}")
+
+    data = resp.json()
+    candidates = data.get("candidates", [])
+    if not candidates:
+        # Cek block reason (safety filter)
+        block_reason = data.get("promptFeedback", {}).get("blockReason")
+        if block_reason:
+            raise AIClientError(
+                f"Prompt diblokir oleh Safety Filter Google (reason: {block_reason})."
+            )
+        raise AIClientError("Google AI Studio mengembalikan kandidat kosong.")
+
+    candidate = candidates[0]
+    finish_reason = str(candidate.get("finishReason", "") or "").upper()
+
+    if check_truncation and finish_reason in ("MAX_TOKENS", "SAFETY", "RECITATION"):
+        raise AIClientError(
+            f"Respons Gemini terpotong/diblokir (finishReason={finish_reason}). "
+            "Coba perbesar max_tokens atau persingkat input."
+        )
+
+    parts = candidate.get("content", {}).get("parts", [])
+    text_chunks = [p.get("text", "") for p in parts if isinstance(p, dict) and p.get("text")]
+    full_text = "".join(text_chunks).strip()
+
+    if not full_text:
+        if not check_truncation:
+            return "OK", []
+        raise AIClientError("Google AI Studio mengembalikan teks kosong.")
+
+    return full_text, []
+
+
 def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_key_env: str = "ANTHROPIC_API_KEY") -> tuple[str, list[dict]]:
     """
     Memanggil AI provider (sesuai request.mode) dengan system prompt + user content,
@@ -446,7 +606,7 @@ def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_ke
     tidak aktif, atau provider yang dipakai bukan mode "anthropic".
 
     Args:
-        request: AnalysisRequest, termasuk mode ("anthropic" / "openai_compatible") dan
+        request: AnalysisRequest, termasuk mode ("anthropic" / "openai_compatible" / "google") dan
                   base_url (wajib diisi jika mode == "openai_compatible").
         api_key: API key eksplisit dari input UI (opsional, prioritas tertinggi).
         api_key_env: nama environment variable fallback untuk provider yang aktif.
@@ -461,6 +621,8 @@ def run_analysis(request: AnalysisRequest, api_key: Optional[str] = None, api_ke
         full_text, sources = _run_anthropic(request, resolved_key, check_truncation=True)
     elif request.mode == MODE_OPENAI_COMPATIBLE:
         full_text, sources = _run_openai_compatible(request, resolved_key, check_truncation=True)
+    elif request.mode == MODE_GOOGLE:
+        full_text, sources = _run_google(request, resolved_key, check_truncation=True)
     else:
         raise AIClientError(f"Mode provider tidak dikenal: '{request.mode}'")
 
@@ -509,6 +671,8 @@ def test_connection(
         _run_anthropic(test_request, resolved_key, check_truncation=False)
     elif mode == MODE_OPENAI_COMPATIBLE:
         _run_openai_compatible(test_request, resolved_key, check_truncation=False)
+    elif mode == MODE_GOOGLE:
+        _run_google(test_request, resolved_key, check_truncation=False)
     else:
         raise AIClientError(f"Mode provider tidak dikenal: '{mode}'")
 
@@ -669,6 +833,8 @@ def build_user_content(
     target_max_seconds: Optional[int] = None,
     analytics_text: Optional[str] = None,
     analytics_short_text: Optional[str] = None,
+    transcript_timestamped: Optional[str] = None,
+    video_duration_seconds: Optional[float] = None,
 ) -> str:
     """Menyusun isi pesan user (konteks + transkrip + setting) untuk dikirim ke AI."""
 
@@ -731,11 +897,29 @@ def build_user_content(
     if extra_notes:
         out.append(f"- Catatan Tambahan dari Pengguna: {extra_notes}")
 
+    if video_duration_seconds is not None:
+        out.append(f"- Durasi Total Video Sumber: {int(round(video_duration_seconds))} detik (timestamp transkrip di bawah adalah SUMBER ACUAN yang valid)")
+
+    if transcript_timestamped and transcript_timestamped.strip():
+        # Transkrip ber-timestamp asli: AI wajib membaca nilai timestamp dari baris.
+        out.extend([
+            "",
+            "## ⚠️ ATURAN TIMESTAMP SUMBER (STRICT — BACA SEBELUM MENGOLAH TRANSKRIP)",
+            "",
+            "Transkrip di bawah DISERTAI timestamp ASLI per baris, format: `[mm:ss - mm:ss] teks`.",
+            "1. DILARANG KERAS mengira-ngira, memperkirakan, atau MENGHALUSINASI angka timestamp sumber! Kamu tidak boleh 'menghitung' detik dari jumlah kata atau tempo bicara — cara itu TIDAK akurat dan terlarang.",
+            "2. Untuk SETIAP Klip/Segmen/Shot yang direkomendasikan, kamu WAJIB mengambil teks kutipan SECARA VERBATIM (persis kata per kata, tanpa mengubah/menambah/mengurangi kata) dari transkrip yang diberikan.",
+            "3. Nilai `start_time`/`end_time` (shots), `sumber_start`/`sumber_end` (opening_60_detik.klip & segmen), `sumber_segmen.start`/`end` (outline video panjang), dan `momen_highlight_sumber.start_time`/`end_time` WAJIB diisi HANYA dari angka timestamp asli baris transkrip tempat kutipan verbatim tersebut berada: `start` = angka timestamp AWAL baris pertama kutipan, `end` = angka timestamp AKHIR baris terakhir kutipan. Salin nilainya 100% akurat tanpa mengubah offset waktunya.",
+            "4. Jika satu segmen merentang dari baris pertama `A` hingga baris terakhir `B`, gunakan `start` = timestamp awal baris A dan `end` = timestamp akhir baris B — JANGAN melakukan interpolasi/pembulatan bebas.",
+            "5. Jika transkrip input TIDAK memiliki timestamp (teks polos tanpa `[..]`), jangan mengarang angka sama sekali: ikuti petunjuk di system prompt untuk kasus tanpa timestamp.",
+            "",
+        ])
+
     out.extend([
         "",
         "## TRANSKRIP VIDEO SUMBER",
         "",
-        transcript_text.strip() if transcript_text else "(transkrip tidak tersedia)",
+        (transcript_timestamped or transcript_text).strip() if (transcript_timestamped or transcript_text) else "(transkrip tidak tersedia)",
         "",
         "---",
     ])

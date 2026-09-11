@@ -1,0 +1,202 @@
+447|) -> Optional[Tuple[int, int]]:
+448|    """Best contiguous ``(start_idx, end_idx)`` (inclusive) of *segments* that
+449|    surrounds *quote*, or ``None``.
+450|
+451|    Anchored on content-token set-overlap with greedy bi-directional expansion
+452|    (capped at 8 lines) and confirmed by ``SequenceMatcher`` ratio — only windows
+453|            with both high coverage AND high ratio are kept, to avoid coincidental
+454|    matches on short or common phrases.
+455|    """
+456|    if not isinstance(segments, list) or not segments:
+457|        return None
+458|    q_clean = _clean_text_for_match(quote)
+459|    if not q_clean or len(q_clean.split()) < 3:
+460|        return None
+461|    q_tokens = _content_tokens(quote)
+462|    if len(q_tokens) < 3:
+463|    qset = set(q_tokens)
+464|    n = len(segments)
+465|    if index is None:
+466|        index = _ts_index(segments)
+467|    ctexts, csets = index
+468|
+469|    coverage = [len(qset & cs) / len(qset) if cs else 0.0 for cs in csets]
+470|    if max(coverage, default=0.0) < 0.10:
+471|        return None
+472|    anchors = sorted(range(n), key=lambda i: (-coverage[i], -len(csets[i])))[:3]
+473|
+474|    best: Optional[Tuple[int, int]] = None
+475|    best_score = -1.0
+476|    for ai in anchors:
+477|        start = end = ai
+478|        matched = qset & csets[ai]
+479|        while (end - start + 1) < 8:
+480|            g_front = len((qset & csets[start - 1]) - matched) if start > 0 else -1
+481|            g_back = len((qset & csets[end + 1]) - matched) if end < n - 1 else -1
+482|            if g_front <= 0 and g_back <= 0:
+483|                break
+484|            if g_back >= g_front:
+485|                end += 1
+486|                matched |= qset & csets[end]
+487|            else:
+488|                start -= 1
+489|                matched |= qset & csets[start]
+490|            if len(matched) >= 0.98 * len(qset):
+491|                break
+492|
+493|        cov = len(matched) / len(qset)
+494|        window_text = " ".join(ctexts[start:end + 1])
+495|        ratio = SequenceMatcher(None, q_clean, window_text).ratio()
+496|        score = cov + ratio
+497|        if cov >= 0.65 and ratio >= 0.50 and score > best_score:
+498|            best_score = score
+499|            best = (start, end)
+500|    return best
+501|
+502|
+503|
+504|def _seconds_to_timestamp(total_seconds) -> str:
+505|    """Render integer seconds as ``mm:ss`` (< 1h) or ``hh:mm:ss`` (>= 1h),
+506|    escalating overflow via the existing ``_fix_timestamp_string`` helper."""
+507|    total = max(0, int(round(float(total_seconds))))
+508|    if total >= 3600:
+509|        return "%02d:%02d:%02d" % (
+510|            total // 3600, (total % 3600) // 60, total % 60
+511|        )
+512|    mins = total // 60
+513|    secs = total % 60
+514|    if mins < 60:
+515|        return "%02d:%02d" % (mins, secs)
+516|    return _fix_timestamp_string("%02d:%02d" % (mins, secs))
+517|
+518|
+519|_SOURCE_FAMILIES = (
+520|    ("sumber_start", "sumber_end"),
+521|    ("start_time", "end_time"),
+522|    ("start", "end"),
+523|)
+524|_QUOTE_KEYS = ("narasi_sumber", "kutipan")
+525|
+526|
+527|def _anchor_quote(obj) -> Optional[str]:
+528|    """First verbatim-quote field present (and non-empty) on *obj*, else None."""
+529|    if not isinstance(obj, dict):
+530|        return None
+531|    for key in _QUOTE_KEYS:
+532|        value = obj.get(key)
+533|        if isinstance(value, str) and value.strip():
+534|            return value
+535|    return None
+536|
+537|
+538|def validate_and_fix_source_timestamps(
+539|    result: Dict[str, Any],
+540|    ts_lines: List[Tuple[int, int, str]],
+541|    tolerance_seconds: int = 10,
+542|) -> Tuple[Dict[str, Any], List[str]]:
+543|    """Re-anchor source timestamps in *result* against the real *ts_lines*.
+544|
+545|    Mutates ``result`` in place and returns ``(result, fixes)`` where ``fixes``
+546|    is a list of human-readable strings describing every correction applied.
+547|    Timestamps already within ``tolerance_seconds`` of the true value are left
+548|    untouched.
+549|    """
+550|    if not isinstance(result, dict):
+551|        return result, []
+552|    if not isinstance(ts_lines, list) or not ts_lines:
+553|        return result, []
+554|    index = _ts_index(ts_lines)
+555|    fixes: List[str] = []
+556|
+557|    def _preview(quote: str, limit: int = 50) -> str:
+558|        cleaned = _clean_text_for_match(quote)
+559|        return (cleaned[:limit] + "...") if len(cleaned) > limit else cleaned
+560|
+561|    def _maybe_set(obj: Dict[str, Any], key: str, real: int) -> bool:
+562|        orig = obj.get(key)
+563|        cur = parse_mmss_to_seconds(orig)
+564|        if cur is None or abs(cur - real) > tolerance_seconds:
+565|            obj[key] = _seconds_to_timestamp(real)
+566|            return True
+567|        return False
+568|
+569|    def _fix(obj, label: str) -> None:
+570|        if not isinstance(obj, dict):
+571|            return
+572|        quote = _anchor_quote(obj)
+573|        if not quote:
+574|            return
+575|        rng = _find_best_timestamp_range(quote, ts_lines, index=index)
+576|        if rng is None:
+577|            return
+578|        i, j = rng
+579|        true_start, true_end = ts_lines[i][0], ts_lines[j][1]
+580|        if true_end <= true_start:
+581|            return
+582|        changed = False
+583|        start_val = None
+584|        for sk, ek in _SOURCE_FAMILIES:
+585|            if sk in obj:
+586|                if _maybe_set(obj, sk, true_start):
+587|                    changed = True
+588|                start_val = parse_mmss_to_seconds(obj.get(sk))
+589|            if ek in obj:
+590|                if _maybe_set(obj, ek, true_end):
+591|                    changed = True
+592|        # Safety: ensure end is strictly after start on whatever end-key exists.
+593|        if start_val is not None:
+594|            for ek in ("end_time", "sumber_end", "end"):
+595|                if ek in obj:
+596|                    ev = parse_mmss_to_seconds(obj.get(ek))
+597|                    if ev is None or ev <= start_val:
+598|                        obj[ek] = _seconds_to_timestamp(start_val + 1)
+599|                        changed = True
+600|        if changed:
+601|            fixes.append(
+602|                "%s: timestamp sumber disesuaikan ke %s-%s (transkrip baris %d-%d) — \"%s\""
+603|                % (
+604|                    label,
+605|                    _seconds_to_timestamp(true_start),
+606|                    _seconds_to_timestamp(true_end),
+607|                    i + 1,
+608|                    j + 1,
+609|                    _preview(quote),
+610|                )
+611|            )
+612|
+613|    # 1. Shorts: shots[].segmen (start_time/end_time + narasi_sumber and the
+614|    #    legacy sumber_start/sumber_end aliases).
+615|    shots = get_safe(result, "shots")
+616|    if isinstance(shots, list):
+617|        for idx, shot in enumerate(shots, 1):
+618|            seg = get_safe(shot, "segmen")
+619|            if isinstance(seg, dict):
+620|                _fix(seg, "shots[%d].segmen" % idx)
+621|
+622|    # 2. video_panjang.strategi_konten – opening_60_detik.klip[] and
+623|    #    outline[].sumber_segmen[] (kutipan quotes). The opening_60_detik
+624|    #    container and outline babak-level estimate fields carry no verbatim
+625|    #    quote, so they are intentionally left untouched here.
+626|    sk = get_safe(result, "video_panjang.strategi_konten")
+627|    if isinstance(sk, dict):
+628|        opening = sk.get("opening_60_detik")
+629|        if isinstance(opening, dict) and isinstance(opening.get("klip"), list):
+630|            for idx, klip in enumerate(opening["klip"], 1):
+631|                if isinstance(klip, dict):
+632|                    _fix(klip, "opening_60_detik.klip[%d]" % idx)
+633|        outline = sk.get("outline")
+634|        if isinstance(outline, list):
+635|            for b_idx, babak in enumerate(outline, 1):
+636|                if not isinstance(babak, dict):
+637|                    continue
+638|                segs = babak.get("sumber_segmen")
+639|                if isinstance(segs, list):
+640|                    for s_idx, seg in enumerate(segs, 1):
+641|                        if isinstance(seg, dict):
+642|                            _fix(
+643|                                seg,
+644|                                "outline[%d].sumber_segmen[%d]" % (b_idx, s_idx),
+645|                            )
+646|
+647|    return result, fixes
+648|

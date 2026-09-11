@@ -1,0 +1,3 @@
+@echo off
+set HK=SHA256:qf42YtV5FjJzCBwc35KhFYNkRgGX45Y6tLNr/H1QKY8
+C:\Users\umiro\.antigravity-ide\suaraai\.deploy-tools\plink.exe -batch -hostkey %HK% -pw Hasan#235 root@116.212.72.44 "pm2 jlist 2>/dev/null | python3 -c 'import json,sys; [print(p[\"name\"], p[\"pm2_env\"][\"status\"]) for p in json.load(sys.stdin) if p[\"name\"].startswith(\"suaraai\")]' 2>/dev/null || pm2 list | grep suaraai; echo ---; curl -s -o /dev/null -w 'FRONTEND_HTTP=%{http_code}\n' https://suara.filsuf.my.id/; curl -s -o /dev/null -w 'API_SETTINGS_HTTP=%{http_code}\n' https://api.filsuf.my.id/api/settings"

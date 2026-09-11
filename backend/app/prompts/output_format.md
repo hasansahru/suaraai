@@ -21,6 +21,7 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
 6. Setiap elemen di `shots[]` WAJIB memiliki `shot_number` berurutan mulai dari 1, dan SEMUA isinya (judul, thumbnail, dst) harus 100% spesifik untuk segmen waktu (`segmen.start_time`–`segmen.end_time`) milik shot itu sendiri — bukan generalisasi dari shot lain atau dari keseluruhan video.
 7. Setiap babak di `video_panjang.strategi_konten.outline` WAJIB memiliki minimal satu entri `sumber_segmen` berisi rentang waktu nyata di video sumber (bukan placeholder kosong seperti "00:00"–"00:00" jika tidak relevan) — sehingga jelas "materi babak ini diambil dari menit berapa sampai berapa di video sumber", sama seperti prinsip `opening_60_detik.klip`. Jika satu babak memadukan materi dari beberapa titik sumber yang tidak berurutan, isi lebih dari satu entri `sumber_segmen`.
 8. Semua estimasi waktu (`start_estimate` dan `end_estimate` pada outline `video_panjang`) WAJIB berupa durasi nyata dalam format `hh:mm:ss` (atau `mm:ss` hanya jika total durasi kurang dari 60 menit) yang dihitung secara kumulatif, mulai dari `00:00:00` pada babak pertama dan berakhir tepat di dalam rentang Durasi Target video baru yang dipilih pengguna. Jika total durasi target adalah 60 menit atau lebih, format `MM:SS` (seperti `90:00`) **DILARANG KERAS**, dan Anda **WAJIB** menuliskan dalam format `hh:mm:ss` (seperti `01:30:00`). JANGAN menggunakan nilai placeholder deskripsi (seperti "hh:mm:ss") atau membiarkan seluruh babak bernilai 00:00.
+ 9. **Anchor Kutipan Verbatim (WAJIB)**: Setiap rentang sumber WAJIB disertai kutipan VERBATIM (kata per kata, bukan ringkasan/paraphrase, minimal 20 kata) dari transkrip sumber: `shots[].segmen.narasi_sumber`, `video_panjang.strategi_konten.opening_60_detik.klip[].narasi_sumber`, dan `video_panjang.strategi_konten.outline[].sumber_segmen[].kutipan`. Backend melakukan fuzzy matching kutipan ini terhadap baris transkrip ber-timestamp asli; jika posisi kutipan di transkrip tidak cocok dengan field timestamp yang Anda tulis, backend AKAN MENIMPA nilai timestamp-nya dengan nilai asli dari baris transkrip tersebut. Karena itu kutipan HARUS disalin persis dari AWAL rentang yang Anda maksud, dengan urutan kata tidak berubah.
 
 ## Skema JSON Wajib
 
@@ -72,9 +73,9 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
           {
             "video_baru_start": "mm:ss — estimasi waktu mulai di video baru, harus berurutan kumulatif mulai dari 00:00",
             "video_baru_end": "mm:ss — estimasi waktu selesai di video baru, akumulasi klip terakhir HARUS tepat berakhir di 01:00 (tidak boleh lebih dari 60 detik)",
-            "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
-            "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER",
-            "narasi_sumber": "string — kutipan PERSIS kalimat dari transkrip video sumber yang diucapkan di segmen ini. WAJIB pastikan jumlah kata MASUK AKAL dengan durasi klip ini (rata-rata bicara 2-3 kata per detik). JANGAN menaruh teks sangat pendek untuk durasi yang panjang (misal teks 5 detik ditaruh untuk durasi 20 detik)!",
+            "sumber_start": "hh:mm:ss — timestamp MULAI klip ini di VIDEO SUMBER (salin langsung dari prefix [mm:ss - mm:ss] baris PERTAMA kutipan narasi_sumber di transkrip)",
+            "sumber_end": "hh:mm:ss — timestamp SELESAI klip ini di VIDEO SUMBER (salin langsung dari prefix [mm:ss - mm:ss] baris TERAKHIR kutipan narasi_sumber)",
+            "narasi_sumber": "string — kutipan VERBATIM (persis kata per kata, minimal 20 kata, urutan kata TIDAK BOLEH diubah) dari transkrip video sumber di AWAL rentang sumber_start sampai sumber_end. Kutipan ini akan divalidasi backend terhadap transkrip asli: posisinya menentukan nilai final sumber_start/sumber_end. DILARANG KERAS menaruh teks fiktif, ringkasan, atau paraphrase!",
             "catatan_editing": "string — instruksi editing untuk segmen ini (B-roll, musik, jeda, dll)"
           }
         ],
@@ -88,8 +89,9 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
           "end_estimate": "hh:mm:ss — estimasi waktu SELESAI babak ini di VIDEO BARU; dihitung kumulatif berurutan, di mana end_estimate babak terakhir wajib berakhir pas di rentang Durasi Target video baru yang dipilih pengguna",
           "sumber_segmen": [
             {
-              "start": "hh:mm:ss — timestamp MULAI di VIDEO SUMBER tempat materi babak ini diambil (hitung dari posisi teks di transkrip: posisi_relatif × durasi_video)",
-              "end": "hh:mm:ss — timestamp SELESAI di VIDEO SUMBER",
+              "start": "hh:mm:ss — timestamp MULAI di VIDEO SUMBER (salin langsung dari prefix [mm:ss - mm:ss] baris pertama kutipan)",
+              "end": "hh:mm:ss — timestamp SELESAI di VIDEO SUMBER (salin langsung dari prefix [mm:ss - mm:ss] baris terakhir kutipan)",
+              "kutipan": "string — kutipan VERBATIM (persis kata per kata, minimal 20 kata, urutan kata TIDAK BOLEH diubah) dari transkrip video sumber di AWAL rentang start-end ini (divalidasi backend untuk menentukan nilai final start/end)",
               "catatan": "string — apa yang diambil dari rentang ini (topik/kutipan/insight spesifik), bukan deskripsi ulang isi babak"
             }
           ]
@@ -157,8 +159,9 @@ Skema di bawah ini punya **DUA wadah keluaran yang terpisah total**, dan Anda **
     {
       "shot_number": 1,
       "segmen": {
-        "start_time": "hh:mm:ss — di VIDEO SUMBER, batas klip shot ini",
-        "end_time": "hh:mm:ss",
+        "start_time": "hh:mm:ss — di VIDEO SUMBER, batas klip shot ini (salin langsung dari prefix [mm:ss - mm:ss] baris pertama kutipan narasi_sumber)",
+        "end_time": "hh:mm:ss — (salin langsung dari prefix [mm:ss - mm:ss] baris terakhir kutipan narasi_sumber)",
+        "narasi_sumber": "string — kutipan VERBATIM (persis kata per kata, minimal 20 kata, urutan kata TIDAK BOLEH diubah) dari transkrip video sumber di AWAL rentang start_time-end_time ini (divalidasi backend untuk menentukan nilai final start_time/end_time)",
         "durasi": "string",
         "alasan": "string — mengapa rentang INI dipilih untuk shot ini secara spesifik"
       },

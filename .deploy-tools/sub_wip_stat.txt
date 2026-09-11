@@ -1,0 +1,13 @@
+ backend/app/main.py                                |    4 +-
+ backend/app/prompts/output_format.md               |    4 +-
+ backend/app/prompts/system_prompt.md               |    3 +-
+ backend/app/settings/ai_provider_setting.json      |  146 +-
+ backend/app/utils/ai_client.py                     |   44 +-
+ backend/app/utils/ffmpeg_analyzer.py               |   65 +-
+ backend/app/utils/parser.py                        |   18 -
+ frontend/src/app/globals.css                       |  573 +++----
+ frontend/src/app/page.tsx                          | 1737 +++++++++++---------
+ .../src/components/studio/FFmpegPeakAnalyzer.tsx   |   35 +-
+ frontend/src/components/studio/SidebarNav.tsx      |  123 +-
+ setup_9router.js                                   |    2 +-
+ 12 files changed, 1461 insertions(+), 1293 deletions(-)
