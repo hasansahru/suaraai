@@ -210,9 +210,16 @@ async def api_test_connection(req: TestConnectionRequest):
         if not effective_api_key or not effective_api_key.strip():
             effective_api_key = os.environ.get("CUSTOM_AI_API_KEY", "sk-359ef6f88ed2d372-wi3lmm-fce3c847")
 
+        # Fallback & validation model untuk 9Router
+        effective_model = (req.model or "").strip()
+        if req.mode in ["nine_router", "custom"] or (resolved_base_url and "sahru.my.id" in resolved_base_url):
+            valid_9router_prefixes = ("Combo-Maut", "Google", "ComToken", "ag/gemini-")
+            if not effective_model or not any(effective_model.startswith(p) for p in valid_9router_prefixes):
+                effective_model = "Combo-Maut"
+
         msg = ai_client.test_connection(
             mode=resolved_mode,
-            model=req.model.strip(),
+            model=effective_model,
             api_key=effective_api_key,
             api_key_env=api_key_env,
             base_url=resolved_base_url,
@@ -442,6 +449,13 @@ async def api_analyze(req: AnalyzeRequest):
         if not effective_base_url or effective_base_url == "https://api.openai.com/v1" or "sahru.my.id" in effective_base_url:
             if req.provider_id in ["nine_router", "custom"] or (req.base_url and "sahru.my.id" in req.base_url):
                 effective_base_url = "https://ai.sahru.my.id/v1"
+
+        # Fallback & validation model untuk 9Router
+        effective_model = (req.model or "").strip()
+        if req.provider_id in ["nine_router", "custom"] or (effective_base_url and "sahru.my.id" in effective_base_url):
+            valid_9router_prefixes = ("Combo-Maut", "Google", "ComToken", "ag/gemini-")
+            if not effective_model or not any(effective_model.startswith(p) for p in valid_9router_prefixes):
+                effective_model = "Combo-Maut"
 
         # Fallback otomatis API Key default 9Router jika user belum mengisi di UI/environment
         effective_api_key = req.api_key

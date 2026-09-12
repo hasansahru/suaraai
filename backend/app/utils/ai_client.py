@@ -415,10 +415,7 @@ def _run_openai_compatible(request: AnalysisRequest, resolved_key: str, check_tr
                 time.sleep(2 ** attempt)
                 continue
             raise AIClientError(
-                f"Provider tidak merespons dalam {request.timeout:.0f} detik (timeout). "
-                "Kemungkinan model/upstream yang dipilih sedang lambat atau antrian panjang. "
-                "Coba lagi, naikkan nilai Timeout API di sidebar, ganti ke model lain yang "
-                "lebih cepat, atau kurangi Jumlah Shots/Segmen."
+                "Server provider (9Router) tidak merespons/timeout. Silakan alihkan ke Google AI Studio."
             ) from exc
     else:
         # Semua percobaan habis — lempar error terakhir

@@ -509,6 +509,7 @@ def _seconds_to_timestamp(total_seconds) -> str:
 
 _SOURCE_FAMILIES = (
     ("sumber_start", "sumber_end"),
+)
 
 
 
@@ -620,10 +621,8 @@ def validate_and_fix_source_timestamps(
 
     return result, fixes
 
-    ("start_time", "end_time"),
-    ("start", "end"),
-)
-_QUOTE_KEYS = ("narasi_sumber", "kutipan")
+
+_QUOTE_KEYS = ("narasi_sumber", "kutipan", "quote", "teks", "content", "ringkasan_segmen")
 
 
 def _anchor_quote(obj) -> Optional[str]:
@@ -634,18 +633,3 @@ def _anchor_quote(obj) -> Optional[str]:
         if isinstance(value, str) and value.strip():
             return value
     return None
-
-            else:
-                start -= 1
-                matched |= qset & csets[start]
-            if len(matched) >= 0.98 * len(qset):
-                break
-
-        cov = len(matched) / len(qset)
-        window_text = " ".join(ctexts[start:end + 1])
-        ratio = SequenceMatcher(None, q_clean, window_text).ratio()
-        score = cov + ratio
-        if cov >= 0.50 and ratio >= 0.40 and score > best_score:
-            best_score = score
-            best = (start, end)
-    return best
