@@ -608,8 +608,8 @@ export default function Dashboard() {
 
     /* ══════════════════════════════════════════════════════════════
        BRANCH B — 9ROUTER / OPENAI-COMPATIBLE
-       POST backend /api/test-connection; fallback direct:
-       GET {base_url}/models dengan Authorization Bearer + x-api-key.
+       POST backend /api/test-connection; fallback direct POST /chat/completions:
+       Authorization Bearer + x-api-key.
        ══════════════════════════════════════════════════════════════ */
     try {
       const res = await callApi({
@@ -645,13 +645,24 @@ export default function Dashboard() {
       }
     } catch (err: any) {
       try {
-        const directRes = await fetch(`${targetBaseUrl}/models`, {
-          method: "GET",
+        const baseUrlClean = targetBaseUrl.replace(/\/+$/, "");
+        const targetUrl = baseUrlClean.endsWith("/chat/completions")
+          ? baseUrlClean
+          : `${baseUrlClean}/chat/completions`;
+
+        const directRes = await fetch(targetUrl, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${inputApiKey}`,
             "x-api-key": inputApiKey,
           },
+          body: JSON.stringify({
+            model: model || "Combo-Maut",
+            messages: [{ role: "user", content: "ping" }],
+            max_tokens: 5,
+          }),
+          signal: AbortSignal.timeout(15000),
         });
 
         if (directRes.status === 401) {
@@ -662,6 +673,21 @@ export default function Dashboard() {
         }
 
         if (directRes.ok) {
+          setTestResult({ ok: true, message: "Koneksi 9Router Online!" });
+          toast.success("Koneksi API Berhasil!");
+          return;
+        }
+
+        const modelsRes = await fetch(`${baseUrlClean}/models`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${inputApiKey}`,
+            "x-api-key": inputApiKey,
+          },
+          signal: AbortSignal.timeout(10000),
+        });
+        if (modelsRes.ok) {
           setTestResult({ ok: true, message: "Koneksi 9Router Online!" });
           toast.success("Koneksi API Berhasil!");
           return;
